@@ -27,5 +27,15 @@ namespace RDVFSharp
             Random rnum = new Random();
             return rnum.Next(min, max);
         }
+
+        public static int Clamp(int n, int min, int max)
+        {
+            return Math.Max(min, Math.Min(n, max));
+        }
+
+        public static int CoinFlip()
+        {
+            return GetRandomNumber(0, 1);
+        }
     }
 }

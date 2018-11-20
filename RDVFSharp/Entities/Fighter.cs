@@ -63,28 +63,28 @@ namespace RDVFSharp.Entities
         public int StaminaCap { get; set; }
         public int MaxStamina { get; set; }
         public int DizzyValue { get; set; }
-        public int ManaBurn { get; private set; }
-        public int StaminaBurn { get; private set; }
-        public int DamageEffectMult { get; private set; }
+        public int ManaBurn { get; set; }
+        public int StaminaBurn { get; set; }
+        public int DamageEffectMult { get; set; }
         public Fighter StatDelta { get; set; }
-        public bool IsUnconscious { get; private set; }
+        public bool IsUnconscious { get; set; }
         public bool IsDead { get; private set; }
         public bool IsRestrained { get; set; }
-        public bool IsStunned { get; private set; }
-        public int IsDisoriented { get; private set; }
-        public List<string> IsGrappledBy { get; private set; }
+        public bool IsStunned { get; set; }
+        public int IsDisoriented { get; set; }
+        public List<string> IsGrappledBy { get; set; }
         public int IsFocused { get; set; }
-        public int IsEscaping { get; private set; }
-        public int IsEvading { get; private set; }
-        public int IsAggressive { get; private set; }
-        public int IsExposed { get; private set; }
-        public bool Fumbled { get; private set; }
+        public int IsEscaping { get; set; }
+        public int IsEvading { get; set; }
+        public int IsAggressive { get; set; }
+        public int IsExposed { get; set; }
+        public bool Fumbled { get; set; }
         public Battlefield Battlefield { get; set; }
         public int KoValue { get; set; }
         public int DeathValue { get; set; }
-        public int RollTotal { get; private set; }
-        public int RollsMade { get; private set; }
-        public List<int> LastRolls { get; private set; }
+        public int RollTotal { get; set; }
+        public int RollsMade { get; set; }
+        public List<int> LastRolls { get; set; }
 
         public Fighter(Battlefield battlefield, ArenaSettings globalSettings)
         {
@@ -156,26 +156,21 @@ namespace RDVFSharp.Entities
         {
             var x = ~~hpToAdd;
             HP += x * DamageEffectMult;
-            HP = Clamp(HP, 0, MaxHP);
+            HP = Utils.Clamp(HP, 0, MaxHP);
         }
 
         public void AddMana(int manaToAdd)
         {
             var x = ~~manaToAdd;
             Mana += x;
-            Mana = Clamp(Mana, 0, MaxMana);
+            Mana = Utils.Clamp(Mana, 0, MaxMana);
         }
 
         public void AddStamina(int staminaToAdd)
         {
             var x = ~~staminaToAdd;
             Stamina += x;
-            Stamina = Clamp(Stamina, 0, MaxStamina);
-        }
-
-        private int Clamp(int n, int min, int max)
-        {
-            return Math.Max(min, Math.Min(n, max));
+            Stamina = Utils.Clamp(Stamina, 0, MaxStamina);
         }
 
         public void HitHp(int hpToRemove)
@@ -183,7 +178,7 @@ namespace RDVFSharp.Entities
             var x = ~~hpToRemove;
             x *= DamageEffectMult;
             HP -= x;
-            HP = Clamp(HP, 0, MaxHP);
+            HP = Utils.Clamp(HP, 0, MaxHP);
             Battlefield.WindowController.Damage = x;
 
             if (IsFocused > 0)
@@ -200,14 +195,14 @@ namespace RDVFSharp.Entities
         {
             var x = ~~manaToRemove;
             Mana -= x;
-            Mana = Clamp(Mana, 0, ManaCap);
+            Mana = Utils.Clamp(Mana, 0, ManaCap);
         }
 
         public void HitStamina(int staminaToRemove)
         {
             var x = ~~staminaToRemove;
             Stamina -= x;
-            Stamina = Clamp(Stamina, 0, StaminaCap);
+            Stamina = Utils.Clamp(Stamina, 0, StaminaCap);
         }
 
         public string PickFatality()
@@ -232,7 +227,7 @@ namespace RDVFSharp.Entities
                     "Literally fucking to death",
                     "Extremely staged and theatrical finisher" };
 
-            return fatalities[Utils.GetRandomNumber(0, fatalities.Count)];
+            return fatalities[Utils.GetRandomNumber(0, fatalities.Count - 1)];
         }
 
         public void Regen()
