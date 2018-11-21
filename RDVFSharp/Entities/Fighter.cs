@@ -4,51 +4,59 @@ using System.Text;
 
 namespace RDVFSharp.Entities
 {
-    class Fighter : BaseFighter
+    class Fighter
     {
-        public BaseFighter BaseFighter => this;
+        public Battlefield Battlefield { get; set; }
+        public BaseFighter BaseFighter { get; set; }
+        public string Name
+        {
+            get
+            {
+                return BaseFighter.Name;
+            }
+        }
 
-        public new int Strength
+        public int Strength
         {
             get
             {
-                var total = base.Strength;
+                var total = BaseFighter.Strength;
                 if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
-        public new int Dexterity
+        public int Dexterity
         {
             get
             {
-                var total = base.Dexterity;
+                var total = BaseFighter.Dexterity;
                 if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
-        public new int Endurance
+        public int Endurance
         {
             get
             {
-                var total = base.Endurance;
+                var total = BaseFighter.Endurance;
                 if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
-        public new int Spellpower
+        public int Spellpower
         {
             get
             {
-                var total = base.Spellpower;
+                var total = BaseFighter.Spellpower;
                 if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
-        public new int Willpower
+        public int Willpower
         {
             get
             {
-                var total = base.Willpower;
+                var total = BaseFighter.Willpower;
                 if (IsDisoriented > 0) total -= 1;
                 return total;
             }
@@ -79,15 +87,15 @@ namespace RDVFSharp.Entities
         public int IsAggressive { get; set; }
         public int IsExposed { get; set; }
         public bool Fumbled { get; set; }
-        public Battlefield Battlefield { get; set; }
         public int KoValue { get; set; }
         public int DeathValue { get; set; }
         public int RollTotal { get; set; }
         public int RollsMade { get; set; }
         public List<int> LastRolls { get; set; }
 
-        public Fighter(Battlefield battlefield, ArenaSettings globalSettings)
+        public Fighter(BaseFighter baseFighter, Battlefield battlefield, ArenaSettings globalSettings)
         {
+            BaseFighter = baseFighter;
             Battlefield = battlefield;
             KoValue = Math.Max(globalSettings.UnconsciousAt, 0);
             DeathValue = globalSettings.DeadAt;
