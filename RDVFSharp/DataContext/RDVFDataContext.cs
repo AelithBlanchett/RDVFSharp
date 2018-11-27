@@ -10,6 +10,7 @@ namespace RDVFSharp.DataContext
     public class RDVFDataContext : DbContext
     {
         public DbSet<BaseFighter> Fighters { get; set; }
+        public DbSet<BaseFight> Fights { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

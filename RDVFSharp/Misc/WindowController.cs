@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RDVFSharp
 {
-    class WindowController
+    public class WindowController
     {
         public List<string> Action { get; set; }
         public List<string> Hit { get; set; }

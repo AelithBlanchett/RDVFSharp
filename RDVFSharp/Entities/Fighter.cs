@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RDVFSharp.Entities
 {
-    class Fighter
+    public class Fighter
     {
         public Battlefield Battlefield { get; set; }
         public BaseFighter BaseFighter { get; set; }
@@ -92,44 +92,32 @@ namespace RDVFSharp.Entities
         public int RollTotal { get; set; }
         public int RollsMade { get; set; }
         public List<int> LastRolls { get; set; }
+        public bool WantsToLeave { get; set; }
 
-        public Fighter(BaseFighter baseFighter, Battlefield battlefield, ArenaSettings globalSettings)
+        public Fighter(BaseFighter baseFighter, Battlefield battlefield)
         {
             BaseFighter = baseFighter;
             Battlefield = battlefield;
-            KoValue = Math.Max(globalSettings.UnconsciousAt, 0);
-            DeathValue = globalSettings.DeadAt;
+            KoValue = Constants.DefaultUnconsciousAt;
+            DeathValue = Constants.DefaultDeadAt;
 
-            var errors = new List<string>();
-
-            //Check stat points for conformity to rules
-            if (BaseFighter.Strength > 10 || BaseFighter.Strength < 0) errors.Add(Name + "'s Strength is outside the allowed range (0 to 10).");
-            if (BaseFighter.Dexterity > 10 || BaseFighter.Dexterity < 0) errors.Add(Name + "'s Dexterity is outside the allowed range (0 to 10).");
-            if (BaseFighter.Endurance > 10 || BaseFighter.Endurance < 0) errors.Add(Name + "'s Endurance is outside the allowed range (0 to 10).");
-            if (BaseFighter.Spellpower > 10 || BaseFighter.Spellpower < 0) errors.Add(Name + "'s Spellpower is outside the allowed range (0 to 10).");
-            if (BaseFighter.Willpower > 10 || BaseFighter.Willpower < 0) errors.Add(Name + "'s Willpower is outside the allowed range (0 to 10).");
-
-            var stattotal = BaseFighter.Strength + BaseFighter.Dexterity + BaseFighter.Endurance + BaseFighter.Spellpower + BaseFighter.Willpower;
-            if (stattotal != globalSettings.StatPoints && globalSettings.StatPoints != 0) errors.Add(Name + " has stats that are too high or too low (" + stattotal + " out of " + globalSettings.StatPoints + " points spent).");
-
-            if (errors.Count > 0)
+            if (!BaseFighter.AreStatsValid)
             {
-                for (var i = 0; i < errors.Count; i++) Battlefield.WindowController.Error.Add(errors[i]);
-                throw new Exception(Name + " was not created due to invalid settings.");
+                throw new Exception($"{Name} was not created due to invalid settings: {string.Join(", ", BaseFighter.GetStatsErrors())}");
             }
 
-            MaxHP = 40 + BaseFighter.Endurance * 10 + BaseFighter.Willpower * 5;
-            MaxMana = 60 + BaseFighter.Willpower * 10 + (BaseFighter.Spellpower - BaseFighter.Strength) * 5;
+            MaxHP = BaseFighter.BaseMaxHP;
+            MaxMana = BaseFighter.BaseMaxMana;
             ManaCap = MaxMana;
-            MaxStamina = 60 + BaseFighter.Willpower * 10 + (BaseFighter.Strength - BaseFighter.Spellpower) * 5;
+            MaxStamina = BaseFighter.BaseMaxStamina;
             StaminaCap = MaxStamina;
 
-            DizzyValue = (int)Math.Floor((double)MaxHP / 2); //You become dizzy at half health and below.
+            DizzyValue = (int)(MaxHP * Constants.DefaultDizzyHPMultiplier); //You become dizzy at half health and below.
 
             ManaBurn = 0;
             StaminaBurn = 0;
 
-            DamageEffectMult = globalSettings.GameSpeed;
+            DamageEffectMult = Constants.DefaultGameSpeed;
 
             HP = 0;
             AddHp(MaxHP);
@@ -158,6 +146,7 @@ namespace RDVFSharp.Entities
             IsAggressive = 0;
             IsExposed = 0;
             Fumbled = false; //A status that gets set when you fumble, so that opponents next action can stun you.
+            WantsToLeave = false;
         }
 
         public void AddHp(int hpToAdd)
@@ -394,7 +383,7 @@ namespace RDVFSharp.Entities
                 Battlefield.WindowController.Hit.Add("The fight is over! CLAIM YOUR SPOILS and VICTORY and FINISH YOUR OPPONENT!");
                 Battlefield.WindowController.Special.Add("FATALITY SUGGESTION: " + this.PickFatality());
                 Battlefield.WindowController.Special.Add("It is just a suggestion, you may not follow it if you don't want to.");
-                //endFight(Battlefield.GetActor().Name, Battlefield.GetTarget().Name); TODO TODO TODO TODO
+                Battlefield.EndFight(Battlefield.GetActor(), Battlefield.GetTarget());
             }
         }
 

@@ -11,5 +11,6 @@ namespace RDVFSharp
         public const int DefaultDisorientedAt = 50;
         public const int DefaultUnconsciousAt = 0;
         public const int DefaultDeadAt = 0;
+        public const double DefaultDizzyHPMultiplier = 0.5;
     }
 }

@@ -1,12 +1,13 @@
 ﻿using RDVFSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
 namespace RDVFSharp
 {
-    class Battlefield
+    public class Battlefield
     {
         public List<Fighter> Fighters { get; set; }
         public string Stage { get; set; }
@@ -17,6 +18,21 @@ namespace RDVFSharp
         private int currentFighter = 0;
         public bool InGrabRange { get; set; }
         public RendezvousFighting Plugin { get; }
+
+        public bool IsInFight(string character)
+        {
+            return Fighters.Any(x => x.Name.ToLower() == character.ToLower());
+        }
+
+        public Fighter GetFighter(string character)
+        {
+            return Fighters.FirstOrDefault(x => x.Name.ToLower() == character.ToLower());
+        }
+
+        public Fighter GetFighterTarget(string character)
+        {
+            return Fighters.FirstOrDefault(x => x.Name.ToLower() != character.ToLower());
+        }
 
         public bool IsActive { get; set; }
 
@@ -45,6 +61,31 @@ namespace RDVFSharp
             IsActive = true;
         }
 
+        public BaseFight EndFight(Fighter victor, Fighter loser)
+        {
+            var fightResult = new BaseFight()
+            {
+                Room = Plugin.Channel,
+                WinnerId = victor.Name,
+                LoserId = loser.Name
+            };
+
+            Plugin.Context.Add(fightResult);
+            Plugin.Context.SaveChanges();
+
+            return fightResult;
+        }
+
+        public bool IsThisCharactersTurn(string characterName)
+        {
+            return GetActor().Name == characterName;
+        }
+
+        public bool IsAbleToAttack(string characterName)
+        {
+            return IsActive && IsThisCharactersTurn(characterName);
+        }
+        
         public void TakeAction(string actionMade)
         {
             var action = actionMade;
@@ -72,7 +113,7 @@ namespace RDVFSharp
                 luck = (int)Math.Round((double)actor.RollTotal / actor.RollsMade);
             }
             Type fighterType = actor.GetType();
-            MethodInfo theMethod = fighterType.GetMethod(action);
+            MethodInfo theMethod = fighterType.GetMethod("Action" + action);
             theMethod.Invoke(actor, new object[] { roll });
 
             WindowController.Info.Add("Raw Dice Roll: " + roll);

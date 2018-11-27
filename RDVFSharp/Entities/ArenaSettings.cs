@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RDVFSharp.Entities
 {
-    class ArenaSettings
+    public class ArenaSettings
     {
         public int StatPoints { get; set; }
         public int GameSpeed { get; set; }
