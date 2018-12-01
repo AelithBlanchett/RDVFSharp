@@ -13,7 +13,12 @@ namespace RDVFSharp.Commands
             var fighter = Plugin.Context.Fighters.Find(character);
             if (fighter == null) { throw new FighterNotRegistered(character); }
 
-            Plugin.FChatClient.SendMessageInChannel(fighter.Stats, channel);
+            if (channel.ToLower().StartsWith("adh-"))
+            {
+                channel = character;
+            }
+
+            Plugin.FChatClient.SendPrivateMessage(fighter.Stats, channel);
         }
     }
 }
