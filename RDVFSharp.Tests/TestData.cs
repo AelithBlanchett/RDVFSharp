@@ -17,31 +17,31 @@ namespace RDVFSharp.Tests
             var firstFighter = new BaseFighter()
             {
                 Dexterity = 4,
-                Endurance = 4,
+                Resilience = 4,
                 Name = "AFighterWithValidStats",
-                Spellpower = 8,
+                Endurance = 8,
                 Strength = 4,
-                Willpower = 4
+                Special = 4
             };
 
             var secondighter = new BaseFighter()
             {
                 Dexterity = 4,
-                Endurance = 4,
+                Resilience = 4,
                 Name = "AnotherFighterWithValidStats",
-                Spellpower = 4,
+                Endurance = 4,
                 Strength = 8,
-                Willpower = 4
+                Special = 4
             };
 
             var thirdFighter = new BaseFighter()
             {
                 Dexterity = 4,
-                Endurance = 4,
+                Resilience = 4,
                 Name = "AFighterWithInvalidStats",
-                Spellpower = 4,
+                Endurance = 4,
                 Strength = 4,
-                Willpower = 4
+                Special = 4
             };
 
             // In-memory database only exists while the connection is open

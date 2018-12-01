@@ -1,5 +1,6 @@
 ﻿using FChatSharpLib.Entities.Plugin.Commands;
 using RDVFSharp.Errors;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RDVFSharp.Commands
@@ -8,7 +9,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Sets the winner of an ongoing fight.";
 
-        public override void ExecuteCommand(string character, string[] args, string channel)
+        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.CurrentBattlefield.IsActive)
             {

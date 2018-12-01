@@ -5,6 +5,7 @@ using RDVFSharp.Entities;
 using RDVFSharp.Errors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.Commands
@@ -13,7 +14,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Displays someone else's stats.";
 
-        public override void ExecuteCommand(string character ,string[] args, string channel)
+        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
             if(!Plugin.FChatClient.IsUserAdmin(character, channel))
             {
@@ -25,7 +26,7 @@ namespace RDVFSharp.Commands
                 Plugin = Plugin
             };
 
-            cmd.ExecuteCommand(args[0], null, channel);
+            cmd.ExecuteCommand(string.Join(" ", args), null, channel);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Leaves an ongoing fight.";
 
-        public override void ExecuteCommand(string character ,string[] args, string channel)
+        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             if (Plugin.CurrentBattlefield.IsActive)
             {
@@ -37,12 +37,12 @@ namespace RDVFSharp.Commands
             else
             {
                 var removed = false;
-                if(Plugin.FirstFighter.Name == character)
+                if(Plugin.FirstFighter?.Name == character)
                 {
                     Plugin.FirstFighter = Plugin.SecondFighter; //should be null anyway if there's no second fighter
                     removed = true;
                 }
-                if (Plugin.SecondFighter.Name == character)
+                if (Plugin.SecondFighter?.Name == character)
                 {
                     Plugin.SecondFighter = null;
                     removed = true;

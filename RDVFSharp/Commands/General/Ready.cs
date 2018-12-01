@@ -13,7 +13,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Sets a player as ready.";
 
-        public override void ExecuteCommand(string character ,string[] args, string channel)
+        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
             if (Plugin.CurrentBattlefield.IsActive || (Plugin.FirstFighter != null && Plugin.SecondFighter != null))
             {

@@ -1,11 +1,6 @@
-﻿using FChatSharpLib.Entities.Plugin;
-using FChatSharpLib.Entities.Plugin.Commands;
-using RDVFSharp.DataContext;
-using RDVFSharp.Entities;
+﻿using FChatSharpLib.Entities.Plugin.Commands;
 using RDVFSharp.Errors;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RDVFSharp.Commands
 {
@@ -13,10 +8,10 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Displays your own stats.";
 
-        public override void ExecuteCommand(string character ,string[] args, string channel)
+        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             var fighter = Plugin.Context.Fighters.Find(character);
-            if(fighter == null){throw new FighterNotRegistered(character);}
+            if (fighter == null) { throw new FighterNotRegistered(character); }
 
             Plugin.FChatClient.SendMessageInChannel(fighter.Stats, channel);
         }

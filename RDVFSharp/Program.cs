@@ -1,17 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-
-namespace RDVFSharp
+﻿namespace RDVFSharp
 {
     class Program
     {
         public static RendezvousFighting RDV { get; set; }
         public static bool IsDebugging { get; set; } = false;
 
-        static void Main(string[] args)
+        static void Main()
         {
-            RDV = new RendezvousFighting(new DataContext.RDVFDataContext(), "ADH-3d64bb9568c39a2818bc", IsDebugging);
+            RDV = new RendezvousFighting(new DataContext.RDVFDataContext(), "ADH-7c167eb564e62f82b40f", IsDebugging);
             RDV.Run();
         }
     }

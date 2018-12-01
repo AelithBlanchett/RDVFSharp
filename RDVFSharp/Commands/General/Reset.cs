@@ -13,7 +13,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Resets the current fight.";
 
-        public override void ExecuteCommand(string character ,string[] args, string channel)
+        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
             if(Plugin.FChatClient.IsUserAdmin(character, channel))
             {

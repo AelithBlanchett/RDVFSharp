@@ -38,7 +38,7 @@ namespace RDVFSharp.Entities
         {
             get
             {
-                var total = BaseFighter.Endurance;
+                var total = BaseFighter.Resilience;
                 if (IsDisoriented > 0) total -= 1;
                 return total;
             }
@@ -47,7 +47,7 @@ namespace RDVFSharp.Entities
         {
             get
             {
-                var total = BaseFighter.Spellpower;
+                var total = BaseFighter.Endurance;
                 if (IsDisoriented > 0) total -= 1;
                 return total;
             }
@@ -56,7 +56,7 @@ namespace RDVFSharp.Entities
         {
             get
             {
-                var total = BaseFighter.Willpower;
+                var total = BaseFighter.Special;
                 if (IsDisoriented > 0) total -= 1;
                 return total;
             }

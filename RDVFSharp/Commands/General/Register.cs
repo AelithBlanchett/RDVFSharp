@@ -5,6 +5,7 @@ using RDVFSharp.Entities;
 using RDVFSharp.Errors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.Commands
@@ -13,7 +14,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Registers a player in the game.";
 
-        public override void ExecuteCommand(string character ,string[] args, string channel)
+        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
             var fighter = Plugin.Context.Fighters.Find(character);
             if(fighter != null)
@@ -25,7 +26,7 @@ namespace RDVFSharp.Commands
 
             try
             {
-                statsArray = Array.ConvertAll(args, int.Parse);
+                statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
             }
             catch (Exception)
             {
@@ -37,9 +38,9 @@ namespace RDVFSharp.Commands
                 Name = character,
                 Strength = statsArray[0],
                 Dexterity = statsArray[1],
-                Endurance = statsArray[2],
-                Spellpower = statsArray[3],
-                Willpower = statsArray[4]
+                Resilience = statsArray[2],
+                Endurance = statsArray[3],
+                Special = statsArray[4]
             };
 
             if (createdFighter.AreStatsValid)
