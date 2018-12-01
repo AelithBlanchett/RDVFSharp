@@ -11,7 +11,8 @@ namespace RDVFSharp
 
         static void Main(string[] args)
         {
-            RDV = new RendezvousFighting("ADH-3d64bb9568c39a2818bc", IsDebugging);
+            RDV = new RendezvousFighting(new DataContext.RDVFDataContext(), "ADH-3d64bb9568c39a2818bc", IsDebugging);
+            RDV.Run();
         }
     }
 }

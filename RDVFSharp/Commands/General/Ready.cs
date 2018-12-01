@@ -19,12 +19,16 @@ namespace RDVFSharp.Commands
             {
                 throw new FightInProgress();
             }
+            else if (Plugin.FirstFighter?.Name == character || Plugin.SecondFighter?.Name == character)
+            {
+                throw new FighterAlreadyExists(character);
+            }
 
             var fighter = Plugin.Context.Fighters.Find(character);
 
             if(fighter == null)
             {
-                throw new FighterNotFound(character);
+                throw new FighterNotRegistered(character);
             }
 
             var actualFighter = new Fighter(fighter, Plugin.CurrentBattlefield);

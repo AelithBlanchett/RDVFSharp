@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RDVFSharp.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RDVFSharp.DataContext
 {
@@ -13,14 +10,23 @@ namespace RDVFSharp.DataContext
         public DbSet<BaseFight> Fights { get; set; }
         public IConfigurationRoot Configuration { get; set; }
 
+        public RDVFDataContext()
+        { }
+
+        public RDVFDataContext(DbContextOptions<RDVFDataContext> options)
+            : base(options)
+        { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            Configuration = new ConfigurationBuilder()
+            if (!optionsBuilder.IsConfigured)
+            {
+                Configuration = new ConfigurationBuilder()
                                 .AddJsonFile("appsettings.json", optional: false)
                                 .Build();
 
-            optionsBuilder.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+                optionsBuilder.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+            }
         }
     }
 }

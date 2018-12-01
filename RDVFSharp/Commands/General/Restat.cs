@@ -18,7 +18,7 @@ namespace RDVFSharp.Commands
             var fighter = Plugin.Context.Fighters.Find(character);
             if(fighter == null)
             {
-                throw new FighterNotFound(character);
+                throw new FighterNotRegistered(character);
             }
 
             int[] statsArray;

@@ -16,7 +16,7 @@ namespace RDVFSharp.Commands
         public override void ExecuteCommand(string character ,string[] args, string channel)
         {
             var fighter = Plugin.Context.Fighters.Find(character);
-            if(fighter == null){throw new FighterNotFound(character);}
+            if(fighter == null){throw new FighterNotRegistered(character);}
 
             Plugin.FChatClient.SendMessageInChannel(fighter.Stats, channel);
         }

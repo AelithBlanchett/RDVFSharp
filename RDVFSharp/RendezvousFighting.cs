@@ -16,17 +16,24 @@ namespace RDVFSharp
         public Fighter SecondFighter { get; set; }
         public RDVFDataContext Context { get; set; }
 
-        public RendezvousFighting(string channel, bool debug = false) : base(channel, debug)
+        public RendezvousFighting(RDVFDataContext context, string channel, bool debug = false, Battlefield currentBattlefield = null) : base(channel, debug)
         {
+            Context = context;
             Console.WriteLine(string.Join(", ", GetCommandList()));
-            ResetFight();
-            Context = new RDVFDataContext();
-            Run();
+            ResetFight(currentBattlefield);
         }
 
-        public void ResetFight()
+        public void ResetFight(Battlefield currentBattlefield = null)
         {
-            CurrentBattlefield = new Battlefield(this);
+            if(currentBattlefield != null)
+            {
+                CurrentBattlefield = currentBattlefield;
+            }
+            else
+            {
+                CurrentBattlefield = new Battlefield(this);
+            }
+            
             FirstFighter = null;
             SecondFighter = null;
         }
