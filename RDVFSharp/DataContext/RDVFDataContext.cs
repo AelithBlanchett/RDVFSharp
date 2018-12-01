@@ -11,10 +11,16 @@ namespace RDVFSharp.DataContext
     {
         public DbSet<BaseFighter> Fighters { get; set; }
         public DbSet<BaseFight> Fights { get; set; }
+        public IConfigurationRoot Configuration { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(Program.Configuration.GetConnectionString("DefaultConnection"));
+            Configuration = new ConfigurationBuilder()
+                                .AddJsonFile("appsettings.json", optional: false)
+                                .Build();
+
+            optionsBuilder.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
         }
     }
 }

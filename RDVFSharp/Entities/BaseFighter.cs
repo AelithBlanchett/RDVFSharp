@@ -60,7 +60,7 @@ namespace RDVFSharp.Entities
         {
             get
             {
-                return GetStatsErrors().Count > 0;
+                return GetStatsErrors().Count == 0;
             }
         }
 

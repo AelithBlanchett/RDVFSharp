@@ -11,7 +11,6 @@ namespace RDVFSharp
     {
         public List<Fighter> Fighters { get; set; }
         public string Stage { get; set; }
-        public ArenaSettings GlobalFighterSettings { get; set; }
         public bool DisplayGrabbed { get; set; }
         public WindowController WindowController { get; set; }
 
@@ -39,6 +38,7 @@ namespace RDVFSharp
         public Battlefield(RendezvousFighting plugin)
         {
             Plugin = plugin;
+            WindowController = new WindowController();
             Fighters = new List<Fighter>();
             Stage = PickStage();
             InGrabRange = false;
@@ -59,6 +59,7 @@ namespace RDVFSharp
             OutputFighterStats(); // Creates the fighter stat blocks (STR/DEX/END/INT/WIL)
             WindowController.Info.Add("[url=http://www.f-list.net/c/rendezvous%20fight/]Visit this page for game information[/url]");
             IsActive = true;
+            WindowController.UpdateOutput(this);
         }
 
         public BaseFight EndFight(Fighter victor, Fighter loser)
@@ -72,6 +73,8 @@ namespace RDVFSharp
 
             Plugin.Context.Add(fightResult);
             Plugin.Context.SaveChanges();
+
+            Plugin.ResetFight();
 
             return fightResult;
         }

@@ -19,9 +19,16 @@ namespace RDVFSharp
         public RendezvousFighting(string channel, bool debug = false) : base(channel, debug)
         {
             Console.WriteLine(string.Join(", ", GetCommandList()));
-            CurrentBattlefield = new Battlefield(this);
+            ResetFight();
             Context = new RDVFDataContext();
             Run();
+        }
+
+        public void ResetFight()
+        {
+            CurrentBattlefield = new Battlefield(this);
+            FirstFighter = null;
+            SecondFighter = null;
         }
     }
 }

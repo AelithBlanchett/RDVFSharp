@@ -1,20 +1,31 @@
-﻿using FChatSharpLib.Entities.Plugin;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace RDVFSharp
 {
     public class WindowController
     {
-        public List<string> Action { get; set; }
-        public List<string> Hit { get; set; }
-        public int Damage { get; set; }
-        public List<string> Status { get; set; }
-        public List<string> Hint { get; set; }
-        public List<string> Special { get; set; }
-        public List<string> Info { get; set; }
-        public List<string> Error { get; set; }
+        public List<string> Action { get; set; } = new List<string>();
+        public List<string> Hit { get; set; } = new List<string>();
+        public List<string> Status { get; set; } = new List<string>();
+        public List<string> Hint { get; set; } = new List<string>();
+        public List<string> Special { get; set; } = new List<string>();
+        public List<string> Info { get; set; } = new List<string>();
+        public List<string> Error { get; set; } = new List<string>();
+
+        public int Damage { get; set; } = 0;
+
+
+        public WindowController()
+        {
+            Action = new List<string>();
+            Hit = new List<string>();
+            Status = new List<string>();
+            Hint = new List<string>();
+            Special = new List<string>();
+            Info = new List<string>();
+            Error = new List<string>();
+            Damage = 0;
+        }
 
         public enum MessageType
         {
@@ -48,6 +59,7 @@ namespace RDVFSharp
         {
             Info.Add("This is " + battlefield.GetActor().Name + "'s turn.");
             var lines = new List<string>(); ;
+            lines.Add("");
             if (Action.Count > 0) lines[0] += FormatMessage(MessageType.Action, string.Join(" ", Action));
             if (Damage != 0) lines[0] += FormatMessage(MessageType.Damage, Damage.ToString());
             if (lines[0] == "") lines.Clear();

@@ -9,6 +9,7 @@ namespace RDVFSharp.Entities
     public class BaseFight
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public string FightId { get; set; }
 
         [Required]
@@ -19,8 +20,8 @@ namespace RDVFSharp.Entities
         public string LoserId { get; set; }
 
         [ForeignKey(nameof(WinnerId))]
-        public BaseFight Winner { get; set; }
+        public BaseFighter Winner { get; set; }
         [ForeignKey(nameof(LoserId))]
-        public BaseFight Loser { get; set; }
+        public BaseFighter Loser { get; set; }
     }
 }
