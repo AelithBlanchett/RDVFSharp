@@ -10,6 +10,10 @@ namespace RDVFSharp.Commands
             {
                 base.ExecuteCommand(character, args, channel);
             }
+            else
+            {
+                Plugin.FChatClient.SendMessageInChannel("You can only use Throw if you are grappling.", Plugin.Channel);
+            }
         }
     }
 }

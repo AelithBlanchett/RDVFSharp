@@ -30,7 +30,7 @@ namespace RDVFSharp.Commands
 
                 if (Plugin.CurrentBattlefield.Fighters.TrueForAll(x => x.WantsToLeave))
                 {
-                    Plugin.CurrentBattlefield = new Battlefield(Plugin);
+                    Plugin.ResetFight();
                     Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
                 }
             }

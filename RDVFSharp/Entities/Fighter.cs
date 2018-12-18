@@ -74,7 +74,6 @@ namespace RDVFSharp.Entities
         public int ManaBurn { get; set; }
         public int StaminaBurn { get; set; }
         public int DamageEffectMult { get; set; }
-        public Fighter StatDelta { get; set; }
         public bool IsUnconscious { get; set; }
         public bool IsDead { get; private set; }
         public bool IsRestrained { get; set; }
@@ -93,6 +92,9 @@ namespace RDVFSharp.Entities
         public int RollsMade { get; set; }
         public List<int> LastRolls { get; set; }
         public bool WantsToLeave { get; set; }
+        public int LastKnownHP { get; set; }
+        public int LastKnownMana { get; set; }
+        public int LastKnownStamina { get; set; }
 
         public Fighter(BaseFighter baseFighter, Battlefield battlefield)
         {
@@ -132,7 +134,9 @@ namespace RDVFSharp.Entities
             RollsMade = 0; // Luck = rollTotal / rollsMade
             LastRolls = new List<int>();
 
-            StatDelta = this;
+            LastKnownHP = HP;
+            LastKnownMana = Mana;
+            LastKnownStamina = Stamina;
 
             IsUnconscious = false;
             IsDead = false;
@@ -266,9 +270,9 @@ namespace RDVFSharp.Entities
 
         public string GetStatus()
         {
-            var hpDelta = HP - StatDelta.HP;
-            var staminaDelta = Stamina - StatDelta.Stamina;
-            var manaDelta = Mana - StatDelta.Mana;
+            var hpDelta = HP - LastKnownHP;
+            var staminaDelta = Stamina - LastKnownStamina;
+            var manaDelta = Mana - LastKnownMana;
             double hpPercent = Math.Ceiling((double)(100 * HP / MaxHP));
             var staminaPercent = Math.Ceiling((double)(100 * Stamina / StaminaCap));
             var manaPercent = Math.Ceiling((double)(100 * Mana / ManaCap));
@@ -308,7 +312,9 @@ namespace RDVFSharp.Entities
             if (ManaCap > MaxMana) message += "[/color]";
             message += " (" + manaPercent + "%)[/color]";
 
-            StatDelta = this;
+            LastKnownHP = HP;
+            LastKnownMana = Mana;
+            LastKnownStamina = Stamina;
 
             if (IsRestrained) Battlefield.WindowController.Hint.Add(Name + " is Grappled.");
             if (IsFocused > 0) Battlefield.WindowController.Hint.Add(Name + " is Focused (" + IsFocused + " points). Focus is reduced by taking damage.");

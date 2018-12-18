@@ -17,7 +17,7 @@ namespace RDVFSharp.Commands
         {
             if(Plugin.FChatClient.IsUserAdmin(character, channel))
             {
-                Plugin.CurrentBattlefield = new Battlefield(Plugin);
+                Plugin.ResetFight();
                 Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
             }
         }
