@@ -27,6 +27,11 @@ namespace RDVFSharp.Commands
             try
             {
                 statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
+
+                if(statsArray.Length != 5)
+                {
+                    throw new Exception();
+                }
             }
             catch (Exception)
             {

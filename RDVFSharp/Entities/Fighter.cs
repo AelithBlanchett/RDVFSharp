@@ -1013,7 +1013,7 @@ namespace RDVFSharp.Entities
             return true; //Successful attack, if we ever need to check that.
         }
 
-        public bool ActionMagic(int roll)
+        public bool ActionMana(int roll)
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
