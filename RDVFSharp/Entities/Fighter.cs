@@ -758,10 +758,9 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
-            damage /= 2;
-            var requiredStam = 5;
-            var difficulty = 6; //Base difficulty, rolls greater than this amount will hit.
+            var damage = 0;
+            var requiredStam = 10;
+            var difficulty = 8; //Base difficulty, rolls greater than this amount will hit.
 
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
 
@@ -818,8 +817,9 @@ namespace RDVFSharp.Entities
 
             //Deal all the actual damage/effects here.
 
-            damage = Math.Max(damage, 1);
-            target.HitHp(damage);
+            damage = Math.Max(damage, 0);
+            if (damage > 0) target.HitHp(damage); //This is to prevent the game displayin that the attacker did 0 damage, which is the normal case.
+            attacker.IsAggressive = 5;
             target.IsStunned = true;
             return true; //Successful attack, if we ever need to check that.
         }
@@ -899,7 +899,7 @@ namespace RDVFSharp.Entities
                 else
                 {
                     damage += 10;
-                    Battlefield.WindowController.Hit.Add(attacker.Name + " THREW " + target.Name + "! " + attacker.Name + " can make another move!");
+                    Battlefield.WindowController.Hit.Add(attacker.Name + " THREW " + target.Name + " and dealt bonus damage!");
                 }
                 //Battlefield.WindowController.Hint.Add(target.Name + ", you are no longer grappled. You should make your post, but you should only emote being hit, do not try to perform any other actions.");
             }
@@ -1620,12 +1620,12 @@ namespace RDVFSharp.Entities
             return true; //Successful attack, if we ever need to check that.
         }
 
-        public void ActionSkip()
+        public void ActionSkip(int roll)
         {
             Battlefield.WindowController.Hit.Add(Name + " skipped the turn! ");
         }
 
-        public void ActionFumble()
+        public void ActionFumble(int roll)
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
