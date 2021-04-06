@@ -16,7 +16,7 @@ namespace RDVFSharp
         public Fighter SecondFighter { get; set; }
         public RDVFDataContext Context { get; set; }
 
-        public RendezvousFighting(RDVFDataContext context, string channel, bool debug = false, Battlefield currentBattlefield = null) : base(channel, debug)
+        public RendezvousFighting(RDVFDataContext context, List<string> channels, bool debug = false, Battlefield currentBattlefield = null) : base(channels, debug)
         {
             Context = context;
             ResetFight(currentBattlefield);
