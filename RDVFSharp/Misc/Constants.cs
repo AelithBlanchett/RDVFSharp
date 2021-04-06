@@ -14,9 +14,9 @@ namespace RDVFSharp
         public const double DefaultDizzyHPMultiplier = 0.5;
 
         public const string VCAdvertisement = @"[color=red][sub]☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰[/sub][/color]
-𝑇ℎ𝑖𝑠 𝑚𝑎𝑡𝑐ℎ 𝑖𝑠 𝑠𝑝𝑜𝑛𝑠𝑜𝑟𝑒𝑑 𝑏𝑦 𝑉𝑖𝑐𝑡𝑜𝑟𝑖𝑎 𝐶𝑎𝑙𝑖𝑐𝑒𝑚 𝐹𝑖𝑔ℎ𝑡𝑖𝑛𝑔 𝐿𝑒𝑎𝑔𝑢𝑒 - 𝑡ℎ𝑒 𝑜𝑓𝑓𝑖𝑐𝑖𝑎𝑙 𝑓𝑖𝑔ℎ𝑡𝑖𝑛𝑔 𝑙𝑒𝑎𝑔𝑢𝑒 𝑜𝑓 𝑉𝑒𝑙𝑣𝑒𝑡𝐶𝑢𝑓𝑓.
-Click [url=https://mydommewallet.velvetcuff.me/app/main/fightingleague]here[/url] to check it out.
-Register [url=https://mydommewallet.velvetcuff.me/app/main/register?referringCharacterId=Aelith%20Blanchette]here[/url] and submit your wins/losses as Hardcore fights with logs to start earning money!
+𝑇ℎ𝑖𝑠 𝑚𝑎𝑡𝑐ℎ 𝑖𝑠 𝑠𝑝𝑜𝑛𝑠𝑜𝑟𝑒𝑑 𝑏𝑦 𝓥𝓮𝓵𝓿𝓮𝓽𝓒𝓾𝓯𝓯.
+Click [url=https://mydommewallet.velvetcuff.me/app/main/fightingleague]here[/url] to check out the latest fights and submit your own results.
+Register [url=https://mydommewallet.velvetcuff.me/app/main/register?referringCharacterId=Aelith%20Blanchette]now[/url] and submit your wins/losses as Hardcore fights with logs to start earning money!
 Conditions: +18 Human-oids only [sub]no furries, sorry[/sub]
 [color=red][sub]☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰[/sub][/color]";
     }
