@@ -51,6 +51,7 @@ namespace RDVFSharp.Commands
                 if (!Plugin.CurrentBattlefield.IsActive && (Plugin.FirstFighter != null && Plugin.SecondFighter != null))
                 {
                     Plugin.FChatClient.SendMessageInChannel($"{actualFighter.Name} accepted the challenge! Let's get it on!", channel);
+                    Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
                     Plugin.CurrentBattlefield.InitialSetup(Plugin.FirstFighter, Plugin.SecondFighter);
                 }
             }

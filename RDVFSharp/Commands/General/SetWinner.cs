@@ -13,7 +13,7 @@ namespace RDVFSharp.Commands
         {
             if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.CurrentBattlefield.IsActive)
             {
-                var activeFighter = Plugin.CurrentBattlefield.GetFighter(args.FirstOrDefault());
+                var activeFighter = Plugin.CurrentBattlefield.GetFighter(string.Join(' ', args));
                 if (activeFighter != null)
                 {
                     Plugin.FChatClient.SendMessageInChannel($"{activeFighter.Name} has won the match.", channel);

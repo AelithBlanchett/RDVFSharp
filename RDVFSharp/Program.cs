@@ -1,4 +1,7 @@
-﻿namespace RDVFSharp
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace RDVFSharp
 {
     class Program
     {
@@ -7,8 +10,23 @@
 
         static void Main()
         {
-            RDV = new RendezvousFighting(new DataContext.RDVFDataContext(), "ADH-7c167eb564e62f82b40f", IsDebugging);
+#if DEBUG 
+            var flistUsername = "";
+            var flistPassword = "";
+            var botCharacterName = ""; //The character used to log in with
+            var adminName = "Aelith Blanchette";
+            var channelToWatch = "adh-2bef661405a83f74cd94"; //Your testing channel code, obtainable with /code in the chat
+            var bot = new FChatSharpLib.Bot(flistUsername, flistPassword, botCharacterName, adminName, true, 4000);
+            bot.Connect();
+
+            RDV = new RendezvousFighting(new DataContext.RDVFDataContext(), channelToWatch, IsDebugging);
             RDV.Run();
+#else
+            var channelToWatch = "ADH-b3c88050e9c580631c70"; //The actual channel you want to connect to
+            RDV = new RendezvousFighting(new DataContext.RDVFDataContext(), channelToWatch, IsDebugging);
+            RDV.Run();
+#endif
+
         }
     }
 }

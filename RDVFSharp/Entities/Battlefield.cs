@@ -68,7 +68,8 @@ namespace RDVFSharp
             {
                 Room = Plugin.Channel,
                 WinnerId = victor.Name,
-                LoserId = loser.Name
+                LoserId = loser.Name,
+                FinishDate = DateTime.UtcNow
             };
 
             Plugin.Context.Add(fightResult);
