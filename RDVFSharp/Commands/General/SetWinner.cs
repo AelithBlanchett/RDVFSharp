@@ -17,7 +17,7 @@ namespace RDVFSharp.Commands
                 if (activeFighter != null)
                 {
                     Plugin.FChatClient.SendMessageInChannel($"{activeFighter.Name} has won the match.", channel);
-                    Plugin.CurrentBattlefield.EndFight(activeFighter, Plugin.CurrentBattlefield.GetFighterTarget(character));
+                    Plugin.CurrentBattlefield.EndFight(activeFighter, Plugin.CurrentBattlefield.GetFighterTarget(activeFighter.Name));
                 }
                 else
                 {

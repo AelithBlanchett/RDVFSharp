@@ -27,7 +27,6 @@ namespace RDVFSharp
         public RendezvousFighting(ServiceProvider serviceProvider, List<string> channels, bool debug = false, Battlefield currentBattlefield = null) : base(channels, debug)
         {
             ServiceProvider = serviceProvider;
-            Context.Fighters.Find(""); //To prevent errors
             ResetFight(currentBattlefield);
         }
 

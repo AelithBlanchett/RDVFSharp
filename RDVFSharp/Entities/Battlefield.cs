@@ -72,8 +72,12 @@ namespace RDVFSharp
                 FinishDate = DateTime.UtcNow
             };
 
-            Plugin.Context.Add(fightResult);
-            Plugin.Context.SaveChanges();
+            using (var context = Plugin.Context)
+            {
+                context.Add(fightResult);
+                context.SaveChanges();
+            }
+            
 
             Plugin.ResetFight();
 

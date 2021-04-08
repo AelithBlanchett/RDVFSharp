@@ -10,15 +10,18 @@ namespace RDVFSharp.Commands
 
         public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            var fighter = Plugin.Context.Fighters.Find(character);
-            if (fighter == null) { throw new FighterNotRegistered(character); }
-
-            if (channel.ToLower().StartsWith("adh-"))
+            using (var context = Plugin.Context)
             {
-                channel = character;
-            }
+                var fighter = context.Fighters.Find(character);
+                if (fighter == null) { throw new FighterNotRegistered(character); }
 
-            Plugin.FChatClient.SendPrivateMessage(fighter.Stats, channel);
+                if (channel.ToLower().StartsWith("adh-"))
+                {
+                    channel = character;
+                }
+
+                Plugin.FChatClient.SendPrivateMessage(fighter.Stats, channel);
+            }
         }
     }
 }

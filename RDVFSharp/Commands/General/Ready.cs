@@ -24,9 +24,14 @@ namespace RDVFSharp.Commands
                 throw new FighterAlreadyExists(character);
             }
 
-            var fighter = Plugin.Context.Fighters.Find(character);
+            BaseFighter fighter = null;
 
-            if(fighter == null)
+            using (var context = Plugin.Context)
+            {
+                fighter = context.Fighters.Find(character);
+            }
+
+            if (fighter == null)
             {
                 throw new FighterNotRegistered(character);
             }

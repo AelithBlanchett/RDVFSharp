@@ -16,48 +16,52 @@ namespace RDVFSharp.Commands
 
         public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
-            var fighter = Plugin.Context.Fighters.Find(character);
-            if(fighter != null)
+            using (var context = Plugin.Context)
             {
-                throw new FighterAlreadyExists(character);
-            }
-
-            int[] statsArray;
-
-            try
-            {
-                statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
-
-                if(statsArray.Length != 5)
+                var fighter = context.Fighters.Find(character);
+                if (fighter != null)
                 {
-                    throw new Exception();
+                    throw new FighterAlreadyExists(character);
+                }
+
+                int[] statsArray;
+
+                try
+                {
+                    statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
+
+                    if (statsArray.Length != 5)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentException("Invalid arguments. All stats must be numbers. Example: !register 5,8,8,1,2");
+                }
+
+                var createdFighter = new BaseFighter()
+                {
+                    Name = character,
+                    Strength = statsArray[0],
+                    Dexterity = statsArray[1],
+                    Resilience = statsArray[2],
+                    Endurance = statsArray[3],
+                    Special = statsArray[4]
+                };
+
+                if (createdFighter.AreStatsValid)
+                {
+                    context.Fighters.Add(createdFighter);
+                    context.SaveChanges();
+                    Plugin.FChatClient.SendMessageInChannel($"Welcome among us, {character}!", channel);
+                }
+                else
+                {
+                    throw new Exception(string.Join(", ", createdFighter.GetStatsErrors()));
                 }
             }
-            catch (Exception)
-            {
-                throw new ArgumentException("Invalid arguments. All stats must be numbers. Example: !register 5,8,8,1,2");
-            }
-
-            var createdFighter = new BaseFighter()
-            {
-                Name = character,
-                Strength = statsArray[0],
-                Dexterity = statsArray[1],
-                Resilience = statsArray[2],
-                Endurance = statsArray[3],
-                Special = statsArray[4]
-            };
-
-            if (createdFighter.AreStatsValid)
-            {
-                Plugin.Context.Fighters.Add(createdFighter);
-                Plugin.Context.SaveChanges();
-                Plugin.FChatClient.SendMessageInChannel($"Welcome among us, {character}!", channel);
-            }
-            else
-            {
-                throw new Exception(string.Join(", ", createdFighter.GetStatsErrors()));
-            }
+            
         }
     }
 }
