@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RDVFSharp
@@ -10,6 +13,17 @@ namespace RDVFSharp
 
         static void Main()
         {
+
+            var services = new ServiceCollection();
+
+            var configuration = new ConfigurationBuilder()
+                                .AddJsonFile("appsettings.json", optional: false)
+                                .Build();
+
+            services.AddDbContext<DataContext.RDVFDataContext>(optionsBuilder => optionsBuilder.UseMySql(configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
+
+            var serviceProvider = services.BuildServiceProvider();
+
 #if DEBUG
             var flistUsername = "";
             var flistPassword = "";
@@ -19,14 +33,11 @@ namespace RDVFSharp
             var bot = new FChatSharpLib.Bot(flistUsername, flistPassword, botCharacterName, adminName, true, 4000);
             bot.Connect();
 
-            RDV = new RendezvousFighting(new DataContext.RDVFDataContext(), channelToWatch, IsDebugging);
+            RDV = new RendezvousFighting(serviceProvider, channelToWatch, IsDebugging);
             RDV.Run();
 #else
-            var bot = new FChatSharpLib.RemoteBotController();
-            bot.Connect();
-
-            var channelToWatch = new List<string>() { "adh-2bef661405a83f74cd94" }; //The actual channel you want to connect to
-            RDV = new RendezvousFighting(new DataContext.RDVFDataContext(), channelToWatch, IsDebugging);
+            var channelToWatch = new List<string>() { "adh-b3c88050e9c580631c70" };
+            RDV = new RendezvousFighting(serviceProvider, channelToWatch, IsDebugging);
             RDV.Run();
 #endif
         }

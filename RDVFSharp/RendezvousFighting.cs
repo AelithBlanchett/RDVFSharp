@@ -1,4 +1,5 @@
 ﻿using FChatSharpLib.Entities.Plugin;
+using Microsoft.Extensions.DependencyInjection;
 using RDVFSharp.DataContext;
 using RDVFSharp.Entities;
 using System;
@@ -14,11 +15,19 @@ namespace RDVFSharp
         public Battlefield CurrentBattlefield { get; set; }
         public Fighter FirstFighter { get; set; }
         public Fighter SecondFighter { get; set; }
-        public RDVFDataContext Context { get; set; }
-
-        public RendezvousFighting(RDVFDataContext context, List<string> channels, bool debug = false, Battlefield currentBattlefield = null) : base(channels, debug)
+        public RDVFDataContext Context
         {
-            Context = context;
+            get
+            {
+                return ServiceProvider.GetService<RDVFDataContext>();
+            }
+        }
+        public ServiceProvider ServiceProvider { get; set; }
+
+        public RendezvousFighting(ServiceProvider serviceProvider, List<string> channels, bool debug = false, Battlefield currentBattlefield = null) : base(channels, debug)
+        {
+            ServiceProvider = serviceProvider;
+            Context.Fighters.Find(""); //To prevent errors
             ResetFight(currentBattlefield);
         }
 
