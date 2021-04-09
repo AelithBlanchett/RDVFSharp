@@ -908,7 +908,7 @@ namespace RDVFSharp.Entities
             {
                 attacker.RemoveGrappler(target);
                 Battlefield.InGrabRange = false;//A throw will put the fighters out of grappling range.
-                Battlefield.WindowController.Hit.Add(attacker.Name + " found a hold and THREW " + target.Name + " off! " + attacker.Name + " can make another move! " + attacker.Name + " is no longer at a penalty from being grappled!");
+                Battlefield.WindowController.Hit.Add(attacker.Name + " found a hold and THREW " + target.Name + " off! " + attacker.Name + " is no longer at a penalty from being grappled!");
                 //Battlefield.WindowController.Hint.Add(target.Name + ", you should make your post, but you should only emote being hit, do not try to perform any other actions.");
             }
             else
@@ -1067,7 +1067,7 @@ namespace RDVFSharp.Entities
             {   //Miss-- no effect.
                 Battlefield.WindowController.Hit.Add(" FAILED!");
                 attacker.IsExposed += 2; //If the fighter misses a big attack, it leaves them open and they have to recover balance which gives the opponent a chance to strike.
-                Battlefield.WindowController.Hint.Add(attacker.Name + " was left wide open by the failed attack and " + target.Name + " has the opportunity to grab them!");
+                Battlefield.WindowController.Hint.Add(attacker.Name + " was left wide open by the failed attack and is now Exposed! " + target.Name + " has -2 difficulty to hit and can use Grab even if fighters are not in grappling range!");
                 return false; //Failed attack, if we ever need to check that.
             }
 
