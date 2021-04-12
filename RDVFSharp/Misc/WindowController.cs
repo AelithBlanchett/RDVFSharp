@@ -14,6 +14,8 @@ namespace RDVFSharp
 
         public int Damage { get; set; } = 0;
 
+        public string LastMessageSent { get; set; } = "";
+
 
         public WindowController()
         {
@@ -70,7 +72,9 @@ namespace RDVFSharp
             if (Special.Count > 0) lines.Add(FormatMessage(MessageType.Special, string.Join("\n", Special)));
             if (Info.Count > 0) lines.Add("\n" + string.Join("\n", Info));
 
-            battlefield.Plugin.FChatClient.SendMessageInChannel(string.Join("\n", lines), battlefield.Plugin.Channel);
+            LastMessageSent = string.Join("\n", lines);
+
+            battlefield.Plugin.FChatClient.SendMessageInChannel(LastMessageSent, battlefield.Plugin.Channel);
             if (Error.Count > 0)
             {
                 battlefield.Plugin.FChatClient.SendMessageInChannel(string.Join("\n", Error), battlefield.Plugin.Channel);
