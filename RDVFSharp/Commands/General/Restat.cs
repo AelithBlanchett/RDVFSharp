@@ -36,7 +36,7 @@ namespace RDVFSharp.Commands
                 }
                 catch (Exception)
                 {
-                    throw new ArgumentException("Invalid arguments. All stats must be numbers. Example: !restat 5,8,8,1,2");
+                    throw new ArgumentException("Invalid arguments. All stats must be numbers. Example: !restat 5 8 8 1 2");
                 }
 
                 fighter.Strength = statsArray[0];
