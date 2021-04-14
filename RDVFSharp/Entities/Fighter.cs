@@ -412,6 +412,7 @@ namespace RDVFSharp.Entities
             var attacker = this;
             var target = Battlefield.GetTarget();
             var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
+            damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredStam = 5;
             var difficulty = 6;
 
@@ -674,13 +675,18 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
-            damage *= 3;
+            var damage = 30;
             var requiredStam = 25;
 
             var difficulty = 10; //Base difficulty, rolls greater than this amount will hit.
             difficulty += (int)Math.Floor((double)(target.Strength - attacker.Strength) / 2); //Up the difficulty of submission moves based on the relative strength of the combatants.
-            difficulty *= (int)Math.Ceiling((double)2 * target.HP / target.MaxHP);//Multiply difficulty with percentage of opponent's health and 2, so that 50% health yields normal difficulty.
+            //difficulty *= (int)Math.Ceiling((double)2 * target.HP / target.MaxHP);//Multiply difficulty with percentage of opponent's health and 2, so that 50% health yields normal difficulty.
+
+            if (target.IsDisoriented < 1) // If target is above 50% HP this is a bad move.
+            {
+                damage /= 2; 
+                difficulty *= 2
+            }
 
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
 
@@ -870,7 +876,7 @@ namespace RDVFSharp.Entities
             if (roll <= attackTable.miss)
             {   //Miss-- no effect.
                 Battlefield.WindowController.Hit.Add(" FAILED!");
-                if (attacker.IsRestrained) attacker.IsEscaping += 5;//If we fail to escape, it'll be easier next time.
+                if (attacker.IsRestrained) attacker.IsEscaping += 4;//If we fail to escape, it'll be easier next time.
                 attacker.IsExposed += 2; //If the fighter misses a big attack, it leaves them open and they have to recover balance which gives the opponent a chance to strike.
                 Battlefield.WindowController.Hint.Add(attacker.Name + " was left wide open by the failed attack and is now Exposed! " + target.Name + " has -2 difficulty to hit and can use Grab even if fighters are not in grappling range!");
                 //If opponent fumbled on their previous action they should become stunned. Tackle is a special case because it stuns anyway if it hits, so we only do this on a miss.
@@ -930,8 +936,9 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
+            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1;
             damage *= 2;
+            damage += ( attacker.Strength + attacker.Dexterity );
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredStam = 10;
             var difficulty = 10; //Base difficulty, rolls greater than this amount will hit.
@@ -1196,6 +1203,7 @@ namespace RDVFSharp.Entities
             var attacker = this;
             var target = Battlefield.GetTarget();
             var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Spellpower;
+            damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredMana = 5;
             var difficulty = 6; //Base difficulty, rolls greater than this amount will hit.
 
@@ -1533,7 +1541,7 @@ namespace RDVFSharp.Entities
             }
 
 
-            if (attacker.IsRestrained) difficulty += (9 + (int)Math.Floor((double)(target.Strength - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
+            if (attacker.IsRestrained) difficulty += (6 + (int)Math.Floor((double)(target.Strength - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
             if (attacker.IsRestrained) difficulty -= attacker.IsEscaping; //Then reduce difficulty based on how much effort we've put into escaping so far.
             if (target.IsRestrained) difficulty -= 4; //Lower the difficulty considerably if the target is restrained.
 
@@ -1571,7 +1579,7 @@ namespace RDVFSharp.Entities
             if (roll <= attackTable.miss)
             {   //Miss-- no effect.
                 Battlefield.WindowController.Hit.Add(" FAILED!");
-                if (attacker.IsRestrained) attacker.IsEscaping += 5;//If we fail to escape, it'll be easier next time.
+                if (attacker.IsRestrained) attacker.IsEscaping += 4;//If we fail to escape, it'll be easier next time.
                 return false; //Failed attack, if we ever need to check that.
             }
 
@@ -1628,7 +1636,7 @@ namespace RDVFSharp.Entities
                 target.Fumbled = false;
             }
 
-            if (attacker.IsRestrained) difficulty += (9 + (int)Math.Floor((double)(target.Spellpower + target.Strength - attacker.Spellpower - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
+            if (attacker.IsRestrained) difficulty += (6 + (int)Math.Floor((double)(target.Spellpower + target.Strength - attacker.Spellpower - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
             if (attacker.IsRestrained) difficulty -= attacker.IsEscaping; //Then reduce difficulty based on how much effort we've put into escaping so far.
             if (target.IsRestrained) difficulty -= 4; //Lower the difficulty considerably if the target is restrained.
 
@@ -1666,7 +1674,7 @@ namespace RDVFSharp.Entities
             if (roll <= attackTable.miss)
             {   //Miss-- no effect.
                 Battlefield.WindowController.Hit.Add(" FAILED!");
-                if (attacker.IsRestrained) attacker.IsEscaping += 5;//If we fail to escape, it'll be easier next time.
+                if (attacker.IsRestrained) attacker.IsEscaping += 4;//If we fail to escape, it'll be easier next time.
                 return false; //Failed attack, if we ever need to check that.
             }
 
