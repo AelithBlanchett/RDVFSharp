@@ -685,7 +685,7 @@ namespace RDVFSharp.Entities
             if (target.IsDisoriented < 1) // If target is above 50% HP this is a bad move.
             {
                 damage /= 2; 
-                difficulty *= 2
+                difficulty *= 2;
             }
 
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
