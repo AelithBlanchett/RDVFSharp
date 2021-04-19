@@ -9,7 +9,7 @@ namespace RDVFSharp
     {
         public static int RollDice(int sides)
         {
-            return GetRandomNumber(1, sides);
+            return GetRandomNumber(1, sides + 1);
         }
 
         public static int RollDice(List<int> sides)
@@ -17,14 +17,15 @@ namespace RDVFSharp
             var total = 0;
             for (var i = 0; i < sides.Count(); i++)
             {
-                total += RollDice(sides[i]);
+                total += RollDice(sides[i] + 1);
             }
             return total;
         }
 
+        private static Random rnum = new Random();
+
         public static int GetRandomNumber(int min, int max)
         {
-            Random rnum = new Random();
             return rnum.Next(min, max);
         }
 
@@ -35,7 +36,7 @@ namespace RDVFSharp
 
         public static int CoinFlip()
         {
-            return GetRandomNumber(0, 1);
+            return rnum.NextDouble() < 0.5d ? 0 : 1;
         }
     }
 }
