@@ -21,7 +21,7 @@ namespace RDVFSharp.Commands
                 if (activeFighter != null)
                 {
                     activeFighter.WantsToLeave = true;
-                    Plugin.FChatClient.SendMessageInChannel($"The fight will end if your opponent types !exit too.", channel);
+                    Plugin.FChatClient.SendMessageInChannel($"The fight will end if your opponent types !leave too.", channel);
                 }
                 else
                 {
