@@ -6,7 +6,7 @@ namespace RDVFSharp.Commands
     {
         public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (!Plugin.CurrentBattlefield.InGrabRange)
+            if (Plugin.CurrentBattlefield.GetActor().CurseUsed > 0)
             {
                 base.ExecuteCommand(character, args, channel);
             }
