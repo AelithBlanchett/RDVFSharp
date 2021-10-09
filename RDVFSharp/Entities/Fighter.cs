@@ -71,6 +71,7 @@ namespace RDVFSharp.Entities
         public int DamageEffectMult { get; set; }
         public bool IsUnconscious { get; set; }
         public bool IsDead { get; private set; }
+        public int CurseUsed { get; set; }
         public bool IsRestrained { get; set; }
         public bool IsStunned { get; set; }
         public int IsDisoriented { get; set; }
@@ -135,6 +136,7 @@ namespace RDVFSharp.Entities
 
             IsUnconscious = false;
             IsDead = false;
+            CurseUsed = 0;
             IsRestrained = false;
             IsStunned = false;
             IsDisoriented = 0;
@@ -1297,7 +1299,8 @@ namespace RDVFSharp.Entities
 
             if (roll <= attackTable.miss)
             {   //Miss-- no effect. Happens during grappling.
-                Battlefield.WindowController.Hit.Add(" FAILED! ");
+                Battlefield.WindowController.Hit.Add(" CURSE FAILED! Curse may not be used again by the attacker!");
+                attacker.CurseUsed += 10;
                 return false; //Failed attack, if we ever need to check that.
             }
 
@@ -1310,7 +1313,7 @@ namespace RDVFSharp.Entities
             }
             else
             { //Normal hit.
-                Battlefield.WindowController.Hit.Add("MAGIC HIT! ");
+                Battlefield.WindowController.Hit.Add("CURSE HIT! Curse may not be used again by the attacker!");
             }
 
             //Deal all the actual damage/effects here.
@@ -1329,6 +1332,7 @@ namespace RDVFSharp.Entities
 
             damage = Math.Max(damage, 1);
             target.HitHp(damage);
+            attacker.CurseUsed += 10;
             return true; //Successful attack, if we ever need to check that.
         }
 
