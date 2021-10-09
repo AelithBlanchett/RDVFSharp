@@ -12,7 +12,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("You have already used Ultimate once in this match!", Plugin.Channel);
+                Plugin.FChatClient.SendMessageInChannel("You have already used Curse once in this match!", Plugin.Channel);
             }
         }
     }
