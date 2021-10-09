@@ -1245,7 +1245,7 @@ namespace RDVFSharp.Entities
             return true; //Successful attack, if we ever need to check that.
         }
 
-        public bool ActionUltimate(int roll)
+        public bool ActionCurse(int roll)
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
