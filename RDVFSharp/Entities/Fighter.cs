@@ -1584,7 +1584,7 @@ namespace RDVFSharp.Entities
             var attacker = this;
             var target = Battlefield.GetTarget();
             var requiredStam = 5;
-            var difficulty = 6; //Base difficulty, rolls greater than this amount will hit.
+            var difficulty = 1; //Base difficulty, rolls greater than this amount will hit.
 
             //If opponent fumbled on their previous action they should become stunned.
             if (target.Fumbled)
@@ -1594,7 +1594,7 @@ namespace RDVFSharp.Entities
             }
 
 
-            if (attacker.IsRestrained) difficulty += (6 + (int)Math.Floor((double)(target.Strength - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
+            if (attacker.IsRestrained) difficulty += (11 + (int)Math.Floor((double)(target.Strength - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
             if (attacker.IsRestrained) difficulty -= attacker.IsEscaping; //Then reduce difficulty based on how much effort we've put into escaping so far.
             if (target.IsRestrained) difficulty -= 4; //Lower the difficulty considerably if the target is restrained.
 
@@ -1661,7 +1661,6 @@ namespace RDVFSharp.Entities
             }
             else
             {
-                attacker.IsEvading = (int)Math.Floor((double)totalBonus / 2);
                 attacker.IsAggressive = (int)Math.Ceiling((double)totalBonus / 2);
                 Battlefield.WindowController.Hit.Add(attacker.Name + " gained mobility bonuses against " + target.Name + " for one turn!");
             }
@@ -1680,7 +1679,7 @@ namespace RDVFSharp.Entities
             var attacker = this;
             var target = Battlefield.GetTarget();
             var requiredMana = 5;
-            var difficulty = 6; //Base difficulty, rolls greater than this amount will hit.
+            var difficulty = 1; //Base difficulty, rolls greater than this amount will hit.
 
         //If opponent fumbled on their previous action they should become stunned.
             if (target.Fumbled)
@@ -1689,7 +1688,7 @@ namespace RDVFSharp.Entities
                 target.Fumbled = false;
             }
 
-            if (attacker.IsRestrained) difficulty += (6 + (int)Math.Floor((double)(target.Spellpower + target.Strength - attacker.Spellpower - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
+            if (attacker.IsRestrained) difficulty += (11 + (int)Math.Floor((double)(target.Spellpower + target.Strength - attacker.Spellpower - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
             if (attacker.IsRestrained) difficulty -= attacker.IsEscaping; //Then reduce difficulty based on how much effort we've put into escaping so far.
             if (target.IsRestrained) difficulty -= 4; //Lower the difficulty considerably if the target is restrained.
 
@@ -1756,7 +1755,6 @@ namespace RDVFSharp.Entities
             }
             else
             {
-                attacker.IsEvading = (int)Math.Floor((double)totalBonus / 2);
                 attacker.IsAggressive = (int)Math.Ceiling((double)totalBonus / 2);
                 Battlefield.WindowController.Hit.Add(attacker.Name + " gained mobility bonuses against " + target.Name + " for one turn!");
             }
