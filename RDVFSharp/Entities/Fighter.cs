@@ -1253,7 +1253,7 @@ namespace RDVFSharp.Entities
             var target = Battlefield.GetTarget();
             var damage = 11 + attacker.Spellpower - attacker.Strength;
             damage *= 2;
-            var requiredMana = 10;
+            var requiredMana = 20;
             var difficulty = 8; //Base difficulty, rolls greater than this amount will hit.
 
             //If opponent fumbled on their previous action they should become stunned.
