@@ -391,7 +391,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredStam = 5;
             var difficulty = 6;
@@ -474,7 +474,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage *= 2;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredStam = 10;
@@ -561,7 +561,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage /= 2;
             var requiredStam = 5;
 
@@ -727,7 +727,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage /= 2;
             var requiredStam = 10;
             var difficulty = 8; //Base difficulty, rolls greater than this amount will hit.
@@ -797,7 +797,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage *= 2;
             var requiredStam = 10;
             var difficulty = 8; //Base difficulty, rolls greater than this amount will hit.
@@ -898,7 +898,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1;
             damage *= 2;
             damage += ( attacker.Strength + attacker.Dexterity );
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
@@ -987,7 +987,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Spellpower;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
             damage *= 2;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredMana = 10;
@@ -1075,7 +1075,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Spellpower;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
             damage *= 2;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredMana = 10;
@@ -1164,7 +1164,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Spellpower;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredMana = 5;
             var difficulty = 6; //Base difficulty, rolls greater than this amount will hit.
@@ -1341,7 +1341,7 @@ namespace RDVFSharp.Entities
         {
             var attacker = this;
             var target = Battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Spellpower;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
             damage *= 2;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredMana = 10;
@@ -1650,7 +1650,7 @@ namespace RDVFSharp.Entities
             }
 
             //The total mobility bonus generated. This will be split bewteen attack and defense.
-            var totalBonus = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Dexterity;
+            var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Dexterity;
 
             if (target.IsGrappling(attacker))
             { //If you were being grappled, you get free.
@@ -1744,7 +1744,7 @@ namespace RDVFSharp.Entities
             }
 
             //The total mobility bonus generated. This will be split bewteen attack and defense.
-            var totalBonus = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Spellpower;
+            var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
 
             if (target.IsGrappling(attacker))
             { //If you were being grappled, you get free.
