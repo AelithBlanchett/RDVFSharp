@@ -39,34 +39,34 @@ namespace RDVFSharp.FightingLogic.Actions
             if (attacker.Mana < requiredMana)
             {   //Not enough stamina-- reduced effect
                 difficulty += (int)Math.Ceiling((double)((requiredMana - attacker.Mana) / requiredMana) * (20 - difficulty)); // Too tired? You're going to fail.
-                battlefield.WindowController.Hint.Add(attacker.Name + " didn't have enough Mana and took a penalty to the attempt.");
+                battlefield.OutputController.Hint.Add(attacker.Name + " didn't have enough Mana and took a penalty to the attempt.");
             }
 
             attacker.HitMana(requiredMana); //Now that mana has been checked, reduce the attacker's mana by the appopriate amount.
 
             var attackTable = attacker.BuildActionTable(difficulty, 0, 0, target.Mana, target.ManaCap);
             //If target can dodge the atatcker has to roll higher than the dodge value. Otherwise they need to roll higher than the miss value. We display the relevant value in the output.
-            battlefield.WindowController.Info.Add("Dice Roll Required: " + (attackTable.miss + 1));
+            battlefield.OutputController.Info.Add("Dice Roll Required: " + (attackTable.miss + 1));
 
             var tempGrappleFlag = true;
             if (attacker.IsGrappling(target))
             { //If you're grappling someone they are freed, regardless of the outcome.
-                battlefield.WindowController.Hint.Add(attacker.Name + " used ESCAPE. " + target.Name + " is no longer being grappled. ");
+                battlefield.OutputController.Hint.Add(attacker.Name + " used ESCAPE. " + target.Name + " is no longer being grappled. ");
                 target.RemoveGrappler(attacker);
                 tempGrappleFlag = false;
             }
 
             if (roll <= attackTable.miss)
             {   //Miss-- no effect.
-                battlefield.WindowController.Hit.Add(" FAILED!");
+                battlefield.OutputController.Hit.Add(" FAILED!");
                 if (attacker.IsRestrained) attacker.IsEscaping += 4;//If we fail to escape, it'll be easier next time.
                 return false; //Failed attack, if we ever need to check that.
             }
 
             if (roll >= attackTable.crit)
             { //Critical Hit-- increased damage/effect, typically 3x damage if there are no other bonuses.
-                battlefield.WindowController.Hit.Add(" CRITICAL SUCCESS! ");
-                battlefield.WindowController.Hint.Add(attacker.Name + " can perform another action!");
+                battlefield.OutputController.Hit.Add(" CRITICAL SUCCESS! ");
+                battlefield.OutputController.Hint.Add(attacker.Name + " can perform another action!");
                 // The only way the target can be stunned is if we set it to stunned with the action we're processing right now.
                 // That in turn is only possible if target had fumbled. So we restore the fumbled status, but keep the stun.
                 // That way we properly get a third action.
@@ -81,7 +81,7 @@ namespace RDVFSharp.FightingLogic.Actions
 
             if (target.IsGrappling(attacker))
             { //If you were being grappled, you get free.
-                battlefield.WindowController.Hint.Add(attacker.Name + " escaped " + target.Name + "'s hold! ");
+                battlefield.OutputController.Hint.Add(attacker.Name + " escaped " + target.Name + "'s hold! ");
                 attacker.RemoveGrappler(target);
                 tempGrappleFlag = false;
                 attacker.IsEvading = (int)Math.Floor((double)totalBonus / 2);
@@ -90,14 +90,14 @@ namespace RDVFSharp.FightingLogic.Actions
             {
                 attacker.IsEvading = (int)Math.Floor((double)totalBonus / 2);
                 attacker.IsAggressive = (int)Math.Ceiling((double)totalBonus / 2);
-                battlefield.WindowController.Hit.Add(attacker.Name + " gained mobility bonuses against " + target.Name + " for one turn!");
+                battlefield.OutputController.Hit.Add(attacker.Name + " gained mobility bonuses against " + target.Name + " for one turn!");
             }
 
             if (battlefield.InGrabRange)
             {
-                battlefield.WindowController.Hit.Add(attacker.Name + " moved away!");
+                battlefield.OutputController.Hit.Add(attacker.Name + " moved away!");
                 battlefield.InGrabRange = false;
-                battlefield.WindowController.Hint.Add(attacker.Name + " managed to put some distance between them and " + target.Name + " and is now out of grabbing range.");
+                battlefield.OutputController.Hint.Add(attacker.Name + " managed to put some distance between them and " + target.Name + " and is now out of grabbing range.");
             }
 
             return true; //Successful attack, if we ever need to check that.

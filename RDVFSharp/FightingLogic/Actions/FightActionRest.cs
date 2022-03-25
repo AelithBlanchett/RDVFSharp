@@ -28,14 +28,14 @@ namespace RDVFSharp.FightingLogic.Actions
 
             if (roll <= difficulty)
             {   //Failed!
-                battlefield.WindowController.Hint.Add(attacker.Name + " was too disoriented or distracted to get any benefit from resting.");
+                battlefield.OutputController.Hint.Add(attacker.Name + " was too disoriented or distracted to get any benefit from resting.");
                 return false; //Failed action, if we ever need to check that.
             }
 
             if (roll == 20)
             {
-                battlefield.WindowController.Hit.Add("CRITICAL SUCCESS! ");
-                battlefield.WindowController.Hint.Add(attacker.Name + " can perform another action!");
+                battlefield.OutputController.Hit.Add("CRITICAL SUCCESS! ");
+                battlefield.OutputController.Hint.Add(attacker.Name + " can perform another action!");
                 target.IsStunned = true;
                 if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                 if (target.IsExposed > 0) target.IsExposed += 2;
@@ -48,15 +48,15 @@ namespace RDVFSharp.FightingLogic.Actions
                 target.Fumbled = false;
             }
 
-            battlefield.WindowController.Info.Add("Dice Roll Required: " + Math.Max(2, (difficulty + 1)));
+            battlefield.OutputController.Info.Add("Dice Roll Required: " + Math.Max(2, (difficulty + 1)));
             var staminaShift = 12 + (attacker.Willpower * 2);
             //staminaShift = Math.Min(staminaShift, attacker.mana);
 
             //attacker.StaminaCap = Math.Max(attacker.StaminaCap, attacker.Stamina + staminaShift);
             //attacker.HitMana(staminaShift);
             attacker.AddStamina(staminaShift);
-            battlefield.WindowController.Hit.Add(attacker.Name + " REGENERATES STAMINA!"); //Removed Stamina cost.
-            battlefield.WindowController.Hint.Add(attacker.Name + " recovered " + staminaShift + " stamina!");
+            battlefield.OutputController.Hit.Add(attacker.Name + " REGENERATES STAMINA!"); //Removed Stamina cost.
+            battlefield.OutputController.Hint.Add(attacker.Name + " recovered " + staminaShift + " stamina!");
             return true;
         }
     }

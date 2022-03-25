@@ -10,7 +10,7 @@ namespace RDVFSharp.Commands
 
         public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsActive)
+            if (Plugin.CurrentBattlefield.IsInProgress)
             {
                 var activeFighter = Plugin.CurrentBattlefield.GetFighter(character);
                 if (activeFighter != null)

@@ -23,19 +23,19 @@ namespace RDVFSharp.FightingLogic.Actions
 
             attacker.IsExposed += 2;//Fumbling exposes you.
 
-            battlefield.WindowController.Hit.Add(" FUMBLE! ");
+            battlefield.OutputController.Hit.Add(" FUMBLE! ");
 
             // Fumbles make you lose a turn, unless your opponent fumbled on their previous one in which case nobody should lose a turn and we just clear the fumbled status on them.
             // Reminder: if fumbled is true for you, your opponent's next normal action will stun you.
             if (!target.Fumbled)
             {
                 attacker.Fumbled = true;
-                battlefield.WindowController.Hint.Add(attacker.Name + " loses the next action and is Exposed!");
+                battlefield.OutputController.Hint.Add(attacker.Name + " loses the next action and is Exposed!");
             }
             else
             {
                 target.Fumbled = false;
-                battlefield.WindowController.Hint.Add("Both fighter fumbled and lost an action so it evens out, but you should still emote the fumble.");
+                battlefield.OutputController.Hint.Add("Both fighter fumbled and lost an action so it evens out, but you should still emote the fumble.");
             }
 
             return false;

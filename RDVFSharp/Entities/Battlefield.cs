@@ -10,41 +10,29 @@ namespace RDVFSharp
 {
     public class Battlefield
     {
+        public RendezvousFighting Plugin { get; }
         public List<Fighter> Fighters { get; set; }
+        public OutputController OutputController { get; set; }
+
         public string Stage { get; set; }
+        public bool IsInProgress { get; set; }
+
+        public bool InGrabRange { get; set; }
         public bool DisplayGrabbed { get; set; }
-        public WindowController WindowController { get; set; }
 
         private int currentFighter = 0;
-        public bool InGrabRange { get; set; }
-        public RendezvousFighting Plugin { get; }
 
-        public bool IsInFight(string character)
-        {
-            return Fighters.Any(x => x.Name.ToLower() == character.ToLower());
-        }
-
-        public Fighter GetFighter(string character)
-        {
-            return Fighters.FirstOrDefault(x => x.Name.ToLower() == character.ToLower());
-        }
-
-        public Fighter GetFighterTarget(string character)
-        {
-            return Fighters.FirstOrDefault(x => x.Name.ToLower() != character.ToLower());
-        }
-
-        public bool IsActive { get; set; }
 
         public Battlefield(RendezvousFighting plugin)
         {
             Plugin = plugin;
-            WindowController = new WindowController();
+            OutputController = new OutputController();
             Fighters = new List<Fighter>();
-            Stage = PickStage();
+            Stage = StageSelect.SelectRandom();
+
             InGrabRange = false;
             DisplayGrabbed = true;
-            IsActive = false;
+            IsInProgress = false;
         }
 
         public void InitialSetup(Fighter firstFighter, Fighter secondFighter)
@@ -54,47 +42,15 @@ namespace RDVFSharp
             Fighters.Add(secondFighter);
 
             PickInitialActor();
-            WindowController.Hit.Add("Game started!");
-            WindowController.Hit.Add("FIGHTING STAGE: " + Stage + " - " + GetActor().Name + " goes first!");
-            OutputFighterStatus(); // Creates the fighter status blocks (HP/Mana/Stamina)
+            OutputController.Hit.Add("Game started!");
+            OutputController.Hit.Add("FIGHTING STAGE: " + Stage + " - " + GetActor().Name + " goes first!");
+            OutputFighterStatuses(); // Creates the fighter status blocks (HP/Mana/Stamina)
             OutputFighterStats(); // Creates the fighter stat blocks (STR/DEX/END/INT/WIL)
-            WindowController.Info.Add("[url=http://www.f-list.net/c/rendezvous%20fight/]Visit this page for game information[/url]");
-            IsActive = true;
-            WindowController.UpdateOutput(this);
+            OutputController.Info.Add("[url=http://www.f-list.net/c/rendezvous%20fight/]Visit this page for game information[/url]");
+            IsInProgress = true;
+            OutputController.Broadcast(this);
         }
 
-        public BaseFight EndFight(Fighter victor, Fighter loser)
-        {
-            var fightResult = new BaseFight()
-            {
-                Room = Plugin.Channel,
-                WinnerId = victor.Name,
-                LoserId = loser.Name,
-                FinishDate = DateTime.UtcNow
-            };
-
-            using (var context = Plugin.Context)
-            {
-                context.Add(fightResult);
-                context.SaveChanges();
-            }
-            
-
-            Plugin.ResetFight();
-
-            return fightResult;
-        }
-
-        public bool IsThisCharactersTurn(string characterName)
-        {
-            return GetActor().Name == characterName;
-        }
-
-        public bool IsAbleToAttack(string characterName)
-        {
-            return IsActive && IsThisCharactersTurn(characterName);
-        }
-        
         public void TakeAction(string actionMade)
         {
             var action = actionMade;
@@ -112,7 +68,7 @@ namespace RDVFSharp
             Console.WriteLine(actor.LastRolls);
             var luck = 0; //Actor's average roll of the fight.
 
-            WindowController.Action.Add(action);
+            OutputController.Action.Add(action);
 
             // Update tracked sum of all rolls and number of rolls the actor has made. Then calculate average value of actor's rolls in this fight.
             actor.RollTotal += roll;
@@ -125,59 +81,26 @@ namespace RDVFSharp
             var fightAction = FightActionFactory.Create(action);
             fightAction.Execute(roll, this, actor, this.GetFighterTarget(actor.Name));
 
-            WindowController.Info.Add("Raw Dice Roll: " + roll);
-            WindowController.Info.Add(actor.Name + "'s Average Dice Roll: " + luck);
-            if (roll == 20) WindowController.Info.Add("\n" + "[eicon]d20crit[/eicon]" + "\n");//Test to see if this works. Might add more graphics in the future.
+            OutputController.Info.Add("Raw Dice Roll: " + roll);
+            OutputController.Info.Add(actor.Name + "'s Average Dice Roll: " + luck);
+            if (roll == 20) OutputController.Info.Add("\n" + "[eicon]d20crit[/eicon]" + "\n");//Test to see if this works. Might add more graphics in the future.
 
             TurnUpKeep(); //End of turn upkeep (Stamina regen, check for being stunned/knocked out, etc.)
-            OutputFighterStatus(); // Creates the fighter status blocks (HP/Mana/Stamina)
-                                   //Battlefield.outputFighterStats();
-            WindowController.UpdateOutput(this); //Tells the window controller to format and dump all the queued up messages to the results screen.
+            OutputFighterStatuses(); // Creates the fighter status blocks (HP/Mana/Stamina)
+                                     //Battlefield.outputFighterStats();
+            OutputController.Broadcast(this); //Tells the window controller to format and dump all the queued up messages to the results screen.
         }
 
-        //public bool AddFighter(ArenaSettings settings)
-        //{
-        //    try
-        //    {
-        //        Fighters.Add(new Fighter(this, settings)); //TODO
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex);
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
-        public void ClearFighters()
+        #region Turn-based logic
+        public void TurnUpKeep()
         {
-            Fighters.Clear();
-        }
-
-        public Fighter GetActor()
-        {
-            return Fighters[currentFighter];
-        }
-
-        public Fighter GetTarget()
-        {
-            return Fighters[1 - currentFighter];
-        }
-
-        public void OutputFighterStatus()
-        {
-            for (int i = 0; i < Fighters.Count; i++)
+            for (var i = 0; i < Fighters.Count; i++)
             {
-                WindowController.Status.Add(Fighters[i].GetStatus());
+                Fighters[i].UpdateCondition();
             }
-        }
 
-        public void OutputFighterStats()
-        {
-            for (int i = 0; i < Fighters.Count; i++)
-            {
-                WindowController.Status.Add(Fighters[i].GetStatBlock());
-            }
+            Fighters[currentFighter].Regen();
+            NextFighter();
         }
 
         public void NextFighter()
@@ -196,62 +119,106 @@ namespace RDVFSharp
             currentFighter = Utils.GetRandomNumber(0, Fighters.Count - 1);
         }
 
-        public string PickStage()
+        public bool IsThisCharactersTurn(string characterName)
         {
-            var stages = new List<string>() {
-            "The Pit",
-            "RF:Wrestling Ring",
-            "Arena",
-            "Subway",
-            "Skyscraper Roof",
-            "Forest",
-            "Cafe",
-            "Street road",
-            "Alley",
-            "Park",
-            "RF:MMA Hexagonal Cage",
-            "Hangar",
-            "Swamp",
-            "RF:Glass Box",
-            "RF:Free Space",
-            "Magic Shop",
-            "Locker Room",
-            "Library",
-            "Pirate Ship",
-            "Baazar",
-            "Supermarket",
-            "Night Club",
-            "Docks",
-            "Hospital",
-            "Dark Temple",
-            "Restaurant",
-            "Graveyard",
-            "Zoo",
-            "Slaughterhouse",
-            "Junkyard",
-            "Theatre",
-            "Circus",
-            "Castle",
-            "Museum",
-            "Beach",
-            "Bowling Club",
-            "Concert Stage",
-            "Wild West Town",
-            "Movie Set"
-            };
-
-            return stages[Utils.GetRandomNumber(0, stages.Count - 1)];
+            return GetActor().Name == characterName;
         }
 
-        public void TurnUpKeep()
+        public bool IsAbleToAttack(string characterName)
         {
-            for (var i = 0; i < Fighters.Count; i++)
+            return IsInProgress && IsThisCharactersTurn(characterName);
+        }
+        #endregion
+
+        #region Fighter management
+
+        public bool IsInFight(string character)
+        {
+            return Fighters.Any(x => x.Name.ToLower() == character.ToLower());
+        }
+
+        public Fighter GetFighter(string character)
+        {
+            return Fighters.FirstOrDefault(x => x.Name.ToLower() == character.ToLower());
+        }
+
+        public Fighter GetFighterTarget(string character)
+        {
+            return Fighters.FirstOrDefault(x => x.Name.ToLower() != character.ToLower());
+        }
+
+        public Fighter FirstFighter
+        {
+            get
             {
-                Fighters[i].UpdateCondition();
+                return Fighters.FirstOrDefault();
+            }
+        }
+
+        public Fighter SecondFighter
+        {
+            get
+            {
+                return Fighters.LastOrDefault();
+            }
+        }
+
+        public void ClearFighters()
+        {
+            Fighters.Clear();
+        }
+
+        public Fighter GetActor()
+        {
+            return Fighters[currentFighter];
+        }
+
+        public Fighter GetTarget()
+        {
+            return Fighters[1 - currentFighter];
+        }
+
+        #endregion     
+
+        #region Output shortcuts
+        public void OutputFighterStatuses()
+        {
+            for (int i = 0; i < Fighters.Count; i++)
+            {
+                OutputController.Status.Add(Fighters[i].GetStatus());
+            }
+        }
+
+        public void OutputFighterStats()
+        {
+            for (int i = 0; i < Fighters.Count; i++)
+            {
+                OutputController.Status.Add(Fighters[i].GetStatBlock());
+            }
+        }
+
+        #endregion
+
+        public BaseFight EndFight(Fighter victor, Fighter loser)
+        {
+            var fightResult = new BaseFight()
+            {
+                Room = Plugin.Channel,
+                WinnerId = victor.Name,
+                LoserId = loser.Name,
+                FinishDate = DateTime.UtcNow
+            };
+
+            using (var context = Plugin.Context)
+            {
+                context.Add(fightResult);
+                context.SaveChanges();
             }
 
-            Fighters[currentFighter].Regen();
-            NextFighter();
+
+            Plugin.ResetFight();
+
+            return fightResult;
         }
     }
 }

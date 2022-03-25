@@ -9,7 +9,7 @@ namespace RDVFSharp.FightingLogic.Actions
     {
         public override bool Execute(int roll, Battlefield battlefield, Fighter initiatingActor, Fighter targetedActor)
         {
-            battlefield.WindowController.Hit.Add(initiatingActor.Name + " skipped the turn! ");
+            battlefield.OutputController.Hit.Add(initiatingActor.Name + " skipped the turn! ");
             return false;
         }
     }

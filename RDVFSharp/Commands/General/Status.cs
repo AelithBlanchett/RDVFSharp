@@ -10,9 +10,9 @@ namespace RDVFSharp.Commands
 
         public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsActive)
+            if (Plugin.CurrentBattlefield.IsInProgress)
             {
-                Plugin.FChatClient.SendPrivateMessage(Plugin.CurrentBattlefield.WindowController.LastMessageSent, character);
+                Plugin.FChatClient.SendPrivateMessage(Plugin.CurrentBattlefield.OutputController.LastMessageSent, character);
             }
             else
             {

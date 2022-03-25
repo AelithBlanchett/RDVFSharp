@@ -2,7 +2,7 @@
 
 namespace RDVFSharp
 {
-    public class WindowController
+    public class OutputController
     {
         public List<string> Action { get; set; } = new List<string>();
         public List<string> Hit { get; set; } = new List<string>();
@@ -17,7 +17,7 @@ namespace RDVFSharp
         public string LastMessageSent { get; set; } = "";
 
 
-        public WindowController()
+        public OutputController()
         {
             Action = new List<string>();
             Hit = new List<string>();
@@ -57,7 +57,7 @@ namespace RDVFSharp
             }
         }
 
-        public void UpdateOutput(Battlefield battlefield)
+        public void Broadcast(Battlefield battlefield)
         {
             Info.Add("This is " + battlefield.GetActor().Name + "'s turn.");
             var lines = new List<string>(); ;

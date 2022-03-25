@@ -28,14 +28,14 @@ namespace RDVFSharp.FightingLogic.Actions
 
             if (roll <= difficulty)
             {   //Failed!
-                battlefield.WindowController.Hint.Add(attacker.Name + " was too disoriented or distracted to channel mana.");
+                battlefield.OutputController.Hint.Add(attacker.Name + " was too disoriented or distracted to channel mana.");
                 return false; //Failed action, if we ever need to check that.
             }
 
             if (roll == 20)
             {
-                battlefield.WindowController.Hit.Add("CRITICAL SUCCESS! ");
-                battlefield.WindowController.Hint.Add(attacker.Name + " can perform another action!");
+                battlefield.OutputController.Hit.Add("CRITICAL SUCCESS! ");
+                battlefield.OutputController.Hint.Add(attacker.Name + " can perform another action!");
                 target.IsStunned = true;
                 if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                 if (target.IsExposed > 0) target.IsExposed += 2;
@@ -48,15 +48,15 @@ namespace RDVFSharp.FightingLogic.Actions
                 target.Fumbled = false;
             }
 
-            battlefield.WindowController.Info.Add("Dice Roll Required: " + Math.Max(2, (difficulty + 1)));
+            battlefield.OutputController.Info.Add("Dice Roll Required: " + Math.Max(2, (difficulty + 1)));
             var manaShift = 12 + (attacker.Willpower * 2);
             //manaShift = Math.Min(manaShift, attacker.Stamina); //This also needs to be commented awaay if we want to remove stamina cost.
 
             //attacker._manaCap = Math.Max(attacker._manaCap, attacker.mana + manaShift);
             //attacker.HitStamina(manaShift);
             attacker.AddMana(manaShift);
-            battlefield.WindowController.Hit.Add(attacker.Name + " GENERATES MANA!"); //Removed Stamina cost.
-            battlefield.WindowController.Hint.Add(attacker.Name + " recovered " + manaShift + " mana!");
+            battlefield.OutputController.Hit.Add(attacker.Name + " GENERATES MANA!"); //Removed Stamina cost.
+            battlefield.OutputController.Hint.Add(attacker.Name + " recovered " + manaShift + " mana!");
             return true;
         }
     }

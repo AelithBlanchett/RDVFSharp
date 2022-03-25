@@ -49,31 +49,31 @@ namespace RDVFSharp.FightingLogic.Actions
                 critCheck = false;
                 damage *= attacker.Mana / requiredMana;
                 difficulty += (int)Math.Ceiling((double)((requiredMana - attacker.Mana) / requiredMana) * (20 - difficulty)); // Too tired? You're likely to have your spell fizzle.
-                battlefield.WindowController.Hint.Add(attacker.Name + " did not have enough mana, and took penalties to the attack.");
+                battlefield.OutputController.Hint.Add(attacker.Name + " did not have enough mana, and took penalties to the attack.");
             }
 
             attacker.HitMana(requiredMana); //Now that required mana has been checked, reduce the attacker's mana by the appopriate amount.
 
             var attackTable = attacker.BuildActionTable(difficulty, target.Dexterity, attacker.Dexterity, target.Mana, target.ManaCap);
             //If target can dodge the atatcker has to roll higher than the dodge value. Otherwise they need to roll higher than the miss value. We display the relevant value in the output.
-            battlefield.WindowController.Info.Add("Dice Roll Required: " + (attackTable.miss + 1));
+            battlefield.OutputController.Info.Add("Dice Roll Required: " + (attackTable.miss + 1));
 
             if (roll <= attackTable.miss)
             {   //Miss-- no effect. Happens during grappling.
-                battlefield.WindowController.Hit.Add(" FAILED! ");
+                battlefield.OutputController.Hit.Add(" FAILED! ");
                 return false; //Failed attack, if we ever need to check that.
             }
 
             if (roll >= attackTable.crit)
             { //Critical Hit-- increased damage/effect, typically 3x damage if there are no other bonuses.
-                battlefield.WindowController.Hit.Add(" CRITICAL HIT! ");
-                battlefield.WindowController.Hint.Add(attacker.Name + " landed a particularly vicious blow!");
+                battlefield.OutputController.Hit.Add(" CRITICAL HIT! ");
+                battlefield.OutputController.Hint.Add(attacker.Name + " landed a particularly vicious blow!");
                 damage += 10;
-                battlefield.WindowController.Hint.Add("Critical Hit! " + attacker.Name + "'s magic worked abnormally well! " + target.Name + " is dazed and disoriented.");
+                battlefield.OutputController.Hint.Add("Critical Hit! " + attacker.Name + "'s magic worked abnormally well! " + target.Name + " is dazed and disoriented.");
             }
             else
             { //Normal hit.
-                battlefield.WindowController.Hit.Add("MAGIC HIT! ");
+                battlefield.OutputController.Hit.Add("MAGIC HIT! ");
             }
 
             //Deal all the actual damage/effects here.
@@ -83,7 +83,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 if (!attacker.IsRestrained && !target.IsRestrained)
                 {
                     battlefield.InGrabRange = false;
-                    battlefield.WindowController.Hit.Add(attacker.Name + " distracted " + target.Name + " with the attack and was able to move out of grappling range!");
+                    battlefield.OutputController.Hit.Add(attacker.Name + " distracted " + target.Name + " with the attack and was able to move out of grappling range!");
                 }
             }
 

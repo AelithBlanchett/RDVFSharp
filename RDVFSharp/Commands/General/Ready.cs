@@ -5,6 +5,7 @@ using RDVFSharp.Entities;
 using RDVFSharp.Errors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.Commands
@@ -15,11 +16,11 @@ namespace RDVFSharp.Commands
 
         public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsActive || (Plugin.FirstFighter != null && Plugin.SecondFighter != null))
+            if (Plugin.CurrentBattlefield.IsInProgress)
             {
                 throw new FightInProgress();
             }
-            else if (Plugin.FirstFighter?.Name == character || Plugin.SecondFighter?.Name == character)
+            else if (Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == character))
             {
                 throw new FighterAlreadyExists(character);
             }
@@ -37,30 +38,21 @@ namespace RDVFSharp.Commands
             }
 
             var actualFighter = new Fighter(fighter, Plugin.CurrentBattlefield);
+            var optionalAlly = string.Join(" ", args);
 
-            if(Plugin.FirstFighter == null && Plugin.SecondFighter != null)
+            //TODO process optionalAlly to construct teams
+            if(!Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == actualFighter.Name))
             {
-                Plugin.FirstFighter = Plugin.SecondFighter;
-                Plugin.SecondFighter = null;
-            }
-
-            if (Plugin.FirstFighter == null)
-            {
-                Plugin.FirstFighter = actualFighter;
+                Plugin.CurrentBattlefield.Fighters.Add(actualFighter);
                 Plugin.FChatClient.SendMessageInChannel($"{actualFighter.Name} joined the fight!", channel);
             }
-            else
+
+            if (!Plugin.CurrentBattlefield.IsInProgress && Plugin.CurrentBattlefield.Fighters.Count >= 2)
             {
-                Plugin.SecondFighter = actualFighter;
-
-                if (!Plugin.CurrentBattlefield.IsActive && (Plugin.FirstFighter != null && Plugin.SecondFighter != null))
-                {
-                    Plugin.FChatClient.SendMessageInChannel($"{actualFighter.Name} accepted the challenge! Let's get it on!", channel);
-                    Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
-                    Plugin.CurrentBattlefield.InitialSetup(Plugin.FirstFighter, Plugin.SecondFighter);
-                }
+                Plugin.FChatClient.SendMessageInChannel($"{actualFighter.Name} accepted the challenge! Let's get it on!", channel);
+                Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
+                Plugin.CurrentBattlefield.InitialSetup(Plugin.CurrentBattlefield.FirstFighter, Plugin.CurrentBattlefield.SecondFighter);
             }
-
         }
     }
 }

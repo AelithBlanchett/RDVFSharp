@@ -180,7 +180,7 @@ namespace RDVFSharp.Entities
             x *= DamageEffectMult;
             HP -= x;
             HP = Utils.Clamp(HP, 0, MaxHP);
-            Battlefield.WindowController.Damage = x;
+            Battlefield.OutputController.Damage = x;
 
             if (IsFocused > 0)
             {
@@ -188,7 +188,7 @@ namespace RDVFSharp.Entities
                 if (IsRestrained) doubleX *= 1.5;
                 if (IsDisoriented > 0) doubleX += IsDisoriented;
                 IsFocused = (int)Math.Max(IsFocused - doubleX, 0);
-                if (IsFocused == 0) Battlefield.WindowController.Hint.Add(Name + " has lost their focus!");
+                if (IsFocused == 0) Battlefield.OutputController.Hint.Add(Name + " has lost their focus!");
             }
         }
 
@@ -316,12 +316,12 @@ namespace RDVFSharp.Entities
             LastKnownMana = Mana;
             LastKnownStamina = Stamina;
 
-            if (IsRestrained) Battlefield.WindowController.Hint.Add(Name + " is Grappled.");
-            if (IsFocused > 0) Battlefield.WindowController.Hint.Add(Name + " is Focused (" + IsFocused + " points). Focus is reduced by taking damage.");
-            if (IsFocused > 0) Battlefield.WindowController.Hint.Add(Name + "'s Ranged and Spell attacks have a +" + Math.Ceiling((double)IsFocused / 10) + " bonus to attack and damage because of the Focus.");
+            if (IsRestrained) Battlefield.OutputController.Hint.Add(Name + " is Grappled.");
+            if (IsFocused > 0) Battlefield.OutputController.Hint.Add(Name + " is Focused (" + IsFocused + " points). Focus is reduced by taking damage.");
+            if (IsFocused > 0) Battlefield.OutputController.Hint.Add(Name + "'s Ranged and Spell attacks have a +" + Math.Ceiling((double)IsFocused / 10) + " bonus to attack and damage because of the Focus.");
             if (Battlefield.InGrabRange && Battlefield.DisplayGrabbed)
             {
-                Battlefield.WindowController.Hint.Add("The fighters are in grappling range."); //Added notification about fighters being in grappling range.
+                Battlefield.OutputController.Hint.Add("The fighters are in grappling range."); //Added notification about fighters being in grappling range.
             }
             Battlefield.DisplayGrabbed = !Battlefield.DisplayGrabbed; //only output it on every two turns
             return message;
@@ -336,7 +336,7 @@ namespace RDVFSharp.Entities
 
             if (IsEscaping > 0)
             {
-                Battlefield.WindowController.Hint.Add(Name + " has a +" + IsEscaping + " escape bonus.");
+                Battlefield.OutputController.Hint.Add(Name + " has a +" + IsEscaping + " escape bonus.");
             }
 
             //if (Stamina < rollDice([20]) && IsFocused > 0) {
@@ -347,34 +347,34 @@ namespace RDVFSharp.Entities
             if (HP > DizzyValue && IsDisoriented > 0)
             {
                 IsDisoriented -= 1;
-                if (IsDisoriented == 0) Battlefield.WindowController.Hint.Add(Name + " has recovered and is no longer dizzy!");
+                if (IsDisoriented == 0) Battlefield.OutputController.Hint.Add(Name + " has recovered and is no longer dizzy!");
             }
 
             if (HP <= DizzyValue && IsDisoriented == 0)
             {
                 IsDisoriented = 1;
-                Battlefield.WindowController.Hit.Add(Name + " became dizzy! Stats penalty!");
+                Battlefield.OutputController.Hit.Add(Name + " became dizzy! Stats penalty!");
             }
 
             if (IsDisoriented > 0)
             {
-                Battlefield.WindowController.Hint.Add(Name + " is dizzy from battle damage. 1 point penalty to all attributes.");
+                Battlefield.OutputController.Hint.Add(Name + " is dizzy from battle damage. 1 point penalty to all attributes.");
             }
 
             if (IsEvading > 0)
             {
-                Battlefield.WindowController.Hint.Add(Name + " has a temporary +" + IsEvading + " bonus to evasion and damage reduction.");
+                Battlefield.OutputController.Hint.Add(Name + " has a temporary +" + IsEvading + " bonus to evasion and damage reduction.");
             }
 
             if (IsAggressive > 0)
             {
-                Battlefield.WindowController.Hint.Add(Name + " has a temporary +" + IsAggressive + " bonus to accuracy and attack damage.");
+                Battlefield.OutputController.Hint.Add(Name + " has a temporary +" + IsAggressive + " bonus to accuracy and attack damage.");
             }
 
             if (IsExposed > 0)
             {
                 IsExposed -= 1;
-                if (IsExposed == 0) Battlefield.WindowController.Hint.Add(Name + " has recovered from the missed attack and is no longer Exposed!");
+                if (IsExposed == 0) Battlefield.OutputController.Hint.Add(Name + " has recovered from the missed attack and is no longer Exposed!");
             }
 
             if (HP <= KoValue && IsUnconscious == false)
@@ -386,9 +386,9 @@ namespace RDVFSharp.Entities
             if (HP <= DeathValue && IsDead == false)
             {
                 IsDead = true;
-                Battlefield.WindowController.Hit.Add("The fight is over! CLAIM YOUR SPOILS and VICTORY and FINISH YOUR OPPONENT!");
-                Battlefield.WindowController.Special.Add("FATALITY SUGGESTION: " + this.PickFatality());
-                Battlefield.WindowController.Special.Add("It is just a suggestion, you may not follow it if you don't want to.");
+                Battlefield.OutputController.Hit.Add("The fight is over! CLAIM YOUR SPOILS and VICTORY and FINISH YOUR OPPONENT!");
+                Battlefield.OutputController.Special.Add("FATALITY SUGGESTION: " + this.PickFatality());
+                Battlefield.OutputController.Special.Add("It is just a suggestion, you may not follow it if you don't want to.");
                 Battlefield.EndFight(Battlefield.GetActor(), Battlefield.GetTarget());
             }
         }

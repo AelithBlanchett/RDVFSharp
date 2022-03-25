@@ -13,8 +13,7 @@ namespace RDVFSharp
     {
 
         public Battlefield CurrentBattlefield { get; set; }
-        public Fighter FirstFighter { get; set; }
-        public Fighter SecondFighter { get; set; }
+
         public RDVFDataContext Context
         {
             get
@@ -40,9 +39,6 @@ namespace RDVFSharp
             {
                 CurrentBattlefield = new Battlefield(this);
             }
-            
-            FirstFighter = null;
-            SecondFighter = null;
         }
     }
 }
