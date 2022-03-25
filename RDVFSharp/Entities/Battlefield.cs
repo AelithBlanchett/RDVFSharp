@@ -1,4 +1,5 @@
 ﻿using RDVFSharp.Entities;
+using RDVFSharp.FightingLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,9 +121,9 @@ namespace RDVFSharp
             {
                 luck = (int)Math.Round((double)actor.RollTotal / actor.RollsMade);
             }
-            Type fighterType = actor.GetType();
-            MethodInfo theMethod = fighterType.GetMethod("Action" + action);
-            theMethod.Invoke(actor, new object[] { roll });
+
+            var fightAction = FightActionFactory.Create(action);
+            fightAction.Execute(roll, this, actor, this.GetFighterTarget(actor.Name));
 
             WindowController.Info.Add("Raw Dice Roll: " + roll);
             WindowController.Info.Add(actor.Name + "'s Average Dice Roll: " + luck);

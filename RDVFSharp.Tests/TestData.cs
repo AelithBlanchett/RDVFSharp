@@ -66,7 +66,7 @@ namespace RDVFSharp.Tests
 
         public static RendezvousFighting GetPlugin(bool resetConnection = false)
         {
-            return new RendezvousFighting(GetDataContext(resetConnection), DebugChannel, true);
+            return new RendezvousFighting(null, new System.Collections.Generic.List<string> { DebugChannel }, true);
         }
 
     }
