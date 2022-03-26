@@ -14,7 +14,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Restats a player in the game.";
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public void Execute(string character, IEnumerable<string> args, string channel = "")
         {
             BaseFighter fighter;
 
@@ -49,13 +49,31 @@ namespace RDVFSharp.Commands
                 {
                     context.Fighters.Update(fighter);
                     context.SaveChanges();
-                    Plugin.FChatClient.SendMessageInChannel($"You've successfully moved points among your stats, {character}.", channel);
+                    if(channel == "")
+                    {
+                        Plugin.FChatClient.SendPrivateMessage($"You've successfully moved points among your stats, {character}.", character);
+                    }
+                    else
+                    {
+                        Plugin.FChatClient.SendMessageInChannel($"You've successfully moved points among your stats, {character}.", channel);
+                    }
+                    
                 }
                 else
                 {
                     throw new Exception(string.Join(", ", fighter.GetStatsErrors()));
                 }
             }
+        }
+
+        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        {
+            this.Execute(character, args, channel);
+        }
+
+        public override void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        {
+            this.Execute(characterCalling, args);
         }
     }
 }

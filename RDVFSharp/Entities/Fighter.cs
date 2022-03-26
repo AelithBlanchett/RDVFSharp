@@ -21,7 +21,6 @@ namespace RDVFSharp.Entities
             get
             {
                 var total = BaseFighter.Strength;
-                if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
@@ -30,7 +29,6 @@ namespace RDVFSharp.Entities
             get
             {
                 var total = BaseFighter.Dexterity;
-                if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
@@ -39,7 +37,6 @@ namespace RDVFSharp.Entities
             get
             {
                 var total = BaseFighter.Resilience;
-                if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
@@ -48,7 +45,6 @@ namespace RDVFSharp.Entities
             get
             {
                 var total = BaseFighter.Endurance;
-                if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
@@ -57,13 +53,17 @@ namespace RDVFSharp.Entities
             get
             {
                 var total = BaseFighter.Special;
-                if (IsDisoriented > 0) total -= 1;
                 return total;
             }
         }
 
         public int HP { get; set; }
         private int MaxHP { get; set; }
+        public int HPDOT { get; set; }
+        public int ManaDOT { get; set; }
+        public int StaminaDOT { get; set; }
+        public int ManaDamage { get; set; }
+        public int StaminaDamage { get; set; }
         public int Mana { get; set; }
         public int ManaCap { get; set; }
         public int MaxMana { get; set; }
@@ -71,17 +71,23 @@ namespace RDVFSharp.Entities
         public int StaminaCap { get; set; }
         public int MaxStamina { get; set; }
         public int DizzyValue { get; set; }
+        public int HPBurn { get; set; }
         public int ManaBurn { get; set; }
         public int StaminaBurn { get; set; }
         public int DamageEffectMult { get; set; }
         public bool IsUnconscious { get; set; }
         public bool IsDead { get; private set; }
+        public int CurseUsed { get; set; }
         public bool IsRestrained { get; set; }
+        public bool IsRestraining { get; set; }
+        public bool IsDazed { get; set; }
         public bool IsStunned { get; set; }
         public int IsDisoriented { get; set; }
         public List<string> IsGrappledBy { get; set; }
+        public int IsGrabbable { get; set; }
         public int IsFocused { get; set; }
         public int IsEscaping { get; set; }
+        public int IsGuarding { get; set; }
         public int IsEvading { get; set; }
         public int IsAggressive { get; set; }
         public int IsExposed { get; set; }
@@ -95,6 +101,7 @@ namespace RDVFSharp.Entities
         public int LastKnownHP { get; set; }
         public int LastKnownMana { get; set; }
         public int LastKnownStamina { get; set; }
+        public int SetTarget { get; set; }
 
         public Fighter(BaseFighter baseFighter, Battlefield battlefield)
         {
@@ -140,6 +147,7 @@ namespace RDVFSharp.Entities
 
             IsUnconscious = false;
             IsDead = false;
+            CurseUsed = 0;
             IsRestrained = false;
             IsStunned = false;
             IsDisoriented = 0;
@@ -248,6 +256,21 @@ namespace RDVFSharp.Entities
             }
 
             if (StaminaCap == MaxStamina) StaminaBurn = 0;
+
+            if (HPBurn > 0)
+            {
+                AddHp (-HPDOT);
+            }
+
+            if (StaminaDamage > 0)
+            {
+                AddStamina(-StaminaDOT);
+            }
+
+            if (ManaDamage > 0)
+            {
+                AddMana(-ManaDOT);
+            }
 
             if (IsUnconscious == false)
             {
@@ -393,10 +416,11 @@ namespace RDVFSharp.Entities
             }
         }
 
-        public (int miss, int crit) BuildActionTable(int difficulty, int targetDex, int attackerDex, int targetEnergy, int targetEnergyMax)
+        public (int miss, int crit, int targethit) BuildActionTable(int difficulty, int targetDex, int attackerDex, int targetEnergy, int targetEnergyMax)
         {
             var miss = 0;
             var crit = 0;
+            var targethit = 0;
             // Modify difficulty by half the difference in DEX rounded down. Each odd point more gives you +1 attack and each even point more gives you +1 defence.
             miss = difficulty + (int)Math.Floor((double)(targetDex - attackerDex) / 2);
             //Opponents who are low on energy are easier to hit. Will use Stamina for physical and Mana for magical attacks.
@@ -404,7 +428,8 @@ namespace RDVFSharp.Entities
             miss = Math.Max(1, miss);//A roll of 1 is always a miss.
             miss = Math.Min(miss, 19); //A roll of 20 is always a hit, so maximum difficulty is 19.
             crit = 20;
-            return (miss, crit);
+            targethit = 7;
+            return (miss, crit, targethit);
         }
 
         public bool CanDodge(Fighter attacker)

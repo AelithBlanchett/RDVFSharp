@@ -14,7 +14,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Registers a player in the game.";
 
-        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
+        public void Execute(string character ,IEnumerable<string> args, string channel = "")
         {
             using (var context = Plugin.Context)
             {
@@ -54,7 +54,15 @@ namespace RDVFSharp.Commands
                 {
                     context.Fighters.Add(createdFighter);
                     context.SaveChanges();
-                    Plugin.FChatClient.SendMessageInChannel($"Welcome among us, {character}!", channel);
+                    if(channel == "")
+                    {
+                        Plugin.FChatClient.SendPrivateMessage($"Welcome among us, {character}!", character);
+                    }
+                    else
+                    {
+                        Plugin.FChatClient.SendMessageInChannel($"Welcome among us, {character}!", channel);
+                    }
+                    
                 }
                 else
                 {
@@ -62,6 +70,16 @@ namespace RDVFSharp.Commands
                 }
             }
             
+        }
+
+        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        {
+            this.Execute(character, args, channel);
+        }
+
+        public override void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        {
+            this.Execute(characterCalling, args);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace RDVFSharp
         public bool DisplayGrabbed { get; set; }
 
         private int currentFighter = 0;
+        private int SetTarget = 0;
 
 
         public Battlefield(RendezvousFighting plugin)
@@ -107,6 +108,21 @@ namespace RDVFSharp
         {
             currentFighter = (currentFighter == Fighters.Count - 1) ? 0 : currentFighter + 1;
 
+            if (Fighters[currentFighter].HPBurn > 0 && !Fighters[currentFighter].IsStunned)
+            {
+                Fighters[currentFighter].HPBurn--;
+            }
+
+            if (Fighters[currentFighter].ManaDamage > 0 && !Fighters[currentFighter].IsStunned)
+            {
+                Fighters[currentFighter].ManaDamage--;
+            }
+
+            if (Fighters[currentFighter].StaminaDamage > 0 && !Fighters[currentFighter].IsStunned)
+            {
+                Fighters[currentFighter].StaminaDamage--;
+            }
+
             if (Fighters[currentFighter].IsStunned)
             {
                 Fighters[currentFighter].IsStunned = false;
@@ -176,6 +192,47 @@ namespace RDVFSharp
         public Fighter GetTarget()
         {
             return Fighters[1 - currentFighter];
+        }
+
+        public Fighter GetPartner()
+        {
+            if (currentFighter == 0)
+                return Fighters[currentFighter + 1];
+
+            else if (currentFighter == 1)
+                return Fighters[currentFighter - 1];
+
+            else if (currentFighter == 2)
+                return Fighters[currentFighter + 1];
+            else
+                return Fighters[currentFighter - 1];
+        }
+
+        public Fighter GetOther()
+        {
+            if (SetTarget == 0 && currentFighter == 0)
+                return Fighters[currentFighter + 2];
+
+            else if (SetTarget == 1 && currentFighter == 0)
+                return Fighters[currentFighter + 3];
+
+            else if (SetTarget == 0 && currentFighter == 1)
+                return Fighters[currentFighter + 2];
+
+            else if (SetTarget == 1 && currentFighter == 1)
+                return Fighters[currentFighter + 1];
+
+            else if (SetTarget == 0 && currentFighter == 2)
+                return Fighters[currentFighter - 2];
+
+            else if (SetTarget == 1 && currentFighter == 2)
+                return Fighters[currentFighter - 1];
+
+            else if (SetTarget == 0 && currentFighter == 3)
+                return Fighters[currentFighter - 2];
+
+            else
+                return Fighters[currentFighter - 3];
         }
 
         #endregion     
