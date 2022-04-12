@@ -11,7 +11,7 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1;
             damage *= 2;
             damage += (attacker.Strength + attacker.Dexterity);
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
@@ -25,6 +25,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 target.Fumbled = false;
             }
 
+            if (target.HPBurn > 1) difficulty -= 1;
             if (attacker.IsRestrained) difficulty += 4; //Up the difficulty considerably if the attacker is restrained.
             if (target.IsRestrained) difficulty += 4; //Ranged attacks during grapple are hard.
             if (target.IsRestrained) difficulty -= 2; //Lower the difficulty slightly if the target is restrained.

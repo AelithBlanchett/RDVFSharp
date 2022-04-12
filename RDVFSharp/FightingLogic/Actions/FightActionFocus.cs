@@ -11,19 +11,26 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
+            var othertarget = battlefield.GetOtherTarget();
             var difficulty = 1; //Base difficulty, rolls greater than this amount will succeed.
 
             //if (attacker.IsDisoriented) difficulty += 2; //Up the difficulty if you are dizzy.
             if (attacker.IsRestrained) difficulty += 9; //Up the difficulty considerably if you are restrained.
 
-            if (target.IsEvading > 0)
-            {//Evasion bonus from move/teleport. Lasts 1 turn. We didn't make an attack and now it resets to 0.
-                target.IsEvading = 0;
-            }
+
             if (attacker.IsAggressive > 0)
             {//Apply bonus to our action from move/teleport then reset it.
                 difficulty -= attacker.IsAggressive;
                 attacker.IsAggressive = 0;
+            }
+            if (attacker.IsGuarding > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsGuarding = 0;
+            }
+
+            if (attacker.IsEvading > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsEvading = 0;
             }
 
             if (roll <= difficulty)
@@ -36,15 +43,15 @@ namespace RDVFSharp.FightingLogic.Actions
             {
                 battlefield.OutputController.Hit.Add("CRITICAL SUCCESS! ");
                 battlefield.OutputController.Hint.Add(attacker.Name + " can perform another action!");
-                target.IsStunned = true;
+                battlefield.Fighters.ForEach(f => f.IsDazed = (f != attacker)); // Set all as dazed
                 if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                 if (target.IsExposed > 0) target.IsExposed += 2;
             }
 
             //If opponent fumbled on their previous action they should become stunned, unless they're already stunned by us rolling a 20.
-            if (target.Fumbled & !target.IsStunned)
+            if (target.Fumbled & !target.IsDazed)
             {
-                target.IsStunned = true;
+                target.IsDazed = true;
                 target.Fumbled = false;
             }
 

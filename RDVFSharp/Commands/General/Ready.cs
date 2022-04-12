@@ -37,21 +37,34 @@ namespace RDVFSharp.Commands
                 throw new FighterNotRegistered(character);
             }
 
-            var actualFighter = new Fighter(fighter, Plugin.CurrentBattlefield);
-            var optionalAlly = string.Join(" ", args);
+            var teamInputText = string.Join(" ", args);
 
-            //TODO process optionalAlly to construct teams
-            if(!Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == actualFighter.Name))
+            var teamColor = "";
+            if (string.IsNullOrEmpty(teamInputText.Trim()))
             {
-                Plugin.CurrentBattlefield.Fighters.Add(actualFighter);
-                Plugin.FChatClient.SendMessageInChannel($"{actualFighter.Name} joined the fight!", channel);
+                teamColor = Plugin.CurrentBattlefield.Fighters.Count % 2 == 0 ? "red" : "blue";
+            }
+            else if (teamInputText.ToLower().Contains("red"))
+            {
+                teamColor = "red";
+            }
+            else if (teamInputText.ToLower().Contains("blue"))
+            {
+                teamColor = "blue";
+            }
+            else if (teamInputText.ToLower().Contains("yellow"))
+            {
+                teamColor = "yellow";
+            }
+            else if (teamInputText.ToLower().Contains("purple"))
+            {
+                teamColor = "purple";
             }
 
-            if (!Plugin.CurrentBattlefield.IsInProgress && Plugin.CurrentBattlefield.Fighters.Count >= 2)
+            if (!Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == fighter.Name))
             {
-                Plugin.FChatClient.SendMessageInChannel($"{actualFighter.Name} accepted the challenge! Let's get it on!", channel);
-                Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
-                Plugin.CurrentBattlefield.InitialSetup(Plugin.CurrentBattlefield.FirstFighter, Plugin.CurrentBattlefield.SecondFighter);
+                Plugin.CurrentBattlefield.AddFighter(fighter, teamColor);
+                Plugin.FChatClient.SendMessageInChannel($"{fighter.Name} joined the fight for team [color={teamColor}]{teamColor.ToUpper()}[/color]!", channel);
             }
         }
     }

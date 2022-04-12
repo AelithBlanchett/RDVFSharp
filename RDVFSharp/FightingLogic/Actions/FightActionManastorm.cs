@@ -11,8 +11,7 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var othertarget = battlefield.GetOther();
-            var partner = battlefield.GetPartner();
+            var othertarget = battlefield.GetOtherTarget();
             var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
             damage *= 2;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);

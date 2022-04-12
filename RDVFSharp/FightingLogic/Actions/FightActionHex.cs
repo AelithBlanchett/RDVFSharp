@@ -11,7 +11,7 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Spellpower;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredMana = 5;
             var difficulty = 6; //Base difficulty, rolls greater than this amount will hit.
@@ -26,7 +26,7 @@ namespace RDVFSharp.FightingLogic.Actions
             if (attacker.IsRestrained) difficulty += 2;
             if (target.IsRestrained) difficulty -= 4; //Ranged attacks during grapple are hard, but Hex is now melee.
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
-
+            if (target.HPBurn > 1) difficulty -= 1;
 
             if (target.IsEvading > 0)
             {//Evasion bonus from move/teleport. Only applies to one attack, then is reset to 0.

@@ -11,7 +11,7 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var damage = Utils.RollDice(new List<int>() { 6, 6 }) - 1 + attacker.Strength;
+            var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage *= 2;
             var requiredStam = 10;
             var difficulty = 8; //Base difficulty, rolls greater than this amount will hit.
@@ -20,6 +20,7 @@ namespace RDVFSharp.FightingLogic.Actions
             if (attacker.IsRestrained) difficulty -= attacker.IsEscaping; //Then reduce difficulty based on how much effort we've put into escaping so far.
             if (target.IsRestrained) difficulty -= 4; //Lower the difficulty considerably if the target is restrained.
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
+            if (target.HPBurn > 1) difficulty -= 1;
 
             if (target.IsEvading > 0)
             {//Evasion bonus from move/teleport. Only applies to one attack, then is reset to 0.
@@ -84,20 +85,20 @@ namespace RDVFSharp.FightingLogic.Actions
                     damage += Math.Max(0, 10 - target.IsEscaping);
                     battlefield.OutputController.Hit.Add(attacker.Name + " THREW " + target.Name + " and dealt bonus damage!");
                 }
-                //battlefield.WindowController.Hint.Add(target.Name + ", you are no longer grappled. You should make your post, but you should only emote being hit, do not try to perform any other actions.");
+                //battlefield.OutputController.Hint.Add(target.Name + ", you are no longer grappled. You should make your post, but you should only emote being hit, do not try to perform any other actions.");
             }
             else if (target.IsGrappling(attacker))
             {
                 attacker.RemoveGrappler(target);
                 battlefield.InGrabRange = false;//A throw will put the fighters out of grappling range.
                 battlefield.OutputController.Hit.Add(attacker.Name + " found a hold and THREW " + target.Name + " off! " + attacker.Name + " is no longer at a penalty from being grappled!");
-                //battlefield.WindowController.Hint.Add(target.Name + ", you should make your post, but you should only emote being hit, do not try to perform any other actions.");
+                //battlefield.OutputController.Hint.Add(target.Name + ", you should make your post, but you should only emote being hit, do not try to perform any other actions.");
             }
             else
             {
                 battlefield.InGrabRange = true;//A regular tackle will put you close enough to your opponent to initiate a grab.
                 battlefield.OutputController.Hit.Add(attacker.Name + " TACKLED " + target.Name + ". " + attacker.Name + " can take another action while their opponent is stunned!");
-                //battlefield.WindowController.Hint.Add(target.Name + ", you should make your post, but you should only emote being hit, do not try to perform any other actions.");
+                //battlefield.OutputController.Hint.Add(target.Name + ", you should make your post, but you should only emote being hit, do not try to perform any other actions.");
             }
 
             //Deal all the actual damage/effects here.

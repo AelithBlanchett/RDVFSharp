@@ -58,7 +58,7 @@ namespace RDVFSharp.Entities
         }
 
         public int HP { get; set; }
-        private int MaxHP { get; set; }
+        public int MaxHP { get; set; }
         public int HPDOT { get; set; }
         public int ManaDOT { get; set; }
         public int StaminaDOT { get; set; }
@@ -102,11 +102,14 @@ namespace RDVFSharp.Entities
         public int LastKnownMana { get; set; }
         public int LastKnownStamina { get; set; }
         public int SetTarget { get; set; }
+        public string TeamColor { get; set; }
+        public Fighter CurrentTarget { get; set; }
 
-        public Fighter(BaseFighter baseFighter, Battlefield battlefield)
+        public Fighter(BaseFighter baseFighter, Battlefield battlefield, string teamColor)
         {
             BaseFighter = baseFighter;
             Battlefield = battlefield;
+            TeamColor = teamColor;
             KoValue = Constants.DefaultUnconsciousAt;
             DeathValue = Constants.DefaultDeadAt;
 

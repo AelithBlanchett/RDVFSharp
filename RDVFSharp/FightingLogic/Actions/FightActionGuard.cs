@@ -11,8 +11,7 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var partner = battlefield.GetPartner();
-            var othertarget = battlefield.GetOther();
+            var othertarget = battlefield.GetOtherTarget();
             var requiredStam = 0;
             var difficulty = 1; //Base difficulty, rolls greater than this amount will hit.
 

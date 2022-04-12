@@ -11,8 +11,7 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = battlefield.GetActor();
             var target = battlefield.GetTarget();
-            var partner = battlefield.GetPartner();
-            var othertarget = battlefield.GetOther();
+            var othertarget = battlefield.GetOtherTarget();
             var difficulty = 6; //Base difficulty, rolls greater than this amount will hit.
 
             //If opponent fumbled on their previous action they should become stunned.
@@ -56,9 +55,8 @@ namespace RDVFSharp.FightingLogic.Actions
                 // That in turn is only possible if target had fumbled. So we restore the fumbled status, but keep the stun.
                 // That way we properly get a third action.
                 if (target.IsDazed) target.Fumbled = true;
-                target.IsDazed = true;
-                partner.IsDazed = true;
-                othertarget.IsDazed = true;
+                battlefield.Fighters.ForEach(f => f.IsDazed = true);
+                attacker.IsDazed = false;
             }
 
             if (roll >= attackTable.targethit)

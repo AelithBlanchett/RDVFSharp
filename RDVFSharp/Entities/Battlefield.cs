@@ -36,13 +36,10 @@ namespace RDVFSharp
             IsInProgress = false;
         }
 
-        public void InitialSetup(Fighter firstFighter, Fighter secondFighter)
+        public void InitialSetup()
         {
-            Fighters.Clear();
-            Fighters.Add(firstFighter);
-            Fighters.Add(secondFighter);
-
             PickInitialActor();
+            SetInitialTargets();
             OutputController.Hit.Add("Game started!");
             OutputController.Hit.Add("FIGHTING STAGE: " + Stage + " - " + GetActor().Name + " goes first!");
             OutputFighterStatuses(); // Creates the fighter status blocks (HP/Mana/Stamina)
@@ -50,6 +47,50 @@ namespace RDVFSharp
             OutputController.Info.Add("[url=http://www.f-list.net/c/rendezvous%20fight/]Visit this page for game information[/url]");
             IsInProgress = true;
             OutputController.Broadcast(this);
+        }
+
+        public void SetInitialTargets()
+        {
+            foreach (var teamColor in Fighters.Select(x => x.TeamColor).Distinct())
+            {
+                var opponents = Fighters.Where(x => x.TeamColor != teamColor).OrderBy(x => new Random().Next()).ToList();
+                var counter = 0;
+                var numberOfOpponentsAvailable = opponents.Count();
+                if(numberOfOpponentsAvailable == 0)
+                {
+                    throw new Exception("There are no opponents available.");
+                }
+                foreach (var teamMember in Fighters.Where(x => x.TeamColor == teamColor).ToList())
+                {
+                    var stillHasFightersofOppositeTeams = (counter + 1) >= numberOfOpponentsAvailable;
+                    var indexOfFighterToAttribute = stillHasFightersofOppositeTeams ? counter : numberOfOpponentsAvailable - 1;
+                    teamMember.CurrentTarget = opponents[indexOfFighterToAttribute];
+                }
+            }
+        }
+
+        public void AssignNewTarget(Fighter fighter)
+        {
+            var opponents = Fighters.Where(x => x.TeamColor != fighter.TeamColor).OrderBy(x => new Random().Next()).ToList();
+            fighter.CurrentTarget = opponents.First();
+        }
+
+        public void CheckTargetCoherenceAndReassign()
+        {
+            foreach (var fighter in Fighters)
+            {
+                if (fighter.CurrentTarget.IsDead)
+                {
+                    AssignNewTarget(fighter);
+                }
+            }
+        }
+
+        public bool AddFighter(BaseFighter fighterName, string teamColor)
+        {
+            Fighters.Add(new Fighter(fighterName, this, teamColor));
+
+            return true;
         }
 
         public void TakeAction(string actionMade)
@@ -101,6 +142,7 @@ namespace RDVFSharp
             }
 
             Fighters[currentFighter].Regen();
+            CheckTargetCoherenceAndReassign();
             NextFighter();
         }
 
@@ -163,22 +205,6 @@ namespace RDVFSharp
             return Fighters.FirstOrDefault(x => x.Name.ToLower() != character.ToLower());
         }
 
-        public Fighter FirstFighter
-        {
-            get
-            {
-                return Fighters.FirstOrDefault();
-            }
-        }
-
-        public Fighter SecondFighter
-        {
-            get
-            {
-                return Fighters.LastOrDefault();
-            }
-        }
-
         public void ClearFighters()
         {
             Fighters.Clear();
@@ -191,24 +217,10 @@ namespace RDVFSharp
 
         public Fighter GetTarget()
         {
-            return Fighters[1 - currentFighter];
+            return GetActor().CurrentTarget;
         }
 
-        public Fighter GetPartner()
-        {
-            if (currentFighter == 0)
-                return Fighters[currentFighter + 1];
-
-            else if (currentFighter == 1)
-                return Fighters[currentFighter - 1];
-
-            else if (currentFighter == 2)
-                return Fighters[currentFighter + 1];
-            else
-                return Fighters[currentFighter - 1];
-        }
-
-        public Fighter GetOther()
+        public Fighter GetOtherTarget()
         {
             if (SetTarget == 0 && currentFighter == 0)
                 return Fighters[currentFighter + 2];

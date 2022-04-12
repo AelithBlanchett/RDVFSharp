@@ -12,13 +12,17 @@ namespace RDVFSharp.FightingLogic.Actions
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
 
-            if (target.IsEvading > 0)
-            {//Evasion bonus from move/teleport. Lasts 1 turn. We didn't make an attack and now it resets to 0.
-                target.IsEvading = 0;
+            if (attacker.IsEvading > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsEvading = 0;
             }
             if (attacker.IsAggressive > 0)
             {//Only applies to 1 action, so we reset it now.
                 attacker.IsAggressive = 0;
+            }
+            if (attacker.IsGuarding > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsGuarding = 0;
             }
 
             attacker.IsExposed += 2;//Fumbling exposes you.
@@ -38,7 +42,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 battlefield.OutputController.Hint.Add("Both fighter fumbled and lost an action so it evens out, but you should still emote the fumble.");
             }
 
-            return false;
+            return true;
         }
     }
 }
