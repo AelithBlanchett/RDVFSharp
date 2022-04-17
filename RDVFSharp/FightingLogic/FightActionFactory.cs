@@ -19,7 +19,7 @@ namespace RDVFSharp.FightingLogic
                     ThrowIfNotTeamFight(isTeamFight);
                     return new FightActionCleave();
                 case "Curse":
-                    return new FightActionCleave();
+                    return new FightActionCurse();
                 case "Focus":
                     return new FightActionFocus();
                 case "Fumble":

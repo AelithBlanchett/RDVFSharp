@@ -123,7 +123,7 @@ namespace RDVFSharp
                 luck = (int)Math.Round((double)actor.RollTotal / actor.RollsMade);
             }
 
-            var fightAction = FightActionFactory.Create(action);
+            var fightAction = FightActionFactory.Create(action, Fighters.Count > 2);
             fightAction.Execute(roll, this, actor, this.GetFighterTarget(actor.Name));
 
             OutputController.Info.Add("Raw Dice Roll: " + roll);
