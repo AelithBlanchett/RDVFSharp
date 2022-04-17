@@ -60,6 +60,10 @@ namespace RDVFSharp.Commands
             {
                 teamColor = "purple";
             }
+            else
+            {
+                throw new Exception("Invalid team color.");
+            }
 
             if (!Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == fighter.Name))
             {

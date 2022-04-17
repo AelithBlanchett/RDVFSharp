@@ -33,7 +33,7 @@ namespace RDVFSharp.Entities
                 return total;
             }
         }
-        public int Endurance
+        public int Resilience
         {
             get
             {
@@ -45,7 +45,7 @@ namespace RDVFSharp.Entities
         {
             get
             {
-                var total = BaseFighter.Endurance;
+                var total = BaseFighter.Spellpower;
                 return total;
             }
         }
@@ -53,7 +53,7 @@ namespace RDVFSharp.Entities
         {
             get
             {
-                var total = BaseFighter.Special;
+                var total = BaseFighter.Willpower;
                 return total;
             }
         }
@@ -270,7 +270,7 @@ namespace RDVFSharp.Entities
 
         public string GetStatBlock()
         {
-            return "[color=cyan]" + Name + " stats: Strength: " + Strength + " Dexterity: " + Dexterity + " Resilience: " + Endurance + " Spellpower: " + Spellpower + " Willpower: " + Willpower + "[/color]";
+            return "[color=cyan]" + Name + " stats: Strength: " + Strength + " Dexterity: " + Dexterity + " Resilience: " + Resilience + " Spellpower: " + Spellpower + " Willpower: " + Willpower + "[/color]";
         }
 
         public string GetStatus()
@@ -378,12 +378,6 @@ namespace RDVFSharp.Entities
             {
                 IsDisoriented -= 1;
                 if (IsDisoriented == 0) Battlefield.OutputController.Hint.Add(Name + " has recovered and is no longer dizzy!");
-            }
-
-            if (HP <= DizzyValue && IsDisoriented == 0)
-            {
-                IsDisoriented = 1;
-                Battlefield.OutputController.Hit.Add(Name + " became dizzy! Stats penalty!");
             }
 
             if (IsExposed > 0)

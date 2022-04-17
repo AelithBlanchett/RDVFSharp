@@ -42,8 +42,8 @@ namespace RDVFSharp.Commands
                 fighter.Strength = statsArray[0];
                 fighter.Dexterity = statsArray[1];
                 fighter.Resilience = statsArray[2];
-                fighter.Endurance = statsArray[3];
-                fighter.Special = statsArray[4];
+                fighter.Spellpower = statsArray[3];
+                fighter.Willpower = statsArray[4];
 
                 if (fighter.AreStatsValid)
                 {

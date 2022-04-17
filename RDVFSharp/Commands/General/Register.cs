@@ -46,8 +46,8 @@ namespace RDVFSharp.Commands
                     Strength = statsArray[0],
                     Dexterity = statsArray[1],
                     Resilience = statsArray[2],
-                    Endurance = statsArray[3],
-                    Special = statsArray[4]
+                    Spellpower = statsArray[3],
+                    Willpower = statsArray[4]
                 };
 
                 if (createdFighter.AreStatsValid)
