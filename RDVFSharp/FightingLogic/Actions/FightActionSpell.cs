@@ -20,7 +20,7 @@ namespace RDVFSharp.FightingLogic.Actions
             //If opponent fumbled on their previous action they should become stunned.
             if (target.Fumbled)
             {
-                target.IsStunned = true;
+                target.IsDazed = true;
                 target.Fumbled = false;
             }
 

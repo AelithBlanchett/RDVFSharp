@@ -1,6 +1,7 @@
 ﻿using RDVFSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.FightingLogic.Actions
@@ -11,7 +12,6 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var othertarget = battlefield.GetOtherTarget();
             var requiredStam = 0;
             var difficulty = 1; //Base difficulty, rolls greater than this amount will hit.
 
@@ -69,8 +69,10 @@ namespace RDVFSharp.FightingLogic.Actions
                 // That in turn is only possible if target had fumbled. So we restore the fumbled status, but keep the stun.
                 // That way we properly get a third action.
                 if (target.IsDazed) target.Fumbled = true;
-                target.IsDazed = true;
-                othertarget.IsDazed = true;
+                foreach (var opposingFighter in battlefield.Fighters.Where(x => x.TeamColor != attacker.TeamColor))
+                {
+                    opposingFighter.IsDazed = true;
+                }
                 if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                 if (target.IsExposed > 0) target.IsExposed += 2;
             }

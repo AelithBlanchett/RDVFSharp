@@ -11,7 +11,6 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = battlefield.GetActor();
             var target = battlefield.GetTarget();
-            var othertarget = battlefield.GetOtherTarget();
             var difficulty = 6; //Base difficulty, rolls greater than this amount will hit.
 
             //If opponent fumbled on their previous action they should become stunned.
@@ -63,10 +62,7 @@ namespace RDVFSharp.FightingLogic.Actions
             {
 
                 battlefield.OutputController.Hit.Add("Success! Your target has changed!");
-                if (attacker.SetTarget == 1)
-                    attacker.SetTarget -= 1;
-                if (attacker.SetTarget == 0)
-                    attacker.SetTarget += 1;
+                attacker.CurrentTarget = target;
 
             }
 

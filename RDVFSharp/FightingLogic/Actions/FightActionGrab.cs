@@ -1,6 +1,7 @@
 ﻿using RDVFSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.FightingLogic.Actions
@@ -54,7 +55,10 @@ namespace RDVFSharp.FightingLogic.Actions
                 {//If we're just moving into range grab counts as a buff so a crit gives a bonus action.
                     battlefield.OutputController.Hit.Add("CRITICAL SUCCESS! ");
                     battlefield.OutputController.Hint.Add(attacker.Name + " can perform another action!");
-                    target.IsStunned = true;
+                    foreach (var opposingFighter in battlefield.Fighters.Where(x => x.TeamColor != attacker.TeamColor))
+                    {
+                        opposingFighter.IsDazed = true;
+                    }
                     if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                     if (target.IsExposed > 0) target.IsExposed += 2;
                 }
@@ -66,7 +70,7 @@ namespace RDVFSharp.FightingLogic.Actions
             // We put it down here for Grab so it doesn't interfere with the stun from a crit on moving into range.
             if (target.Fumbled)
             {
-                target.IsStunned = true;
+                target.IsDazed = true;
                 target.Fumbled = false;
             }
 

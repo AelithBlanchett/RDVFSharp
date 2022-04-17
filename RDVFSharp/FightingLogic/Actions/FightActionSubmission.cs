@@ -55,7 +55,7 @@ namespace RDVFSharp.FightingLogic.Actions
             // We put it down here for Grab so it doesn't interfere with the stun from a crit on moving into range.
             if (target.Fumbled)
             {
-                target.IsStunned = true;
+                target.IsDazed = true;
                 target.Fumbled = false;
             }
 

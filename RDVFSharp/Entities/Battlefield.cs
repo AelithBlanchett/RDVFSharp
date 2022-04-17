@@ -21,7 +21,6 @@ namespace RDVFSharp
         public bool DisplayGrabbed { get; set; }
 
         private int currentFighter = 0;
-        private int SetTarget = 0;
 
 
         public Battlefield(RendezvousFighting plugin)
@@ -81,6 +80,10 @@ namespace RDVFSharp
             {
                 if (fighter.CurrentTarget.IsDead)
                 {
+                    foreach (var enemies in Fighters.Where(x => x.CurrentTarget.Name == fighter.Name))
+                    {
+                        enemies.RemoveGrappler(fighter);
+                    }
                     AssignNewTarget(fighter);
                 }
             }
@@ -130,6 +133,12 @@ namespace RDVFSharp
             TurnUpKeep(); //End of turn upkeep (Stamina regen, check for being stunned/knocked out, etc.)
             OutputFighterStatuses(); // Creates the fighter status blocks (HP/Mana/Stamina)
                                      //Battlefield.outputFighterStats();
+
+            if ((GetActor().IsGrabbable == GetTarget().IsGrabbable) && (GetActor().IsGrabbable > 0) && (GetActor().IsGrabbable < 20))
+            {
+                OutputController.Hint.Add(GetActor().Name + " and " + GetTarget().Name + " are in grappling range.");
+            }
+
             OutputController.Broadcast(this); //Tells the window controller to format and dump all the queued up messages to the results screen.
         }
 
@@ -142,32 +151,60 @@ namespace RDVFSharp
             }
 
             Fighters[currentFighter].Regen();
+
+            CheckIfFightIsOver();
+
             CheckTargetCoherenceAndReassign();
             NextFighter();
+        }
+
+        private void CheckIfFightIsOver()
+        {
+            if(RemainingTeams == 1)
+            {
+                OutputController.Hit.Add("The fight is over! CLAIM YOUR SPOILS and VICTORY and FINISH YOUR OPPONENT!");
+                OutputController.Special.Add("FATALITY SUGGESTION: " + FatalitySelect.SelectRandom());
+                OutputController.Special.Add("It is just a suggestion, you may not follow it if you don't want to.");
+                EndFight(GetActor(), GetTarget());
+            }
+        }
+
+        public int RemainingTeams
+        {
+            get
+            {
+                return Fighters.Where(x => x.IsDead == false).Select(x => x.TeamColor).ToList().Distinct().Count();
+            }
         }
 
         public void NextFighter()
         {
             currentFighter = (currentFighter == Fighters.Count - 1) ? 0 : currentFighter + 1;
 
-            if (Fighters[currentFighter].HPBurn > 0 && !Fighters[currentFighter].IsStunned)
+            if (Fighters[currentFighter].HPBurn > 0 && Fighters[currentFighter].IsStunned < 2)
             {
                 Fighters[currentFighter].HPBurn--;
             }
 
-            if (Fighters[currentFighter].ManaDamage > 0 && !Fighters[currentFighter].IsStunned)
+            if (Fighters[currentFighter].ManaDamage > 0 && Fighters[currentFighter].IsStunned < 2)
             {
                 Fighters[currentFighter].ManaDamage--;
             }
 
-            if (Fighters[currentFighter].StaminaDamage > 0 && !Fighters[currentFighter].IsStunned)
+            if (Fighters[currentFighter].StaminaDamage > 0 && Fighters[currentFighter].IsStunned < 2)
             {
                 Fighters[currentFighter].StaminaDamage--;
             }
 
-            if (Fighters[currentFighter].IsStunned)
+            if (Fighters[currentFighter].IsDazed)
             {
-                Fighters[currentFighter].IsStunned = false;
+                Fighters[currentFighter].IsDazed = false;
+                NextFighter();
+            }
+
+            if (Fighters[currentFighter].IsStunned > 1)
+            {
+                Fighters[currentFighter].IsStunned--;
                 NextFighter();
             }
         }
@@ -220,33 +257,6 @@ namespace RDVFSharp
             return GetActor().CurrentTarget;
         }
 
-        public Fighter GetOtherTarget()
-        {
-            if (SetTarget == 0 && currentFighter == 0)
-                return Fighters[currentFighter + 2];
-
-            else if (SetTarget == 1 && currentFighter == 0)
-                return Fighters[currentFighter + 3];
-
-            else if (SetTarget == 0 && currentFighter == 1)
-                return Fighters[currentFighter + 2];
-
-            else if (SetTarget == 1 && currentFighter == 1)
-                return Fighters[currentFighter + 1];
-
-            else if (SetTarget == 0 && currentFighter == 2)
-                return Fighters[currentFighter - 2];
-
-            else if (SetTarget == 1 && currentFighter == 2)
-                return Fighters[currentFighter - 1];
-
-            else if (SetTarget == 0 && currentFighter == 3)
-                return Fighters[currentFighter - 2];
-
-            else
-                return Fighters[currentFighter - 3];
-        }
-
         #endregion     
 
         #region Output shortcuts
@@ -275,7 +285,9 @@ namespace RDVFSharp
                 Room = Plugin.Channel,
                 WinnerId = victor.Name,
                 LoserId = loser.Name,
-                FinishDate = DateTime.UtcNow
+                FinishDate = DateTime.UtcNow,
+                AdditionalWinnersId = string.Join(',', Fighters.Where(x => x.Name != victor.Name && x.TeamColor == victor.TeamColor).Select(x => x.Name).ToList()),
+                AdditionalLosersId = string.Join(',', Fighters.Where(x => x.Name != loser.Name && x.TeamColor != victor.TeamColor).Select(x => x.Name).ToList())
             };
 
             using (var context = Plugin.Context)

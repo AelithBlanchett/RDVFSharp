@@ -1,6 +1,7 @@
 ﻿using RDVFSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.FightingLogic.Actions
@@ -11,7 +12,6 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var othertarget = battlefield.GetOtherTarget();
             var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage *= 2;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
@@ -106,11 +106,13 @@ namespace RDVFSharp.FightingLogic.Actions
             if (attacker.IsRestrained) attacker.IsEscaping += (int)Math.Floor((double)damage / 5);
 
             damage = Math.Max(damage, 1);
-            target.HitHp(damage * 3 / 4 - target.IsEvading);
-            othertarget.HitHp((damage * 3 / 4) - othertarget.IsEvading);
+            foreach (var opposingFighter in battlefield.Fighters.Where(x => x.TeamColor != attacker.TeamColor))
+            {
+                opposingFighter.HitHp((damage * 3 / 4) - target.IsEvading);
+                opposingFighter.IsGrabbable = 0;
+            }
+            
             attacker.IsGrabbable = 0;
-            target.IsGrabbable = 0;
-            othertarget.IsGrabbable = 0;
             return true; //Successful attack, if we ever need to check that.
         }
     }

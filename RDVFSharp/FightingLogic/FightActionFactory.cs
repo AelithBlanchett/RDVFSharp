@@ -66,7 +66,7 @@ namespace RDVFSharp.FightingLogic
                 case "Throw":
                     return new FightActionThrow();
                 default:
-                    throw new Exception("This move doesn't exist or isn't available.");
+                    throw new Exception("This move doesn't exist.");
             }
         }
 
@@ -74,7 +74,7 @@ namespace RDVFSharp.FightingLogic
         {
             if (isTeamfight == false)
             {
-                throw new Exception("This move doesn't exist or isn't available.");
+                throw new Exception("This move isn't available.");
             }
         }
     }

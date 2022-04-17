@@ -1,6 +1,7 @@
 ﻿using RDVFSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.FightingLogic.Actions
@@ -36,15 +37,18 @@ namespace RDVFSharp.FightingLogic.Actions
             {
                 battlefield.OutputController.Hit.Add("CRITICAL SUCCESS! ");
                 battlefield.OutputController.Hint.Add(attacker.Name + " can perform another action!");
-                target.IsStunned = true;
+                foreach (var opposingFighter in battlefield.Fighters.Where(x => x.TeamColor != attacker.TeamColor))
+                {
+                    opposingFighter.IsDazed = true;
+                }
                 if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                 if (target.IsExposed > 0) target.IsExposed += 2;
             }
 
             //If opponent fumbled on their previous action they should become stunned, unless they're already stunned by us rolling a 20.
-            if (target.Fumbled & !target.IsStunned)
+            if (target.Fumbled & !target.IsDazed)
             {
-                target.IsStunned = true;
+                target.IsDazed = true;
                 target.Fumbled = false;
             }
 

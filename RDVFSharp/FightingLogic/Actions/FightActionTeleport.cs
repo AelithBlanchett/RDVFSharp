@@ -1,6 +1,7 @@
 ﻿using RDVFSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.FightingLogic.Actions
@@ -17,7 +18,7 @@ namespace RDVFSharp.FightingLogic.Actions
             //If opponent fumbled on their previous action they should become stunned.
             if (target.Fumbled)
             {
-                target.IsStunned = true;
+                target.IsDazed = true;
                 target.Fumbled = false;
             }
 
@@ -70,8 +71,11 @@ namespace RDVFSharp.FightingLogic.Actions
                 // The only way the target can be stunned is if we set it to stunned with the action we're processing right now.
                 // That in turn is only possible if target had fumbled. So we restore the fumbled status, but keep the stun.
                 // That way we properly get a third action.
-                if (target.IsStunned) target.Fumbled = true;
-                target.IsStunned = true;
+                if (target.IsDazed) target.Fumbled = true;
+                foreach (var opposingFighter in battlefield.Fighters.Where(x => x.TeamColor != attacker.TeamColor))
+                {
+                    opposingFighter.IsDazed = true;
+                }
                 if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                 if (target.IsExposed > 0) target.IsExposed += 2;
             }

@@ -11,7 +11,6 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var othertarget = battlefield.GetOtherTarget();
             var difficulty = 1; //Base difficulty, rolls greater than this amount will succeed.
 
             //if (attacker.IsDisoriented) difficulty += 2; //Up the difficulty if you are dizzy.

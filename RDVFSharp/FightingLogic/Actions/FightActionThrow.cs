@@ -59,7 +59,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 //If opponent fumbled on their previous action they should become stunned. Tackle is a special case because it stuns anyway if it hits, so we only do this on a miss.
                 if (target.Fumbled)
                 {
-                    target.IsStunned = true;
+                    target.IsDazed = true;
                     target.Fumbled = false;
                 }
                 return false; //Failed attack, if we ever need to check that.

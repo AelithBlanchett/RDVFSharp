@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.Entities
@@ -76,12 +77,12 @@ namespace RDVFSharp.Entities
         public int StaminaBurn { get; set; }
         public int DamageEffectMult { get; set; }
         public bool IsUnconscious { get; set; }
-        public bool IsDead { get; private set; }
+        public bool IsDead { get; set; }
         public int CurseUsed { get; set; }
         public bool IsRestrained { get; set; }
         public bool IsRestraining { get; set; }
         public bool IsDazed { get; set; }
-        public bool IsStunned { get; set; }
+        public int IsStunned { get; set; }
         public int IsDisoriented { get; set; }
         public List<string> IsGrappledBy { get; set; }
         public int IsGrabbable { get; set; }
@@ -147,16 +148,19 @@ namespace RDVFSharp.Entities
             LastKnownHP = HP;
             LastKnownMana = Mana;
             LastKnownStamina = Stamina;
-
+            IsGrabbable = 0;
             IsUnconscious = false;
             IsDead = false;
             CurseUsed = 0;
             IsRestrained = false;
-            IsStunned = false;
+            IsRestraining = false;
+            IsDazed = false;
+            IsStunned = 0;
             IsDisoriented = 0;
             IsGrappledBy = new List<string>();
             IsFocused = 0;
             IsEscaping = 0;//A bonus to escape attempts that increases whenever you fail one.
+            IsGuarding = 0;
             IsEvading = 0;
             IsAggressive = 0;
             IsExposed = 0;
@@ -217,31 +221,6 @@ namespace RDVFSharp.Entities
             Stamina = Utils.Clamp(Stamina, 0, StaminaCap);
         }
 
-        public string PickFatality()
-        {
-            var fatalities = new List<string>() {
-                    "Decapitation",
-                    "Strangulation",
-                    "Beating to death",
-                    "Exposing internal organs",
-                    "Blood loss",
-                    "Heart damage",
-                    "Brain damage",
-                    "Breaking Neck",
-                    "Breaking bones",
-                    "Dismemberment",
-                    "Crushing",
-                    "Severing the jaw",
-                    "Remove top part of a head",
-                    "Maceration",
-                    "Brutality!",
-                    "Slow and sensual death",
-                    "Literally fucking to death",
-                    "Extremely staged and theatrical finisher" };
-
-            return fatalities[Utils.GetRandomNumber(0, fatalities.Count - 1)];
-        }
-
         public void Regen()
         {
             if (ManaCap > MaxMana)
@@ -262,7 +241,7 @@ namespace RDVFSharp.Entities
 
             if (HPBurn > 0)
             {
-                AddHp (-HPDOT);
+                AddHp(-HPDOT);
             }
 
             if (StaminaDamage > 0)
@@ -285,7 +264,7 @@ namespace RDVFSharp.Entities
             }
             else
             {
-                IsStunned = true;
+                IsDazed = true;
             }
         }
 
@@ -338,6 +317,10 @@ namespace RDVFSharp.Entities
             if (ManaCap > MaxMana) message += "[/color]";
             message += " (" + manaPercent + "%)[/color]";
 
+            message += "|";
+            message += "[color=red] target:[/color] ";
+            message += $"[color={CurrentTarget.TeamColor}]" + CurrentTarget.Name + "[/color]";
+
             LastKnownHP = HP;
             LastKnownMana = Mana;
             LastKnownStamina = Stamina;
@@ -345,10 +328,6 @@ namespace RDVFSharp.Entities
             if (IsRestrained) Battlefield.OutputController.Hint.Add(Name + " is Grappled.");
             if (IsFocused > 0) Battlefield.OutputController.Hint.Add(Name + " is Focused (" + IsFocused + " points). Focus is reduced by taking damage.");
             if (IsFocused > 0) Battlefield.OutputController.Hint.Add(Name + "'s Ranged and Spell attacks have a +" + Math.Ceiling((double)IsFocused / 10) + " bonus to attack and damage because of the Focus.");
-            if (Battlefield.InGrabRange && Battlefield.DisplayGrabbed)
-            {
-                Battlefield.OutputController.Hint.Add("The fighters are in grappling range."); //Added notification about fighters being in grappling range.
-            }
             Battlefield.DisplayGrabbed = !Battlefield.DisplayGrabbed; //only output it on every two turns
             return message;
         }
@@ -370,6 +349,31 @@ namespace RDVFSharp.Entities
             //    IsFocused = 0;
             //}
 
+            if (IsEvading > 0)
+            {
+                Battlefield.OutputController.Hint.Add(Name + " has a temporary +" + IsEvading + " bonus to evasion and damage reduction.");
+            }
+
+            if (IsAggressive > 0)
+            {
+                Battlefield.OutputController.Hint.Add(Name + " has a temporary +" + IsAggressive + " bonus to accuracy and attack damage.");
+            }
+
+            if (StaminaDamage > 1)
+            {
+                Battlefield.OutputController.Hint.Add(Name + " is taking " + HPDOT + " damage to both Stamina and HP for " + (HPBurn - 1) + " turn(s).");
+            }
+
+            if (ManaDamage > 1)
+            {
+                Battlefield.OutputController.Hint.Add(Name + " is taking " + HPDOT + " damage to both Mana and HP for " + (HPBurn - 1) + " turn(s).");
+            }
+
+            if (IsGuarding > 0)
+            {
+                Battlefield.OutputController.Hint.Add(Name + " has a temporary +" + IsGuarding + " bonus to evasion and damage reduction.");
+            }
+
             if (HP > DizzyValue && IsDisoriented > 0)
             {
                 IsDisoriented -= 1;
@@ -380,21 +384,6 @@ namespace RDVFSharp.Entities
             {
                 IsDisoriented = 1;
                 Battlefield.OutputController.Hit.Add(Name + " became dizzy! Stats penalty!");
-            }
-
-            if (IsDisoriented > 0)
-            {
-                Battlefield.OutputController.Hint.Add(Name + " is dizzy from battle damage. 1 point penalty to all attributes.");
-            }
-
-            if (IsEvading > 0)
-            {
-                Battlefield.OutputController.Hint.Add(Name + " has a temporary +" + IsEvading + " bonus to evasion and damage reduction.");
-            }
-
-            if (IsAggressive > 0)
-            {
-                Battlefield.OutputController.Hint.Add(Name + " has a temporary +" + IsAggressive + " bonus to accuracy and attack damage.");
             }
 
             if (IsExposed > 0)
@@ -412,10 +401,29 @@ namespace RDVFSharp.Entities
             if (HP <= DeathValue && IsDead == false)
             {
                 IsDead = true;
-                Battlefield.OutputController.Hit.Add("The fight is over! CLAIM YOUR SPOILS and VICTORY and FINISH YOUR OPPONENT!");
-                Battlefield.OutputController.Special.Add("FATALITY SUGGESTION: " + this.PickFatality());
-                Battlefield.OutputController.Special.Add("It is just a suggestion, you may not follow it if you don't want to.");
-                Battlefield.EndFight(Battlefield.GetActor(), Battlefield.GetTarget());
+                IsGrabbable = 0;
+                IsStunned = 2147483647;
+                CurseUsed = 0;
+                IsRestrained = false;
+                IsDazed = false;
+                IsDisoriented = 0;
+                IsGrappledBy = new List<string>();
+                IsFocused = 0;
+                IsEscaping = 0;//A bonus to escape attempts that increases whenever you fail one.
+                IsGuarding = 0;
+                IsEvading = 0;
+                IsAggressive = 0;
+                IsExposed = 0;
+                SetTarget = 0;
+                HPDOT = 0;
+                HPBurn = 0;
+                foreach (var enemies in this.Battlefield.Fighters.Where(x => x.TeamColor != this.TeamColor && x.CurrentTarget == this))
+                {
+                    enemies.IsEscaping = 0;
+                    enemies.IsRestrained = false;
+                }
+                
+                Battlefield.OutputController.Hit.Add(Name + " has been knocked out!");
             }
         }
 
