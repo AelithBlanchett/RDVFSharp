@@ -1,6 +1,7 @@
 ﻿using FChatSharpLib.Entities.Plugin.Commands;
 using RDVFSharp.Errors;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
@@ -8,30 +9,27 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Displays your own stats.";
 
-        public void Execute(string character, IEnumerable<string> args, string channel = "")
+        public async Task Execute(string character, IEnumerable<string> args, string channel = "")
         {
-            using (var context = Plugin.DataContext)
+            var fighter = await Plugin.DataContext.Fighters.FindAsync(character);
+            if (fighter == null) { throw new FighterNotRegistered(character); }
+
+            if (channel.ToLower().StartsWith("adh-"))
             {
-                var fighter = context.Fighters.Find(character);
-                if (fighter == null) { throw new FighterNotRegistered(character); }
-
-                if (channel.ToLower().StartsWith("adh-"))
-                {
-                    channel = character;
-                }
-
-                Plugin.FChatClient.SendPrivateMessage(fighter.Stats, channel);
+                channel = character;
             }
+
+            Plugin.FChatClient.SendPrivateMessage(fighter.Stats, channel);
         }
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            this.Execute(character, args, channel);
+            await this.Execute(character, args, channel);
         }
 
-        public override void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        public override async Task ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
-            this.Execute(characterCalling, args);
+            await this.Execute(characterCalling, args);
         }
     }
 }

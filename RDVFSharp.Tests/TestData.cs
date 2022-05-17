@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RDVFSharp.DataContext;
@@ -14,7 +15,7 @@ namespace RDVFSharp.Tests
 
         public static RDVFDataContext RDVFDataContext;
 
-        public static RDVFDataContext GetDataContext(bool reset = false)
+        public static RDVFDataContext GetDataContext(bool reset = true)
         {
             if (RDVFDataContext != null && !reset) { return RDVFDataContext; }
             var firstFighter = new BaseFighter()
@@ -75,6 +76,7 @@ namespace RDVFSharp.Tests
                 Debug = true
             });
             var optionsRabbit = Options.Create<ConnectionFactory>(new ConnectionFactory());
+
             return new RDVFPlugin(options, new FChatSharpLib.RemoteBotController(new FChatSharpLib.RemoteEvents(options, optionsRabbit)), GetDataContext());
         }
 

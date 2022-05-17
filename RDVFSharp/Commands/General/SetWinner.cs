@@ -2,6 +2,7 @@
 using RDVFSharp.Errors;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
@@ -9,7 +10,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Sets the winner of an ongoing fight.";
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.CurrentBattlefield.IsInProgress)
             {

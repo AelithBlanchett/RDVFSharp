@@ -62,7 +62,7 @@ namespace RDVFSharp
                 var numberOfOpponentsAvailable = opponents.Count();
                 var random = new Random();
                 int index = random.Next(opponents.Count());
-                if(numberOfOpponentsAvailable == 0)
+                if (numberOfOpponentsAvailable == 0)
                 {
                     throw new Exception("There are no opponents available.");
                 }
@@ -227,7 +227,7 @@ namespace RDVFSharp
 
         private void CheckIfFightIsOver()
         {
-            if(RemainingTeams == 1)
+            if (RemainingTeams == 1)
             {
                 OutputController.Hit.Add("The fight is over! CLAIM YOUR SPOILS and VICTORY and FINISH YOUR OPPONENT!");
                 OutputController.Special.Add("FATALITY SUGGESTION: " + FatalitySelect.SelectRandom());
@@ -290,8 +290,8 @@ namespace RDVFSharp
             if (TeamYellow.Count > 2) TurnOrder.Add(TeamYellow[2]);
             if (TeamPurple.Count > 2) TurnOrder.Add(TeamPurple[2]);
             if (TeamRed.Count > 3) TurnOrder.Add(TeamRed[3]);
-            if (TeamBlue.Count > 3) TurnOrder.Add(TeamBlue[3]); 
-            if (TeamYellow.Count > 3) TurnOrder.Add(TeamYellow[3]); 
+            if (TeamBlue.Count > 3) TurnOrder.Add(TeamBlue[3]);
+            if (TeamYellow.Count > 3) TurnOrder.Add(TeamYellow[3]);
             if (TeamPurple.Count > 3) TurnOrder.Add(TeamPurple[3]);
             if (TeamRed.Count > 4) TurnOrder.Add(TeamRed[4]);
             if (TeamBlue.Count > 4) TurnOrder.Add(TeamBlue[4]);
@@ -324,9 +324,9 @@ namespace RDVFSharp
 
             if (TurnOrder[currentFighter].IsExposed > 0)
             {
-                TurnOrder[currentFighter].IsExposed-=2;
+                TurnOrder[currentFighter].IsExposed -= 2;
             }
-            
+
             if (TurnOrder[currentFighter].IsStunned > 1)
             {
                 TurnOrder[currentFighter].IsStunned--;
@@ -339,7 +339,7 @@ namespace RDVFSharp
                 NextFighter();
             }
 
-            
+
         }
 
         public void PickInitialActor()
@@ -423,12 +423,8 @@ namespace RDVFSharp
                 AdditionalLosersId = string.Join(',', Fighters.Where(x => x.Name != loser.Name && x.TeamColor != victor.TeamColor).Select(x => x.Name).ToList())
             };
 
-            using (var context = Plugin.DataContext)
-            {
-                context.Add(fightResult);
-                context.SaveChanges();
-            }
-
+            Plugin.DataContext.Add(fightResult);
+            Plugin.DataContext.SaveChanges();
 
             Plugin.ResetFight();
 

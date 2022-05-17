@@ -19,7 +19,7 @@ namespace RDVFSharp.Tests
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
             readyCommand.Plugin.CurrentBattlefield.IsInProgress = true;
-            Assert.Throws<FightInProgress>(() => readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
+            await Assert.ThrowsAsync<FightInProgress>(async () => await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
         }
 
         [Theory]
@@ -28,17 +28,17 @@ namespace RDVFSharp.Tests
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
-            Assert.Throws<FighterNotRegistered>(() => readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
+            await Assert.ThrowsAsync<FighterNotRegistered>(async () => await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
         }
 
-        [Fact]
-        public async void ExecuteCommand_SameCharacterShouldntJoinTwice_Fail()
+        [Theory]
+        [InlineData("AnotherFighterWithValidStats")]
+        public async void ExecuteCommand_SameCharacterShouldntJoinTwice_Fail(string characterName)
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
-            var fighter = await readyCommand.Plugin.DataContext.Fighters.FirstAsync(x => x.Name == "AnotherFighterWithValidStats");
-            readyCommand.ExecuteCommand(fighter.Name, new string[0], TestData.DebugChannel);
-            Assert.Throws<FighterAlreadyExists>(() => readyCommand.ExecuteCommand(fighter.Name, new string[0], TestData.DebugChannel));
+            await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel);
+            await Assert.ThrowsAsync<FighterAlreadyExists>(async () => await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
         }
     }
 }

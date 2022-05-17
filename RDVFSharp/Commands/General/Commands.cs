@@ -1,6 +1,7 @@
 ﻿using FChatSharpLib.Entities.Plugin.Commands;
 using RDVFSharp.Errors;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
@@ -8,7 +9,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Gets the status of an ongoing fight.";
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             
                 Plugin.FChatClient.SendPrivateMessage("[u][b]General Commands[/b][/u]" + "\n" +

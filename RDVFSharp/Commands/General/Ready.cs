@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
@@ -14,7 +15,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Sets a player as ready.";
 
-        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             if (Plugin.CurrentBattlefield.IsInProgress)
             {
@@ -27,10 +28,7 @@ namespace RDVFSharp.Commands
 
             BaseFighter fighter = null;
 
-            using (var context = Plugin.DataContext)
-            {
-                fighter = context.Fighters.Find(character);
-            }
+            fighter = await Plugin.DataContext.Fighters.FindAsync(character);
 
             if (fighter == null)
             {

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
@@ -14,7 +15,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Displays someone else's stats.";
 
-        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
             if(!Plugin.FChatClient.IsUserAdmin(character, channel))
             {

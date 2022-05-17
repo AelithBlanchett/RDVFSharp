@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
@@ -11,7 +12,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Sets your target.";
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             var target = Plugin.CurrentBattlefield.GetTarget();
             if (Plugin.CurrentBattlefield.GetFighter(character).IsGrappling(target))

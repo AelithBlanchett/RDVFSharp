@@ -1,6 +1,7 @@
 ﻿using FChatSharpLib.Entities.Plugin.Commands;
 using RDVFSharp.Errors;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
@@ -8,7 +9,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => $"{GetType().Name} attack";
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             var attacker = Plugin.CurrentBattlefield.GetActor();
             var target = Plugin.CurrentBattlefield.GetTarget();

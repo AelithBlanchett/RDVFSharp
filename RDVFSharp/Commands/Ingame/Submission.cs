@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
     public class Submission : Action
     {
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             var attacker = Plugin.CurrentBattlefield.GetActor();
             var target = Plugin.CurrentBattlefield.GetTarget();

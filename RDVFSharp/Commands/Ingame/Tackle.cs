@@ -3,12 +3,13 @@ using RDVFSharp.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
     public class Tackle : Action
     {
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
             var attacker = Plugin.CurrentBattlefield.GetActor();
             var target = Plugin.CurrentBattlefield.GetTarget();
