@@ -65,7 +65,7 @@ namespace RDVFSharp.Commands
                         {
                             battlefield.OutputController.Hint.Add(activeFighter.Name + " has a temporary +" + activeFighter.IsGuarding + " bonus to evasion and damage reduction.");
                         }
-                        if (activeFighter.IsGrabbable == NewTarget.IsGrabbable && activeFighter.IsGrabbable>0 && activeFighter.IsGrabbable<10)
+                        if (activeFighter.IsGrabbable == NewTarget.IsGrabbable && activeFighter.IsGrabbable > 0 && activeFighter.IsGrabbable < 10)
                         {
                             battlefield.OutputController.Hint.Add(activeFighter.Name + " and " + NewTarget.Name + " are in grappling range.");
                         }
@@ -92,9 +92,13 @@ namespace RDVFSharp.Commands
                         {
                             battlefield.OutputController.Hint.Add(NewTarget.Name + " has a temporary +" + NewTarget.IsGuarding + " bonus to evasion and damage reduction.");
                         }
+                        if (NewTarget.IsExposed > 0)
+                        {
+                            battlefield.OutputController.Hint.Add(NewTarget.Name + " is exposed and has a -2 difficulty to be hit");
+                        }
 
                         battlefield.OutputController.Broadcast(battlefield);
-                        
+
                     }
                 }
 
