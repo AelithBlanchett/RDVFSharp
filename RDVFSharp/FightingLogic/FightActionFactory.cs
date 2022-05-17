@@ -11,8 +11,8 @@ namespace RDVFSharp.FightingLogic
         {
             switch (actionName)
             {
-                case "Burn":
-                    return new FightActionBurn();
+                case "Drain":
+                    return new FightActionDrain();
                 case "Channel":
                     return new FightActionChannel();
                 case "Cleave":
@@ -37,8 +37,6 @@ namespace RDVFSharp.FightingLogic
                     return new FightActionLight();
                 case "Magic":
                     return new FightActionMagic();
-                case "Mana":
-                    return new FightActionMana();
                 case "Manastorm":
                     ThrowIfNotTeamFight(isTeamFight);
                     return new FightActionManastorm();
@@ -58,9 +56,6 @@ namespace RDVFSharp.FightingLogic
                     return new FightActionSubmission();
                 case "Tackle":
                     return new FightActionTackle();
-                case "Target":
-                    ThrowIfNotTeamFight(isTeamFight);
-                    return new FightActionTarget();
                 case "Teleport":
                     return new FightActionTeleport();
                 case "Throw":

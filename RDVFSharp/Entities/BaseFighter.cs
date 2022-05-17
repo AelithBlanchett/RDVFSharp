@@ -48,8 +48,8 @@ namespace RDVFSharp.Entities
             get
             {
                 return "[b]" + Name + "[/b]'s stats" + "\n" +
-                    "[b][color=red]Strength[/color][/b]:  " + Strength + "      " + "[b][color=yellow]Hit Points[/color][/b]: " + BaseMaxHP + "\n" +
-                    "[b][color=pink]Dexterity[/color][/b]: " + Dexterity + "      " + "[b][color=green]Stamina[/color][/b]: " + BaseMaxStamina + "\n" +
+                    "[b][color=red]Strength[/color][/b]:  " + Strength + "      " + "[b][color=green]Hit Points[/color][/b]: " + BaseMaxHP + "\n" +
+                    "[b][color=pink]Dexterity[/color][/b]: " + Dexterity + "      " + "[b][color=yellow]Stamina[/color][/b]: " + BaseMaxStamina + "\n" +
                     "[b][color=white]Resilience[/color][/b]:" + Resilience + "      " + "[b][color=blue]Mana[/color][/b]: " + BaseMaxMana + "\n" +
                     "[b][color=cyan]Spellpower[/color][/b]: " + Spellpower + "      " + "\n" +
                     "[b][color=purple]Willpower[/color][/b]: " + Willpower;

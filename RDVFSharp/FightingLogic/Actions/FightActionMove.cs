@@ -55,6 +55,8 @@ namespace RDVFSharp.FightingLogic.Actions
             { //If you're grappling someone they are freed, regardless of the outcome.
                 battlefield.OutputController.Hint.Add(attacker.Name + " used ESCAPE. " + target.Name + " is no longer being grappled. ");
                 target.RemoveGrappler(attacker);
+                attacker.IsRestraining = 0;
+                target.IsRestrained = false;
                 tempGrappleFlag = false;
             }
 
@@ -73,10 +75,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 // That in turn is only possible if target had fumbled. So we restore the fumbled status, but keep the stun.
                 // That way we properly get a third action.
                 if (target.IsDazed) target.Fumbled = true;
-                foreach (var opposingFighter in battlefield.Fighters.Where(x => x.TeamColor != attacker.TeamColor))
-                {
-                    opposingFighter.IsDazed = true;
-                }
+                battlefield.Fighters.ForEach(f => f.IsDazed = (f != attacker)); // Set all as dazed
                 if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                 if (target.IsExposed > 0) target.IsExposed += 2;
             }
@@ -90,6 +89,8 @@ namespace RDVFSharp.FightingLogic.Actions
                 attacker.RemoveGrappler(target);
                 tempGrappleFlag = false;
                 attacker.IsEvading = (int)Math.Floor((double)totalBonus / 2);
+                attacker.IsRestrained = false;
+                target.IsRestraining = 0;
             }
             else
             {
@@ -97,12 +98,16 @@ namespace RDVFSharp.FightingLogic.Actions
                 battlefield.OutputController.Hit.Add(attacker.Name + " gained mobility bonuses against " + target.Name + " for one turn!");
             }
 
-            if (battlefield.InGrabRange)
+            foreach (var opponent in battlefield.Fighters.Where(x => x.TeamColor != attacker.TeamColor))
             {
-                battlefield.OutputController.Hit.Add(attacker.Name + " moved away!");
-                battlefield.InGrabRange = false;
-                battlefield.OutputController.Hint.Add(attacker.Name + " managed to put some distance between them and " + target.Name + " and is now out of grabbing range.");
+                if (attacker.IsGrabbable > 0 && opponent.IsGrabbable == attacker.IsGrabbable && !attacker.IsGrappling(target) && !target.IsGrappling(attacker))
+                {
+                    attacker.IsGrabbable = 0;
+                    battlefield.OutputController.Hit.Add(attacker.Name + " moved away!");
+                    battlefield.OutputController.Hint.Add(attacker.Name + " managed to put some distance between them and " + opponent.Name + " and is now out of grabbing range.");
+                }
             }
+
             return true; //Successful attack, if we ever need to check that.
         }
     }

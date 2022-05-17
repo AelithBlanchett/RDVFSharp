@@ -36,7 +36,7 @@ namespace RDVFSharp.FightingLogic.Actions
             {
                 battlefield.OutputController.Hit.Add("CRITICAL SUCCESS! ");
                 battlefield.OutputController.Hint.Add(attacker.Name + " can perform another action!");
-                target.IsDazed = true;
+                battlefield.Fighters.ForEach(f => f.IsDazed = (f != attacker)); // Set all as dazed
                 if (target.IsDisoriented > 0) target.IsDisoriented += 2;
                 if (target.IsExposed > 0) target.IsExposed += 2;
             }

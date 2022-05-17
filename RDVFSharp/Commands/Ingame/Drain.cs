@@ -3,5 +3,5 @@ using RDVFSharp.Errors;
 
 namespace RDVFSharp.Commands
 {
-    public class Burn : Action { }
+    public class Drain : Action { }
 }

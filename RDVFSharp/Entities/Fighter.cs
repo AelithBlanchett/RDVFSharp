@@ -80,7 +80,7 @@ namespace RDVFSharp.Entities
         public bool IsDead { get; set; }
         public int CurseUsed { get; set; }
         public bool IsRestrained { get; set; }
-        public bool IsRestraining { get; set; }
+        public int IsRestraining { get; set; }
         public bool IsDazed { get; set; }
         public int IsStunned { get; set; }
         public int IsDisoriented { get; set; }
@@ -153,7 +153,7 @@ namespace RDVFSharp.Entities
             IsDead = false;
             CurseUsed = 0;
             IsRestrained = false;
-            IsRestraining = false;
+            IsRestraining = 0;
             IsDazed = false;
             IsStunned = 0;
             IsDisoriented = 0;
@@ -283,7 +283,7 @@ namespace RDVFSharp.Entities
             var manaPercent = Math.Ceiling((double)(100 * Mana / ManaCap));
 
             var message = $"[color={TeamColor}]" + Name;
-            message += "[/color][color=yellow] hit points: ";
+            message += "[/color][color=green] hit points: ";
             if (HP > DizzyValue)
             {
                 message += HP;
@@ -297,7 +297,7 @@ namespace RDVFSharp.Entities
             message += "|" + this.MaxHP;
             message += " (" + hpPercent + "%)";
 
-            message += "[/color][color=green] stamina: " + Stamina;
+            message += "[/color][color=yellow] stamina: " + Stamina;
             if (staminaDelta > 0) message += "[color=cyan] (+" + staminaDelta + ")[/color]";
             if (staminaDelta < 0) message += "[color=red] (" + staminaDelta + ")[/color]";
 
@@ -332,8 +332,18 @@ namespace RDVFSharp.Entities
             return message;
         }
 
+        public void FinalStand()
+        {
+            var attacker = Battlefield.GetActor();
+
+            if (attacker.HP < HPDOT)
+            {
+                Battlefield.OutputController.Hit.Add("This is " + attacker.Name + "'s final stand, do all the damage you can on this turn!");
+            }
+        }
         public void UpdateCondition()
         {
+            
             if (IsGrappledBy.Count != 0 && IsRestrained == false) IsRestrained = true;
             if (IsGrappledBy.Count == 0 && IsRestrained == true) IsRestrained = false;
 
@@ -382,9 +392,9 @@ namespace RDVFSharp.Entities
 
             if (IsExposed > 0)
             {
-                IsExposed -= 1;
-                if (IsExposed == 0) Battlefield.OutputController.Hint.Add(Name + " has recovered from the missed attack and is no longer Exposed!");
+                Battlefield.OutputController.Hint.Add(Name + " is exposed and has a -2 difficulty to be hit");
             }
+
 
             if (HP <= KoValue && IsUnconscious == false)
             {
@@ -411,7 +421,7 @@ namespace RDVFSharp.Entities
                 SetTarget = 0;
                 HPDOT = 0;
                 HPBurn = 0;
-                foreach (var enemies in this.Battlefield.Fighters.Where(x => x.TeamColor != this.TeamColor && x.CurrentTarget == this))
+                foreach (var enemies in this.Battlefield.TurnOrder.Where(x => x.TeamColor != this.TeamColor && x.CurrentTarget == this))
                 {
                     enemies.IsEscaping = 0;
                     enemies.IsRestrained = false;

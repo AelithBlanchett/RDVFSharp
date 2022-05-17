@@ -1,6 +1,7 @@
 ﻿using RDVFSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.FightingLogic.Actions
@@ -15,10 +16,15 @@ namespace RDVFSharp.FightingLogic.Actions
             damage /= 2;
             var requiredStam = 10;
             var difficulty = 8; //Base difficulty, rolls greater than this amount will hit.
+            var others = battlefield.Fighters.Where(x => x.Name != attacker.Name).OrderBy(x => new Random().Next()).ToList();
 
+
+
+            foreach (var fighter in others)
+            {
+                if (fighter.CurrentTarget == attacker.CurrentTarget) difficulty += 2;
+            }
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
-            if (target.HPBurn > 1) difficulty -= 1;
-
             if (target.IsEvading > 0)
             {//Evasion bonus from move/teleport. Only applies to one attack, then is reset to 0.
                 difficulty += target.IsEvading;
@@ -67,14 +73,49 @@ namespace RDVFSharp.FightingLogic.Actions
                 damage += 10;
             }
 
-            battlefield.InGrabRange = true;//A regular tackle will put you close enough to your opponent to initiate a grab.
             battlefield.OutputController.Hit.Add(attacker.Name + " TACKLED " + target.Name + ". " + attacker.Name + " can take another action while their opponent is stunned!");
 
             //Deal all the actual damage/effects here.
 
             damage = Math.Max(damage, 0);
             if (damage > 0) target.HitHp(damage); //This is to prevent the game displayin that the attacker did 0 damage, which is the normal case.
-            target.IsDazed = true;
+            if (target.IsDazed) target.Fumbled = true;
+            battlefield.Fighters.ForEach(f => f.IsDazed = (f != attacker)); // Set all as dazed
+            if (target.IsDisoriented > 0) target.IsDisoriented += 2;
+            if (target.IsExposed > 0) target.IsExposed += 2;
+
+            if (attacker.IsGrabbable == 0 && target.IsGrabbable == 0)
+            {
+                attacker.IsGrabbable += 1;
+                target.IsGrabbable += 1;
+            }
+            if (attacker.IsGrabbable == 0 && target.IsGrabbable == 1)
+            {
+                attacker.IsGrabbable += 1;
+            }
+            if (attacker.IsGrabbable == 1 && target.IsGrabbable == 0)
+            {
+                attacker.IsGrabbable += 1;
+                target.IsGrabbable += 2;
+            }
+            if (attacker.IsGrabbable == 2 && target.IsGrabbable == 1)
+            {
+                attacker.IsGrabbable -= 1;
+            }
+            if (attacker.IsGrabbable == 1 && target.IsGrabbable == 2)
+            {
+                attacker.IsGrabbable += 1;
+            }
+            if (attacker.IsGrabbable == 2 && target.IsGrabbable == 0)
+            {
+                attacker.IsGrabbable -= 1;
+                target.IsGrabbable += 1;
+            }
+            if (attacker.IsGrabbable == 0 && target.IsGrabbable == 2)
+            {
+                attacker.IsGrabbable += 2;
+            }
+
             return true; //Successful attack, if we ever need to check that.
         }
     }

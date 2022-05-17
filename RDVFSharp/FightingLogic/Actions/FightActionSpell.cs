@@ -1,6 +1,7 @@
 ﻿using RDVFSharp.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.FightingLogic.Actions
@@ -16,7 +17,14 @@ namespace RDVFSharp.FightingLogic.Actions
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
             var requiredMana = 10;
             var difficulty = 10; //Base difficulty, rolls greater than this amount will hit.
+            var others = battlefield.Fighters.Where(x => x.Name != attacker.Name).OrderBy(x => new Random().Next()).ToList();
 
+
+
+            foreach (var fighter in others)
+            {
+                if (fighter.CurrentTarget == attacker.CurrentTarget) difficulty += 2;
+            }
             //If opponent fumbled on their previous action they should become stunned.
             if (target.Fumbled)
             {
@@ -27,7 +35,6 @@ namespace RDVFSharp.FightingLogic.Actions
             if (attacker.IsRestrained) difficulty += 4; //Math.Max(2, 4 + (int)Math.Floor((double)(target.Strength - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants. Minimum of +2 difficulty, maximum of +8.
             if (target.IsRestrained) difficulty += 4; //Ranged attacks during grapple are hard.
             if (attacker.IsFocused > 0) difficulty -= (int)Math.Ceiling((double)attacker.IsFocused / 10); //Lower the difficulty if the attacker is focused
-            if (target.HPBurn > 1) difficulty -= 1;
 
             if (attacker.IsFocused > 0) damage += (int)Math.Ceiling((double)attacker.IsFocused / 10); //Focus gives bonus damage.
 
@@ -79,18 +86,18 @@ namespace RDVFSharp.FightingLogic.Actions
 
             //Deal all the actual damage/effects here.
 
-            if (battlefield.InGrabRange)
-            {// Succesful attacks will beat back the grabber before they can grab you, but not if you're already grappling.
-                if (!attacker.IsRestrained && !target.IsRestrained)
+            foreach (var opponent in battlefield.Fighters.Where(x => x.TeamColor != attacker.TeamColor))
+            {
+                if (attacker.IsGrabbable > 0 && opponent.IsGrabbable == attacker.IsGrabbable && !attacker.IsGrappling(target) && !target.IsGrappling(attacker))
                 {
-                    battlefield.InGrabRange = false;
-                    battlefield.OutputController.Hit.Add(attacker.Name + " distracted " + target.Name + " with the attack and was able to move out of grappling range!");
+                    battlefield.OutputController.Hint.Add(attacker.Name + " managed to put some distance between them and " + opponent.Name + " and is now out of grabbing range.");
                 }
             }
 
             //If you're being grappled and you hit the opponent that will make it a little easier to escape later on.
             if (attacker.IsRestrained) attacker.IsEscaping += (int)Math.Floor((double)damage / 5);
-
+            attacker.IsGrabbable = 0;
+            target.IsGrabbable = 0;
             damage = Math.Max(damage, 1);
             target.HitHp(damage);
             return true; //Successful attack, if we ever need to check that.
