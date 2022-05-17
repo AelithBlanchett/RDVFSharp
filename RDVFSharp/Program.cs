@@ -1,45 +1,96 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using FChatSharpLib;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
+using Serilog;
+using Serilog.Events;
+using Volo.Abp;
 
 namespace RDVFSharp
 {
-    class Program
+    public class Program
     {
-        public static RendezvousFighting RDV { get; set; }
-        public static bool IsDebugging { get; set; } = false;
-
-        static void Main()
+        public static async Task<int> Main(string[] args)
         {
-
-            var services = new ServiceCollection();
-
-            var configuration = new ConfigurationBuilder()
-                                .AddJsonFile("appsettings.json", optional: false)
-                                .Build();
-
-            services.AddDbContext<DataContext.RDVFDataContext>(optionsBuilder => optionsBuilder.UseMySql(configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
-
-            var serviceProvider = services.BuildServiceProvider();
-
-#if DEBUG
-            var flistUsername = "";
-            var flistPassword = "";
-            var botCharacterName = ""; //The character used to log in with
-            var adminName = "Aelith Blanchette";
-            var channelToWatch = new List<string>() { "adh-2bef661405a83f74cd94" }; //Your testing channel code, obtainable with /code in the chat
-            var bot = new FChatSharpLib.Bot(flistUsername, flistPassword, botCharacterName, adminName, true, 4000);
-            bot.Connect();
-
-            RDV = new RendezvousFighting(serviceProvider, channelToWatch, IsDebugging);
-            RDV.Run();
+            Log.Logger = new LoggerConfiguration()
+#if !DEBUG
+                .MinimumLevel.Debug()
 #else
-            var channelToWatch = new List<string>() { "adh-b3c88050e9c580631c70" };
-            RDV = new RendezvousFighting(serviceProvider, channelToWatch, IsDebugging);
-            RDV.Run();
+                .MinimumLevel.Information()
 #endif
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Async(c => c.File("Logs/logs.txt"))
+                .WriteTo.Async(c => c.Console())
+                .CreateLogger();
+
+            using (var application = AbpApplicationFactory.Create<RDVFPluginAppModule>(options =>
+            {
+                options.UseAutofac(); //Autofac integration
+            }))
+            {
+                try
+                {
+                    Log.Information("Starting console host.");
+                    await CreateHostBuilder(args).RunConsoleAsync();
+                    return 0;
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex, "Host terminated unexpectedly!");
+                    return 1;
+                }
+                finally
+                {
+                    Log.CloseAndFlush();
+                }
+            }
+
+
+
+        }
+
+        internal static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseAutofac()
+                .UseSerilog()
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    //setup your additional configuration sources
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddApplication<RDVFPluginAppModule>();
+
+                    var config = LoadConfiguration();
+                    services.AddSingleton(config);
+
+                    services.Configure<FChatSharpPluginOptions>(options => hostContext.Configuration.GetSection("Options").Bind(options));
+                    services.Configure<ConnectionFactory>(options => hostContext.Configuration.GetSection("RabbitMQ").Bind(options));
+
+                    services.AddSingleton<RemoteEvents>();
+                    services.AddSingleton<RemoteBotController>();
+                    services.Configure<RDVFPluginOptions>(options => config.Bind(options));
+
+                    services.AddDbContext<DataContext.RDVFDataContext>(optionsBuilder => optionsBuilder.UseMySql(config.GetConnectionString("DefaultConnection"), new MariaDbServerVersion("10.5.13")), ServiceLifetime.Transient);
+                });
+
+        public static IConfiguration LoadConfiguration()
+        {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
+                .AddEnvironmentVariables();
+
+            return builder.Build();
         }
     }
 }

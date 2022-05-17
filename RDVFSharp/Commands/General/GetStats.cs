@@ -10,7 +10,7 @@ using System.Text;
 
 namespace RDVFSharp.Commands
 {
-    public class GetStats : BaseCommand<RendezvousFighting>
+    public class GetStats : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Displays someone else's stats.";
 

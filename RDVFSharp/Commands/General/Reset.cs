@@ -9,7 +9,7 @@ using System.Text;
 
 namespace RDVFSharp.Commands
 {
-    public class Reset : BaseCommand<RendezvousFighting>
+    public class Reset : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Resets the current fight.";
 

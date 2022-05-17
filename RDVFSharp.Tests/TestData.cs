@@ -1,7 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 using RDVFSharp.DataContext;
 using RDVFSharp.Entities;
+using System.Collections.Generic;
 
 namespace RDVFSharp.Tests
 {
@@ -64,9 +67,15 @@ namespace RDVFSharp.Tests
             return RDVFDataContext;
         }
 
-        public static RendezvousFighting GetPlugin(bool resetConnection = false)
+        public static RDVFPlugin GetPlugin(bool resetConnection = false)
         {
-            return new RendezvousFighting(null, new System.Collections.Generic.List<string> { DebugChannel }, true);
+            var options = Options.Create<RDVFPluginOptions>(new RDVFPluginOptions()
+            {
+                Channels = new List<string>() { DebugChannel },
+                Debug = true
+            });
+            var optionsRabbit = Options.Create<ConnectionFactory>(new ConnectionFactory());
+            return new RDVFPlugin(options, new FChatSharpLib.RemoteBotController(new FChatSharpLib.RemoteEvents(options, optionsRabbit)), GetDataContext());
         }
 
     }

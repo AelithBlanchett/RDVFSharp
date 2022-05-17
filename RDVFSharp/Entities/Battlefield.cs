@@ -10,7 +10,7 @@ namespace RDVFSharp
 {
     public class Battlefield
     {
-        public RendezvousFighting Plugin { get; }
+        public RDVFPlugin Plugin { get; }
         public List<Fighter> Fighters { get; set; }
         public List<Fighter> TeamRed { get; set; }
         public List<Fighter> TeamBlue { get; set; }
@@ -27,7 +27,7 @@ namespace RDVFSharp
         private int currentFighter = 0;
         private int initialActor = 0;
 
-        public Battlefield(RendezvousFighting plugin)
+        public Battlefield(RDVFPlugin plugin)
         {
             Plugin = plugin;
             OutputController = new OutputController();
@@ -423,7 +423,7 @@ namespace RDVFSharp
                 AdditionalLosersId = string.Join(',', Fighters.Where(x => x.Name != loser.Name && x.TeamColor != victor.TeamColor).Select(x => x.Name).ToList())
             };
 
-            using (var context = Plugin.Context)
+            using (var context = Plugin.DataContext)
             {
                 context.Add(fightResult);
                 context.SaveChanges();

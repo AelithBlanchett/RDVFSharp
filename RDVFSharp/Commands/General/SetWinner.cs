@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace RDVFSharp.Commands
 {
-    public class SetWinner : BaseCommand<RendezvousFighting>
+    public class SetWinner : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Sets the winner of an ongoing fight.";
 

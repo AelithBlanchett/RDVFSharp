@@ -10,7 +10,7 @@ using System.Text;
 
 namespace RDVFSharp.Commands
 {
-    public class Ready : BaseCommand<RendezvousFighting>
+    public class Ready : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Sets a player as ready.";
 
@@ -27,7 +27,7 @@ namespace RDVFSharp.Commands
 
             BaseFighter fighter = null;
 
-            using (var context = Plugin.Context)
+            using (var context = Plugin.DataContext)
             {
                 fighter = context.Fighters.Find(character);
             }

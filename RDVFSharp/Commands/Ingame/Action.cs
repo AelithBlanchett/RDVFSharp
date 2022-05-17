@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RDVFSharp.Commands
 {
-    public abstract class Action : BaseCommand<RendezvousFighting>
+    public abstract class Action : BaseCommand<RDVFPlugin>
     {
         public override string Description => $"{GetType().Name} attack";
 

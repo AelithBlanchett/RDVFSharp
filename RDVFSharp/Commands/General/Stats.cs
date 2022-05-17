@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace RDVFSharp.Commands
 {
-    public class Stats : BaseCommand<RendezvousFighting>
+    public class Stats : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Displays your own stats.";
 
         public void Execute(string character, IEnumerable<string> args, string channel = "")
         {
-            using (var context = Plugin.Context)
+            using (var context = Plugin.DataContext)
             {
                 var fighter = context.Fighters.Find(character);
                 if (fighter == null) { throw new FighterNotRegistered(character); }

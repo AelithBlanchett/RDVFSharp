@@ -14,7 +14,7 @@ namespace RDVFSharp.Tests
 
         [Theory]
         [InlineData("MyNonExistingCharacter")]
-        public void ExecuteCommand_FightAlreadyGoingOn_Fail(string characterName)
+        public async void ExecuteCommand_FightAlreadyGoingOn_Fail(string characterName)
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
@@ -24,7 +24,7 @@ namespace RDVFSharp.Tests
 
         [Theory]
         [InlineData("MyNonExistingCharacter")]
-        public void ExecuteCommand_UnregisteredCharacter_Fail(string characterName)
+        public async void ExecuteCommand_UnregisteredCharacter_Fail(string characterName)
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
@@ -36,7 +36,7 @@ namespace RDVFSharp.Tests
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
-            var fighter = await readyCommand.Plugin.Context.Fighters.FirstOrDefaultAsync();
+            var fighter = await readyCommand.Plugin.DataContext.Fighters.FirstAsync(x => x.Name == "AnotherFighterWithValidStats");
             readyCommand.ExecuteCommand(fighter.Name, new string[0], TestData.DebugChannel);
             Assert.Throws<FighterAlreadyExists>(() => readyCommand.ExecuteCommand(fighter.Name, new string[0], TestData.DebugChannel));
         }

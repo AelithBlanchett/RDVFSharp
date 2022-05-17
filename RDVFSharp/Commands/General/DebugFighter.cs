@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace RDVFSharp.Commands
 {
-    public class DebugFighter : BaseCommand<RendezvousFighting>
+    public class DebugFighter : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Sets a property to a certain value for a fighter in an ongoing fight.";
 

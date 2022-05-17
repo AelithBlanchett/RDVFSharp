@@ -10,7 +10,7 @@ using System.Text;
 
 namespace RDVFSharp.Commands
 {
-    public class Restat : BaseCommand<RendezvousFighting>
+    public class Restat : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Restats a player in the game.";
 
@@ -18,7 +18,7 @@ namespace RDVFSharp.Commands
         {
             BaseFighter fighter;
 
-            using (var context = Plugin.Context)
+            using (var context = Plugin.DataContext)
             {
                 fighter = context.Fighters.Find(character);
 

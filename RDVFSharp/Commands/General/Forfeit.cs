@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RDVFSharp.Commands
 {
-    public class Forfeit : BaseCommand<RendezvousFighting>
+    public class Forfeit : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Forfeits an ongoing fight.";
 

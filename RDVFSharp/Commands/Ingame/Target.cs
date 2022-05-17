@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace RDVFSharp.Commands
 {
-    public class Target : BaseCommand<RendezvousFighting>
+    public class Target : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Sets your target.";
 

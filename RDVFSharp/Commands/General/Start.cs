@@ -10,7 +10,7 @@ using System.Text;
 
 namespace RDVFSharp.Commands
 {
-    public class Start : BaseCommand<RendezvousFighting>
+    public class Start : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Starts the fight.";
 

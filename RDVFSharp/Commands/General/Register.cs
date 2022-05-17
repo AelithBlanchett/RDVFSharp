@@ -10,13 +10,13 @@ using System.Text;
 
 namespace RDVFSharp.Commands
 {
-    public class Register : BaseCommand<RendezvousFighting>
+    public class Register : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Registers a player in the game.";
 
         public void Execute(string character ,IEnumerable<string> args, string channel = "")
         {
-            using (var context = Plugin.Context)
+            using (var context = Plugin.DataContext)
             {
                 var fighter = context.Fighters.Find(character);
                 if (fighter != null)

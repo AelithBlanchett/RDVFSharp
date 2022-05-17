@@ -9,7 +9,7 @@ using System.Text;
 
 namespace RDVFSharp.Commands
 {
-    public class Leave : BaseCommand<RendezvousFighting>
+    public class Leave : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Leaves an ongoing fight.";
 
