@@ -2,16 +2,17 @@
 using RDVFSharp.Errors;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
-    public class SetWinner : BaseCommand<RendezvousFighting>
+    public class SetWinner : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Sets the winner of an ongoing fight.";
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.CurrentBattlefield.IsActive)
+            if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.CurrentBattlefield.IsInProgress)
             {
                 var activeFighter = Plugin.CurrentBattlefield.GetFighter(string.Join(' ', args));
                 if (activeFighter != null)

@@ -6,14 +6,15 @@ using RDVFSharp.Errors;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
-    public class Reset : BaseCommand<RendezvousFighting>
+    public class Reset : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Resets the current fight.";
 
-        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
             if(Plugin.FChatClient.IsUserAdmin(character, channel))
             {

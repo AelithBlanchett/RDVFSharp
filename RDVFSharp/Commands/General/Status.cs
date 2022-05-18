@@ -1,18 +1,19 @@
 ﻿using FChatSharpLib.Entities.Plugin.Commands;
 using RDVFSharp.Errors;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
-    public class Status : BaseCommand<RendezvousFighting>
+    public class Status : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Gets the status of an ongoing fight.";
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsActive)
+            if (Plugin.CurrentBattlefield.IsInProgress)
             {
-                Plugin.FChatClient.SendPrivateMessage(Plugin.CurrentBattlefield.WindowController.LastMessageSent, character);
+                Plugin.FChatClient.SendPrivateMessage(Plugin.CurrentBattlefield.OutputController.LastMessageSent, character);
             }
             else
             {

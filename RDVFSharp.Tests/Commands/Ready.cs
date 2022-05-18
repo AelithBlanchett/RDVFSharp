@@ -14,31 +14,31 @@ namespace RDVFSharp.Tests
 
         [Theory]
         [InlineData("MyNonExistingCharacter")]
-        public void ExecuteCommand_FightAlreadyGoingOn_Fail(string characterName)
+        public async void ExecuteCommand_FightAlreadyGoingOn_Fail(string characterName)
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
-            readyCommand.Plugin.CurrentBattlefield.IsActive = true;
-            Assert.Throws<FightInProgress>(() => readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
+            readyCommand.Plugin.CurrentBattlefield.IsInProgress = true;
+            await Assert.ThrowsAsync<FightInProgress>(async () => await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
         }
 
         [Theory]
         [InlineData("MyNonExistingCharacter")]
-        public void ExecuteCommand_UnregisteredCharacter_Fail(string characterName)
+        public async void ExecuteCommand_UnregisteredCharacter_Fail(string characterName)
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
-            Assert.Throws<FighterNotRegistered>(() => readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
+            await Assert.ThrowsAsync<FighterNotRegistered>(async () => await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
         }
 
-        [Fact]
-        public async void ExecuteCommand_SameCharacterShouldntJoinTwice_Fail()
+        [Theory]
+        [InlineData("AnotherFighterWithValidStats")]
+        public async void ExecuteCommand_SameCharacterShouldntJoinTwice_Fail(string characterName)
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
-            var fighter = await readyCommand.Plugin.Context.Fighters.FirstOrDefaultAsync();
-            readyCommand.ExecuteCommand(fighter.Name, new string[0], TestData.DebugChannel);
-            Assert.Throws<FighterAlreadyExists>(() => readyCommand.ExecuteCommand(fighter.Name, new string[0], TestData.DebugChannel));
+            await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel);
+            await Assert.ThrowsAsync<FighterAlreadyExists>(async () => await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
         }
     }
 }

@@ -25,7 +25,7 @@ namespace RDVFSharp.DataContext
                                 .AddJsonFile("appsettings.json", optional: false)
                                 .Build();
 
-                optionsBuilder.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+                optionsBuilder.UseMySql(Configuration.GetConnectionString("DefaultConnection"), new MariaDbServerVersion("10.5.13"));
             }
         }
     }

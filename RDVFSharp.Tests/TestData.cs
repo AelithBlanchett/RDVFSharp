@@ -1,7 +1,11 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 using RDVFSharp.DataContext;
 using RDVFSharp.Entities;
+using System.Collections.Generic;
 
 namespace RDVFSharp.Tests
 {
@@ -11,7 +15,7 @@ namespace RDVFSharp.Tests
 
         public static RDVFDataContext RDVFDataContext;
 
-        public static RDVFDataContext GetDataContext(bool reset = false)
+        public static RDVFDataContext GetDataContext(bool reset = true)
         {
             if (RDVFDataContext != null && !reset) { return RDVFDataContext; }
             var firstFighter = new BaseFighter()
@@ -19,9 +23,9 @@ namespace RDVFSharp.Tests
                 Dexterity = 4,
                 Resilience = 4,
                 Name = "AFighterWithValidStats",
-                Endurance = 8,
+                Spellpower = 8,
                 Strength = 4,
-                Special = 4
+                Willpower = 4
             };
 
             var secondighter = new BaseFighter()
@@ -29,9 +33,9 @@ namespace RDVFSharp.Tests
                 Dexterity = 4,
                 Resilience = 4,
                 Name = "AnotherFighterWithValidStats",
-                Endurance = 4,
+                Spellpower = 4,
                 Strength = 8,
-                Special = 4
+                Willpower = 4
             };
 
             var thirdFighter = new BaseFighter()
@@ -39,9 +43,9 @@ namespace RDVFSharp.Tests
                 Dexterity = 4,
                 Resilience = 4,
                 Name = "AFighterWithInvalidStats",
-                Endurance = 4,
+                Spellpower = 4,
                 Strength = 4,
-                Special = 4
+                Willpower = 4
             };
 
             // In-memory database only exists while the connection is open
@@ -64,9 +68,16 @@ namespace RDVFSharp.Tests
             return RDVFDataContext;
         }
 
-        public static RendezvousFighting GetPlugin(bool resetConnection = false)
+        public static RDVFPlugin GetPlugin(bool resetConnection = false)
         {
-            return new RendezvousFighting(GetDataContext(resetConnection), DebugChannel, true);
+            var options = Options.Create<RDVFPluginOptions>(new RDVFPluginOptions()
+            {
+                Channels = new List<string>() { DebugChannel },
+                Debug = true
+            });
+            var optionsRabbit = Options.Create<ConnectionFactory>(new ConnectionFactory());
+
+            return new RDVFPlugin(options, new FChatSharpLib.RemoteBotController(new FChatSharpLib.RemoteEvents(options, optionsRabbit)), GetDataContext());
         }
 
     }

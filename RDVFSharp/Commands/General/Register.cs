@@ -7,61 +7,77 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
-    public class Register : BaseCommand<RendezvousFighting>
+    public class Register : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Registers a player in the game.";
 
-        public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
+        public async Task Execute(string character, IEnumerable<string> args, string channel = "")
         {
-            using (var context = Plugin.Context)
+            var fighter = await Plugin.DataContext.Fighters.FindAsync(character);
+            if (fighter != null)
             {
-                var fighter = context.Fighters.Find(character);
-                if (fighter != null)
+                throw new FighterAlreadyExists(character);
+            }
+
+            int[] statsArray;
+
+            try
+            {
+                statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
+
+                if (statsArray.Length != 5)
                 {
-                    throw new FighterAlreadyExists(character);
+                    throw new Exception();
                 }
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Invalid arguments. All stats must be numbers. Example: !register 5 8 8 1 2");
+            }
 
-                int[] statsArray;
+            var createdFighter = new BaseFighter()
+            {
+                Name = character,
+                Strength = statsArray[0],
+                Dexterity = statsArray[1],
+                Resilience = statsArray[2],
+                Spellpower = statsArray[3],
+                Willpower = statsArray[4]
+            };
 
-                try
+            if (createdFighter.AreStatsValid)
+            {
+                Plugin.DataContext.Fighters.Add(createdFighter);
+                Plugin.DataContext.SaveChanges();
+
+                if (channel == "")
                 {
-                    statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
-
-                    if (statsArray.Length != 5)
-                    {
-                        throw new Exception();
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentException("Invalid arguments. All stats must be numbers. Example: !register 5 8 8 1 2");
-                }
-
-                var createdFighter = new BaseFighter()
-                {
-                    Name = character,
-                    Strength = statsArray[0],
-                    Dexterity = statsArray[1],
-                    Resilience = statsArray[2],
-                    Endurance = statsArray[3],
-                    Special = statsArray[4]
-                };
-
-                if (createdFighter.AreStatsValid)
-                {
-                    context.Fighters.Add(createdFighter);
-                    context.SaveChanges();
-                    Plugin.FChatClient.SendMessageInChannel($"Welcome among us, {character}!", channel);
+                    Plugin.FChatClient.SendPrivateMessage($"Welcome among us, {character}!", character);
                 }
                 else
                 {
-                    throw new Exception(string.Join(", ", createdFighter.GetStatsErrors()));
+                    Plugin.FChatClient.SendMessageInChannel($"Welcome among us, {character}!", channel);
                 }
+
             }
-            
+            else
+            {
+                throw new Exception(string.Join(", ", createdFighter.GetStatsErrors()));
+            }
+        }
+
+        public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        {
+            await this.Execute(character, args, channel);
+        }
+
+        public override async Task ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        {
+            await this.Execute(characterCalling, args);
         }
     }
 }
