@@ -334,13 +334,12 @@ namespace RDVFSharp.Entities
 
         public void FinalStand()
         {
-            var attacker = Battlefield.GetActor();
-
-            if (attacker.HP < HPDOT)
+            if (HP < HPDOT)
             {
-                Battlefield.OutputController.Hit.Add("This is " + attacker.Name + "'s final stand, do all the damage you can on this turn!");
+                Battlefield.OutputController.Hit.Add("This is " + Name + "'s final stand, do all the damage you can on this turn!");
             }
         }
+
         public void UpdateCondition()
         {
             
