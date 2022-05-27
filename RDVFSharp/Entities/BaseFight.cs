@@ -16,6 +16,7 @@ namespace RDVFSharp.Entities
         public string Room { get; set; }
         [Required]
         public string WinnerId { get; set; }
+
         [Required]
         public string LoserId { get; set; }
         [Required]
@@ -23,7 +24,12 @@ namespace RDVFSharp.Entities
 
         [ForeignKey(nameof(WinnerId))]
         public BaseFighter Winner { get; set; }
+
         [ForeignKey(nameof(LoserId))]
         public BaseFighter Loser { get; set; }
+
+        public string AdditionalWinnersId { get; set; }
+
+        public string AdditionalLosersId { get; set; }
     }
 }

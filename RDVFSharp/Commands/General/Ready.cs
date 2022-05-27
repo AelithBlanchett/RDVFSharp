@@ -5,6 +5,7 @@ using RDVFSharp.Entities;
 using RDVFSharp.Errors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RDVFSharp.Commands
@@ -15,11 +16,11 @@ namespace RDVFSharp.Commands
 
         public override void ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsActive || (Plugin.FirstFighter != null && Plugin.SecondFighter != null))
+            if (Plugin.CurrentBattlefield.IsInProgress)
             {
                 throw new FightInProgress();
             }
-            else if (Plugin.FirstFighter?.Name == character || Plugin.SecondFighter?.Name == character)
+            else if (Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == character))
             {
                 throw new FighterAlreadyExists(character);
             }
@@ -36,31 +37,39 @@ namespace RDVFSharp.Commands
                 throw new FighterNotRegistered(character);
             }
 
-            var actualFighter = new Fighter(fighter, Plugin.CurrentBattlefield);
+            var teamInputText = string.Join(" ", args);
 
-            if(Plugin.FirstFighter == null && Plugin.SecondFighter != null)
+            var teamColor = "";
+            if (string.IsNullOrEmpty(teamInputText.Trim()))
             {
-                Plugin.FirstFighter = Plugin.SecondFighter;
-                Plugin.SecondFighter = null;
+                teamColor = Plugin.CurrentBattlefield.Fighters.Count % 2 == 0 ? "red" : "blue";
             }
-
-            if (Plugin.FirstFighter == null)
+            else if (teamInputText.ToLower().Contains("red"))
             {
-                Plugin.FirstFighter = actualFighter;
-                Plugin.FChatClient.SendMessageInChannel($"{actualFighter.Name} joined the fight!", channel);
+                teamColor = "red";
+            }
+            else if (teamInputText.ToLower().Contains("blue"))
+            {
+                teamColor = "blue";
+            }
+            else if (teamInputText.ToLower().Contains("yellow"))
+            {
+                teamColor = "yellow";
+            }
+            else if (teamInputText.ToLower().Contains("purple"))
+            {
+                teamColor = "purple";
             }
             else
             {
-                Plugin.SecondFighter = actualFighter;
-
-                if (!Plugin.CurrentBattlefield.IsActive && (Plugin.FirstFighter != null && Plugin.SecondFighter != null))
-                {
-                    Plugin.FChatClient.SendMessageInChannel($"{actualFighter.Name} accepted the challenge! Let's get it on!", channel);
-                    Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
-                    Plugin.CurrentBattlefield.InitialSetup(Plugin.FirstFighter, Plugin.SecondFighter);
-                }
+                throw new Exception("Invalid team color.");
             }
 
+            if (!Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == fighter.Name))
+            {
+                Plugin.CurrentBattlefield.AddFighter(fighter, teamColor);
+                Plugin.FChatClient.SendMessageInChannel($"{fighter.Name} joined the fight for team [color={teamColor}]{teamColor.ToUpper()}[/color]!", channel);
+            }
         }
     }
 }

@@ -19,9 +19,9 @@ namespace RDVFSharp.Tests
                 Dexterity = 4,
                 Resilience = 4,
                 Name = "AFighterWithValidStats",
-                Endurance = 8,
+                Spellpower = 8,
                 Strength = 4,
-                Special = 4
+                Willpower = 4
             };
 
             var secondighter = new BaseFighter()
@@ -29,9 +29,9 @@ namespace RDVFSharp.Tests
                 Dexterity = 4,
                 Resilience = 4,
                 Name = "AnotherFighterWithValidStats",
-                Endurance = 4,
+                Spellpower = 4,
                 Strength = 8,
-                Special = 4
+                Willpower = 4
             };
 
             var thirdFighter = new BaseFighter()
@@ -39,9 +39,9 @@ namespace RDVFSharp.Tests
                 Dexterity = 4,
                 Resilience = 4,
                 Name = "AFighterWithInvalidStats",
-                Endurance = 4,
+                Spellpower = 4,
                 Strength = 4,
-                Special = 4
+                Willpower = 4
             };
 
             // In-memory database only exists while the connection is open
@@ -66,7 +66,7 @@ namespace RDVFSharp.Tests
 
         public static RendezvousFighting GetPlugin(bool resetConnection = false)
         {
-            return new RendezvousFighting(GetDataContext(resetConnection), DebugChannel, true);
+            return new RendezvousFighting(null, new System.Collections.Generic.List<string> { DebugChannel }, true);
         }
 
     }

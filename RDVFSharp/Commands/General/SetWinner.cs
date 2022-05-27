@@ -11,7 +11,7 @@ namespace RDVFSharp.Commands
 
         public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.CurrentBattlefield.IsActive)
+            if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.CurrentBattlefield.IsInProgress)
             {
                 var activeFighter = Plugin.CurrentBattlefield.GetFighter(string.Join(' ', args));
                 if (activeFighter != null)

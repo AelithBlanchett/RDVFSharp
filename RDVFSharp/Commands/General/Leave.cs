@@ -15,13 +15,13 @@ namespace RDVFSharp.Commands
 
         public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsActive)
+            if (Plugin.CurrentBattlefield.IsInProgress)
             {
                 var activeFighter = Plugin.CurrentBattlefield.GetFighter(character);
                 if (activeFighter != null)
                 {
                     activeFighter.WantsToLeave = true;
-                    Plugin.FChatClient.SendMessageInChannel($"The fight will end if your opponent types !exit too.", channel);
+                    Plugin.FChatClient.SendMessageInChannel($"The fight will end once all the fighters in this match type !leave.", channel);
                 }
                 else
                 {
@@ -37,16 +37,8 @@ namespace RDVFSharp.Commands
             else
             {
                 var removed = false;
-                if(Plugin.FirstFighter?.Name == character)
-                {
-                    Plugin.FirstFighter = Plugin.SecondFighter; //should be null anyway if there's no second fighter
-                    removed = true;
-                }
-                if (Plugin.SecondFighter?.Name == character)
-                {
-                    Plugin.SecondFighter = null;
-                    removed = true;
-                }
+                int result = Plugin.CurrentBattlefield.Fighters.RemoveAll(x => x.Name == character);
+                removed = result > 0;
 
                 if (removed)
                 {

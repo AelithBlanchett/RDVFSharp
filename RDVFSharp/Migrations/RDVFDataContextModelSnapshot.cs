@@ -22,6 +22,10 @@ namespace RDVFSharp.Migrations
                     b.Property<long>("FightId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AdditionalLosersId");
+
+                    b.Property<string>("AdditionalWinnersId");
+
                     b.Property<DateTime>("FinishDate");
 
                     b.Property<string>("LoserId")
@@ -49,13 +53,13 @@ namespace RDVFSharp.Migrations
 
                     b.Property<int>("Dexterity");
 
-                    b.Property<int>("Endurance");
-
                     b.Property<int>("Resilience");
 
-                    b.Property<int>("Special");
+                    b.Property<int>("Spellpower");
 
                     b.Property<int>("Strength");
+
+                    b.Property<int>("Willpower");
 
                     b.HasKey("Name");
 

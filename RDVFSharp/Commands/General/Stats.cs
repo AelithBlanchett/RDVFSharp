@@ -8,7 +8,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Displays your own stats.";
 
-        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        public void Execute(string character, IEnumerable<string> args, string channel = "")
         {
             using (var context = Plugin.Context)
             {
@@ -22,6 +22,16 @@ namespace RDVFSharp.Commands
 
                 Plugin.FChatClient.SendPrivateMessage(fighter.Stats, channel);
             }
+        }
+
+        public override void ExecuteCommand(string character, IEnumerable<string> args, string channel)
+        {
+            this.Execute(character, args, channel);
+        }
+
+        public override void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        {
+            this.Execute(characterCalling, args);
         }
     }
 }
