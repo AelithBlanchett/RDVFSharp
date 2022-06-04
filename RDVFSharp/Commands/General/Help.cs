@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
-    public class Commands : BaseCommand<RDVFPlugin>
+    public class Help : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Gets the status of an ongoing fight.";
 
@@ -21,7 +21,7 @@ namespace RDVFSharp.Commands
                     "[b]!stats[/b]: The bot will PM you with your stats." + "\n" +
                     "[b]!forfeit[/b]: Ends the match, and declares your opponent the winner." + "\n" +
                     "[b]!leave[/b]: If you've readied, but there is no match going on, this clears the arena. Otherwise, if all the participants in an ongoing match type this, the fight becomes null and void." + "\n" +
-                    "[b]!commands/!help[/b]: Makes the bot PM all the commands available to you." + "\n" +
+                    "[b]!help/!commands[/b]: Makes the bot PM all the commands available to you." + "\n" +
                     "\n" +
                     "\n" +
                     "[u][b]Infight commands[/b][/u]" + "\n" +

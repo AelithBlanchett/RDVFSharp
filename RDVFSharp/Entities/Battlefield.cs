@@ -54,6 +54,7 @@ namespace RDVFSharp
             OutputController.Broadcast(this);
         }
 
+#region Target Management
         public void SetInitialTargets()
         {
             foreach (var teamColor in Fighters.Select(x => x.TeamColor).Distinct())
@@ -94,6 +95,36 @@ namespace RDVFSharp
 
                             {
                                 fighter.CurrentTarget = opponents.First();
+                                if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
+
+                                {
+                                    fighter.CurrentTarget = opponents.First();
+                                    if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
+
+                                    {
+                                        fighter.CurrentTarget = opponents.First();
+                                        if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
+
+                                        {
+                                            fighter.CurrentTarget = opponents.First();
+                                            if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
+
+                                            {
+                                                fighter.CurrentTarget = opponents.First();
+                                                if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
+
+                                                {
+                                                    fighter.CurrentTarget = opponents.First();
+                                                    if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
+
+                                                    {
+                                                        fighter.CurrentTarget = opponents.First();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -120,6 +151,36 @@ namespace RDVFSharp
 
                             {
                                 fighter.CurrentTarget = opponents.First();
+                                if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
+
+                                {
+                                    fighter.CurrentTarget = opponents.First();
+                                    if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
+
+                                    {
+                                        fighter.CurrentTarget = opponents.First();
+                                        if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
+
+                                        {
+                                            fighter.CurrentTarget = opponents.First();
+                                            if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
+
+                                            {
+                                                fighter.CurrentTarget = opponents.First();
+                                                if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
+
+                                                {
+                                                    fighter.CurrentTarget = opponents.First();
+                                                    if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
+
+                                                    {
+                                                        fighter.CurrentTarget = opponents.First();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -133,8 +194,52 @@ namespace RDVFSharp
 
         public void AssignNewTarget(Fighter fighter)
         {
-            var opponents = Fighters.Where(x => x.TeamColor != fighter.TeamColor).OrderBy(x => new Random().Next()).ToList();
-            fighter.CurrentTarget = opponents.First();
+
+            foreach (var Opponent in Fighters.Where(x => x.TeamColor != fighter.TeamColor).ToList())
+            {
+                var opponents = Fighters.Where((x => x.TeamColor != fighter.TeamColor && x.IsDead == false)).OrderBy(x => new Random().Next()).ToList();
+                fighter.CurrentTarget = opponents.First();
+                if (fighter.CurrentTarget.IsDead == true)
+                {
+                    fighter.CurrentTarget = opponents.First();
+                    if (fighter.CurrentTarget.IsDead == true)
+                    {
+                        fighter.CurrentTarget = opponents.First();
+                        if (fighter.CurrentTarget.IsDead == true)
+                        {
+                            fighter.CurrentTarget = opponents.First();
+                            if (fighter.CurrentTarget.IsDead == true)
+                            {
+                                fighter.CurrentTarget = opponents.First();
+                                if (fighter.CurrentTarget.IsDead == true)
+                                {
+                                    fighter.CurrentTarget = opponents.First();
+                                    if (fighter.CurrentTarget.IsDead == true)
+                                    {
+                                        fighter.CurrentTarget = opponents.First();
+                                        if (fighter.CurrentTarget.IsDead == true)
+                                        {
+                                            fighter.CurrentTarget = opponents.First();
+                                            if (fighter.CurrentTarget.IsDead == true)
+                                            {
+                                                fighter.CurrentTarget = opponents.First();
+                                                if (fighter.CurrentTarget.IsDead == true)
+                                                {
+                                                    fighter.CurrentTarget = opponents.First();
+                                                    if (fighter.CurrentTarget.IsDead == true)
+                                                    {
+                                                        fighter.CurrentTarget = opponents.First();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void CheckTargetCoherenceAndReassign()
@@ -151,6 +256,8 @@ namespace RDVFSharp
                 }
             }
         }
+
+        #endregion
 
         public bool AddFighter(BaseFighter fighterName, string teamColor)
         {
