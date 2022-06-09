@@ -7,16 +7,16 @@ namespace RDVFSharp.Commands
     {
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            var attacker = Plugin.CurrentBattlefield.GetActor();
-            var target = Plugin.CurrentBattlefield.GetTarget();
+            var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
+            var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
 
             if (attacker.IsGrappling(target) || target.IsGrappling(attacker))
             {
-                base.ExecuteCommand(character, args, channel);
+                await base.ExecuteCommand(character, args, channel);
             }
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("You can only use Throw if you are grappling.", Plugin.Channel);
+                Plugin.FChatClient.SendMessageInChannel("You can only use Throw if you are grappling.", channel);
             }
         }
     }

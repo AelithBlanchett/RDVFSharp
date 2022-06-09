@@ -7,8 +7,8 @@ namespace RDVFSharp.Commands
     {
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            var attacker = Plugin.CurrentBattlefield.GetActor();
-            var target = Plugin.CurrentBattlefield.GetTarget();
+            var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
+            var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
 
             if (attacker.IsGrappling(target))
             {
@@ -16,7 +16,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("You can only use Submission if you are grappling your opponent.", Plugin.Channel);
+                Plugin.FChatClient.SendMessageInChannel("You can only use Submission if you are grappling your opponent.", channel);
             }
         }
     }

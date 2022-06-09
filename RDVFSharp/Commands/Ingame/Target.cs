@@ -14,13 +14,13 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            var target = Plugin.CurrentBattlefield.GetTarget();
-            if (Plugin.CurrentBattlefield.GetFighter(character).IsGrappling(target))
+            var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
+            if (Plugin.GetCurrentBattlefield(channel).GetFighter(character).IsGrappling(target))
             {
                 Plugin.FChatClient.SendMessageInChannel("You cannot change targets while grappling someone.", channel);
             }
 
-            else if ((Plugin.CurrentBattlefield.IsAbleToAttack(character)))
+            else if ((Plugin.GetCurrentBattlefield(channel).IsAbleToAttack(character)))
             {
                 if (args.Count() < 1)
                 {
@@ -30,9 +30,9 @@ namespace RDVFSharp.Commands
 
                 var characterName = string.Join(' ', argsList.Skip(0));
 
-                var activeFighter = Plugin.CurrentBattlefield.GetFighter(character);
-                var NewTarget = Plugin.CurrentBattlefield.GetFighter(characterName);
-                var battlefield = Plugin.CurrentBattlefield;
+                var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
+                var NewTarget = Plugin.GetCurrentBattlefield(channel).GetFighter(characterName);
+                var battlefield = Plugin.GetCurrentBattlefield(channel);
 
                 if ((NewTarget != null) && (NewTarget.TeamColor != activeFighter.TeamColor))
                 {

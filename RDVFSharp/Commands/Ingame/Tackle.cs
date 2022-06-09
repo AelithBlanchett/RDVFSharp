@@ -11,10 +11,10 @@ namespace RDVFSharp.Commands
     {
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            var attacker = Plugin.CurrentBattlefield.GetActor();
-            var target = Plugin.CurrentBattlefield.GetTarget();
-            var others = Plugin.CurrentBattlefield.Fighters.Where(x => x.Name != attacker.Name);
-            var otherothers = Plugin.CurrentBattlefield.Fighters.Where(x => x.Name != target.Name);
+            var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
+            var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
+            var others = Plugin.GetCurrentBattlefield(channel).Fighters.Where(x => x.Name != attacker.Name);
+            var otherothers = Plugin.GetCurrentBattlefield(channel).Fighters.Where(x => x.Name != target.Name);
 
 
 
@@ -24,7 +24,7 @@ namespace RDVFSharp.Commands
                     }
                     else
                     {
-                        Plugin.FChatClient.SendMessageInChannel("You can't use Tackle when you already are in grappling range, or on someone that's being grappled by/grappling someone else.", Plugin.Channel);
+                        Plugin.FChatClient.SendMessageInChannel("You can't use Tackle when you already are in grappling range, or on someone that's being grappled by/grappling someone else.", channel);
                     }
         }
     }

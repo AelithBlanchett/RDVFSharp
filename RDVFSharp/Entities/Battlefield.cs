@@ -19,6 +19,7 @@ namespace RDVFSharp
         public List<Fighter> TurnOrder { get; set; }
         public OutputController OutputController { get; set; }
 
+        public string Channel { get; set; }
         public string Stage { get; set; }
         public bool IsInProgress { get; set; }
 
@@ -27,9 +28,10 @@ namespace RDVFSharp
         private int currentFighter = 0;
         private int initialActor = 0;
 
-        public Battlefield(RDVFPlugin plugin)
+        public Battlefield(RDVFPlugin plugin, string channel)
         {
             Plugin = plugin;
+            Channel = channel;
             OutputController = new OutputController();
             Fighters = new List<Fighter>();
             Stage = StageSelect.SelectRandom();
@@ -415,7 +417,7 @@ namespace RDVFSharp
         {
             var fightResult = new BaseFight()
             {
-                Room = Plugin.Channel,
+                Room = Channel,
                 WinnerId = victor.Name,
                 LoserId = loser.Name,
                 FinishDate = DateTime.UtcNow,
@@ -426,7 +428,7 @@ namespace RDVFSharp
             Plugin.DataContext.Add(fightResult);
             Plugin.DataContext.SaveChanges();
 
-            Plugin.ResetFight();
+            Plugin.ResetFight(Channel);
 
             return fightResult;
         }

@@ -11,9 +11,9 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsInProgress)
+            if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
-                Plugin.FChatClient.SendPrivateMessage(Plugin.CurrentBattlefield.OutputController.LastMessageSent, character);
+                Plugin.FChatClient.SendPrivateMessage(Plugin.GetCurrentBattlefield(channel).OutputController.LastMessageSent, character);
             }
             else
             {

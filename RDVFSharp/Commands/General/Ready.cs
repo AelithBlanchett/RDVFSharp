@@ -17,11 +17,11 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsInProgress)
+            if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
                 throw new FightInProgress();
             }
-            else if (Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == character))
+            else if (Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == character))
             {
                 throw new FighterAlreadyExists(character);
             }
@@ -40,7 +40,7 @@ namespace RDVFSharp.Commands
             var teamColor = "";
             if (string.IsNullOrEmpty(teamInputText.Trim()))
             {
-                teamColor = Plugin.CurrentBattlefield.Fighters.Count % 2 == 0 ? "red" : "blue";
+                teamColor = Plugin.GetCurrentBattlefield(channel).Fighters.Count % 2 == 0 ? "red" : "blue";
             }
             else if (teamInputText.ToLower().Contains("red"))
             {
@@ -63,9 +63,9 @@ namespace RDVFSharp.Commands
                 throw new Exception("Invalid team color.");
             }
 
-            if (!Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == fighter.Name))
+            if (!Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == fighter.Name))
             {
-                Plugin.CurrentBattlefield.AddFighter(fighter, teamColor);
+                Plugin.GetCurrentBattlefield(channel).AddFighter(fighter, teamColor);
                 Plugin.FChatClient.SendMessageInChannel($"{fighter.Name} joined the fight for team [color={teamColor}]{teamColor.ToUpper()}[/color]!", channel);
             }
         }

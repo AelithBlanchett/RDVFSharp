@@ -11,13 +11,13 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsInProgress)
+            if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
-                var activeFighter = Plugin.CurrentBattlefield.GetFighter(character);
+                var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
                 if (activeFighter != null)
                 {
                     Plugin.FChatClient.SendMessageInChannel($"{activeFighter.Name} has forfeited the match.", channel);
-                    Plugin.CurrentBattlefield.EndFight(Plugin.CurrentBattlefield.GetFighterTarget(character), activeFighter);
+                    Plugin.GetCurrentBattlefield(channel).EndFight(Plugin.GetCurrentBattlefield(channel).GetFighterTarget(character), activeFighter);
                 }
                 else
                 {

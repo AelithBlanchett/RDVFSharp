@@ -17,20 +17,20 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsInProgress)
+            if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
                 throw new FightInProgress();
             }
-            else if (!Plugin.CurrentBattlefield.Fighters.Any(x => x.Name == character))
+            else if (!Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == character))
             {
                 throw new FighterNotFound(character);
             }
 
-            if (!Plugin.CurrentBattlefield.IsInProgress && Plugin.CurrentBattlefield.Fighters.Count >= 2)
+            if (!Plugin.GetCurrentBattlefield(channel).IsInProgress && Plugin.GetCurrentBattlefield(channel).Fighters.Count >= 2)
             {
                 Plugin.FChatClient.SendMessageInChannel($"Let's get it on!", channel);
                 Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
-                Plugin.CurrentBattlefield.InitialSetup();
+                Plugin.GetCurrentBattlefield(channel).InitialSetup();
             }
         }
     }
