@@ -7,16 +7,16 @@ namespace RDVFSharp.Commands
     {
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            var attacker = Plugin.CurrentBattlefield.GetActor();
-            var target = Plugin.CurrentBattlefield.GetTarget();
+            var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
+            var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
 
-            if (!Plugin.CurrentBattlefield.GetTarget().IsRestrained && (((Plugin.CurrentBattlefield.GetTarget().IsGrabbable==Plugin.CurrentBattlefield.GetActor().IsGrabbable) && (0 < Plugin.CurrentBattlefield.GetActor().IsGrabbable)) || Plugin.CurrentBattlefield.GetTarget().IsExposed > 0 || target.IsGrappling(attacker)))
+            if (!Plugin.GetCurrentBattlefield(channel).GetTarget().IsRestrained && (((Plugin.GetCurrentBattlefield(channel).GetTarget().IsGrabbable==Plugin.GetCurrentBattlefield(channel).GetActor().IsGrabbable) && (0 < Plugin.GetCurrentBattlefield(channel).GetActor().IsGrabbable)) || Plugin.GetCurrentBattlefield(channel).GetTarget().IsExposed > 0 || target.IsGrappling(attacker)))
             {
                 base.ExecuteCommand(character, args, channel);
             }
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("You can only use Grab if your opponent is not already grappled and if either you are in grappling range or your opponent is Exposed.", Plugin.Channel);
+                Plugin.FChatClient.SendMessageInChannel("You can only use Grab if your opponent is not already grappled and if either you are in grappling range or your opponent is Exposed.", channel);
             }
         }
     }

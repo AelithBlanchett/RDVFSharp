@@ -16,9 +16,9 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.CurrentBattlefield.IsInProgress)
+            if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
-                var activeFighter = Plugin.CurrentBattlefield.GetFighter(character);
+                var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
                 if (activeFighter != null)
                 {
                     activeFighter.WantsToLeave = true;
@@ -29,16 +29,16 @@ namespace RDVFSharp.Commands
                     throw new FightInProgress();
                 }
 
-                if (Plugin.CurrentBattlefield.Fighters.TrueForAll(x => x.WantsToLeave))
+                if (Plugin.GetCurrentBattlefield(channel).Fighters.TrueForAll(x => x.WantsToLeave))
                 {
-                    Plugin.ResetFight();
+                    Plugin.ResetFight(channel);
                     Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
                 }
             }
             else
             {
                 var removed = false;
-                int result = Plugin.CurrentBattlefield.Fighters.RemoveAll(x => x.Name == character);
+                int result = Plugin.GetCurrentBattlefield(channel).Fighters.RemoveAll(x => x.Name == character);
                 removed = result > 0;
 
                 if (removed)

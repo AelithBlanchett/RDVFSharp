@@ -11,22 +11,22 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            var attacker = Plugin.CurrentBattlefield.GetActor();
-            var target = Plugin.CurrentBattlefield.GetTarget();
+            var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
+            var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
             
             if ((attacker.IsRestrained == true && !target.IsGrappling(attacker)) || (attacker.IsRestraining > 0 && !attacker.IsGrappling(target)))
             {
-                Plugin.FChatClient.SendMessageInChannel("You must be targetting the one that is grappling you, or that you are grappling.", Plugin.Channel);
+                Plugin.FChatClient.SendMessageInChannel("You must be targetting the one that is grappling you, or that you are grappling.", channel);
             }
             
-            else if ((Plugin.CurrentBattlefield.IsAbleToAttack(character)) && !((Plugin.CurrentBattlefield.GetActor().IsRestrained == true) && (Plugin.CurrentBattlefield.GetTarget().IsRestraining == 0)))
+            else if ((Plugin.GetCurrentBattlefield(channel).IsAbleToAttack(character)) && !((Plugin.GetCurrentBattlefield(channel).GetActor().IsRestrained == true) && (Plugin.GetCurrentBattlefield(channel).GetTarget().IsRestraining == 0)))
             {
-                Plugin.CurrentBattlefield.TakeAction(GetType().Name);
+                Plugin.GetCurrentBattlefield(channel).TakeAction(GetType().Name);
             }
 
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("This is not your turn.", Plugin.Channel);
+                Plugin.FChatClient.SendMessageInChannel("This is not your turn.", channel);
             }
 
         }

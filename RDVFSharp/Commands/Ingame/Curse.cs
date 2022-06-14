@@ -7,7 +7,7 @@ namespace RDVFSharp.Commands
     {
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            var attacker = Plugin.CurrentBattlefield.GetActor();
+            var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
 
             if (attacker.CurseUsed == 0)
             {
@@ -15,7 +15,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("You can only use Curse once per match.", Plugin.Channel);
+                Plugin.FChatClient.SendMessageInChannel("You can only use Curse once per match.", channel);
             }
         }
     }

@@ -14,7 +14,7 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.CurrentBattlefield.IsInProgress)
+            if (Plugin.FChatClient.IsUserAdmin(character, channel) && Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
                 if(args.Count() < 3)
                 {
@@ -26,7 +26,7 @@ namespace RDVFSharp.Commands
                 var propertyValue = argsList[1];
                 var characterName = string.Join(' ', argsList.Skip(2));
 
-                var activeFighter = Plugin.CurrentBattlefield.GetFighter(characterName);
+                var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(characterName);
                 if (activeFighter != null)
                 {
                     PropertyInfo prop = activeFighter.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);

@@ -18,7 +18,7 @@ namespace RDVFSharp.Tests
         {
             var readyCommand = new RDVFSharp.Commands.Ready();
             readyCommand.Plugin = TestData.GetPlugin();
-            readyCommand.Plugin.CurrentBattlefield.IsInProgress = true;
+            readyCommand.Plugin.GetCurrentBattlefield(TestData.DebugChannel).IsInProgress = true;
             await Assert.ThrowsAsync<FightInProgress>(async () => await readyCommand.ExecuteCommand(characterName, new string[0], TestData.DebugChannel));
         }
 

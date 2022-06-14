@@ -13,7 +13,7 @@ namespace RDVFSharp
 {
     public class RDVFPlugin : BasePlugin, ISingletonDependency
     {
-        public Battlefield CurrentBattlefield { get; set; }
+        public Dictionary<string, Battlefield> CurrentBattlefields { get; set; } = new Dictionary<string, Battlefield>();
         public IOptions<RDVFPluginOptions> RDVFPluginOptions { get; }
         public RDVFDataContext DataContext { get; }
 
@@ -21,18 +21,36 @@ namespace RDVFSharp
         {
             RDVFPluginOptions = pluginOptions;
             DataContext = dataContext;
-            ResetFight(CurrentBattlefield);
+            ResetAllFight();
         }
 
-        public void ResetFight(Battlefield currentBattlefield = null)
+        public Battlefield GetCurrentBattlefield(string channel)
         {
-            if (currentBattlefield != null)
+            if (!CurrentBattlefields.ContainsKey(channel.ToLower()))
             {
-                CurrentBattlefield = currentBattlefield;
+                ResetFight(channel.ToLower());
+            }
+
+            return CurrentBattlefields[channel.ToLower()];
+        }
+
+        public void ResetAllFight()
+        {
+            foreach (var channel in RDVFPluginOptions.Value.Channels)
+            {
+                ResetFight(channel.ToLower());
+            }
+        }
+
+        public void ResetFight(string channel)
+        {
+            if (CurrentBattlefields.ContainsKey(channel.ToLower()))
+            {
+                CurrentBattlefields[channel.ToLower()] = new Battlefield(this, channel.ToLower());
             }
             else
             {
-                CurrentBattlefield = new Battlefield(this);
+                CurrentBattlefields.Add(channel.ToLower(), new Battlefield(this, channel.ToLower()));
             }
         }
     }

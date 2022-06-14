@@ -74,10 +74,10 @@ namespace RDVFSharp
 
             LastMessageSent = string.Join("\n", lines);
 
-            battlefield.Plugin.FChatClient.SendMessageInChannel(LastMessageSent, battlefield.Plugin.Channel);
+            battlefield.Plugin.FChatClient.SendMessageInChannel(LastMessageSent, battlefield.Channel);
             if (Error.Count > 0)
             {
-                battlefield.Plugin.FChatClient.SendMessageInChannel(string.Join("\n", Error), battlefield.Plugin.Channel);
+                battlefield.Plugin.FChatClient.SendMessageInChannel(string.Join("\n", Error), battlefield.Channel);
             }
 
             //clear messages from the queue once they have been displayed
