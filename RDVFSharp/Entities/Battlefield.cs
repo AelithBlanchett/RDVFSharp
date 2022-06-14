@@ -42,9 +42,8 @@ namespace RDVFSharp
         {
             JoinTeams();
             PickInitialActor();
-            SetInitialTargets();
+            AssignTargets();
             SetTurnOrder();
-            ReassignInitialTargets();
             OutputController.Hit.Add("Game started!");
             OutputController.Hit.Add("FIGHTING STAGE: " + Stage + " - " + GetActor().Name + " goes first!");
             OutputFighterStatuses(); // Creates the fighter status blocks (HP/Mana/Stamina) 
@@ -55,191 +54,28 @@ namespace RDVFSharp
         }
 
 #region Target Management
-        public void SetInitialTargets()
+
+        public int CountOfFightersTargettingTarget(string targetName)
         {
-            foreach (var teamColor in Fighters.Select(x => x.TeamColor).Distinct())
-            {
-                var opponents = Fighters.Where(x => x.TeamColor != teamColor).OrderBy(x => new Random().Next()).ToList();
-                var numberOfOpponentsAvailable = opponents.Count();
-                var random = new Random();
-                int index = random.Next(opponents.Count());
-                if (numberOfOpponentsAvailable == 0)
-                {
-                    throw new Exception("There are no opponents available.");
-                }
-                foreach (var teamMember in Fighters.Where(x => x.TeamColor == teamColor).ToList())
-                {
-                    teamMember.CurrentTarget = opponents[index];
-                }
-            }
+            return Fighters.Count(x => x.CurrentTarget.Name == targetName);
         }
 
-        public void ReassignInitialTargets() // Doing the multiple repeats in here for the occasion where multi-fights occur
+        public void AssignTargets(bool isInitialTargeting = true)
         {
-            foreach (var fighter in Fighters)
+            foreach (var fighter in Fighters.Where(x => !x.IsDead).ToList())
             {
-                foreach (var teamMember in Fighters.Where(x => x.TeamColor == fighter.TeamColor && x.Name != fighter.Name).ToList())
-
+                AssignNewTarget(fighter);
+                if (isInitialTargeting)
                 {
-                    var opponents = Fighters.Where(x => x.TeamColor != fighter.TeamColor && x != teamMember.CurrentTarget).OrderBy(x => new Random().Next()).ToList();
-
-                    if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                    {
-                        fighter.CurrentTarget = opponents.First();
-                        if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                        {
-                            fighter.CurrentTarget = opponents.First();
-                            if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                            {
-                                fighter.CurrentTarget = opponents.First();
-                                if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                                {
-                                    fighter.CurrentTarget = opponents.First();
-                                    if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                                    {
-                                        fighter.CurrentTarget = opponents.First();
-                                        if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                                        {
-                                            fighter.CurrentTarget = opponents.First();
-                                            if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                                            {
-                                                fighter.CurrentTarget = opponents.First();
-                                                if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                                                {
-                                                    fighter.CurrentTarget = opponents.First();
-                                                    if ((fighter.CurrentTarget == teamMember.CurrentTarget) && (opponents.Count() > 0))
-
-                                                    {
-                                                        fighter.CurrentTarget = opponents.First();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    foreach (var opponent in opponents.Where(x => fighter.CurrentTarget == x))
-                    {
-                        opponent.CurrentTarget = fighter;
-                    }
-
-                }
-
-                foreach (var Opponent in Fighters.Where(x => x.TeamColor != fighter.TeamColor).ToList())
-                {
-                    var opponents = Fighters.Where(x => x.TeamColor != fighter.TeamColor && x != Opponent.CurrentTarget).OrderBy(x => new Random().Next()).ToList();
-                    if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                    {
-                        fighter.CurrentTarget = opponents.First();
-                        if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                        {
-                            fighter.CurrentTarget = opponents.First();
-                            if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                            {
-                                fighter.CurrentTarget = opponents.First();
-                                if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                                {
-                                    fighter.CurrentTarget = opponents.First();
-                                    if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                                    {
-                                        fighter.CurrentTarget = opponents.First();
-                                        if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                                        {
-                                            fighter.CurrentTarget = opponents.First();
-                                            if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                                            {
-                                                fighter.CurrentTarget = opponents.First();
-                                                if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                                                {
-                                                    fighter.CurrentTarget = opponents.First();
-                                                    if ((fighter.CurrentTarget == Opponent.CurrentTarget) && (opponents.Count() > 0))
-
-                                                    {
-                                                        fighter.CurrentTarget = opponents.First();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    foreach (var opponent in opponents.Where(x => fighter.CurrentTarget == x))
-                    {
-                        opponent.CurrentTarget = fighter;
-                    }
+                    fighter.CurrentTarget.CurrentTarget = fighter;
                 }
             }
         }
 
         public void AssignNewTarget(Fighter fighter)
         {
-
-            foreach (var Opponent in Fighters.Where(x => x.TeamColor != fighter.TeamColor).ToList())
-            {
-                var opponents = Fighters.Where((x => x.TeamColor != fighter.TeamColor && x.IsDead == false)).OrderBy(x => new Random().Next()).ToList();
-                fighter.CurrentTarget = opponents.First();
-                if (fighter.CurrentTarget.IsDead == true)
-                {
-                    fighter.CurrentTarget = opponents.First();
-                    if (fighter.CurrentTarget.IsDead == true)
-                    {
-                        fighter.CurrentTarget = opponents.First();
-                        if (fighter.CurrentTarget.IsDead == true)
-                        {
-                            fighter.CurrentTarget = opponents.First();
-                            if (fighter.CurrentTarget.IsDead == true)
-                            {
-                                fighter.CurrentTarget = opponents.First();
-                                if (fighter.CurrentTarget.IsDead == true)
-                                {
-                                    fighter.CurrentTarget = opponents.First();
-                                    if (fighter.CurrentTarget.IsDead == true)
-                                    {
-                                        fighter.CurrentTarget = opponents.First();
-                                        if (fighter.CurrentTarget.IsDead == true)
-                                        {
-                                            fighter.CurrentTarget = opponents.First();
-                                            if (fighter.CurrentTarget.IsDead == true)
-                                            {
-                                                fighter.CurrentTarget = opponents.First();
-                                                if (fighter.CurrentTarget.IsDead == true)
-                                                {
-                                                    fighter.CurrentTarget = opponents.First();
-                                                    if (fighter.CurrentTarget.IsDead == true)
-                                                    {
-                                                        fighter.CurrentTarget = opponents.First();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            var opponents = Fighters.Where(x => x.TeamColor != fighter.TeamColor && !x.IsDead).OrderBy(x => CountOfFightersTargettingTarget(x.Name)).ThenBy(x => new Random().Next()).ToList();
+            fighter.CurrentTarget = opponents.First();
         }
 
         public void CheckTargetCoherenceAndReassign()
