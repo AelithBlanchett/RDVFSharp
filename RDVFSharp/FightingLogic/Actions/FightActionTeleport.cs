@@ -57,6 +57,8 @@ namespace RDVFSharp.FightingLogic.Actions
                 tempGrappleFlag = false;
                 attacker.IsRestraining = 0;
                 target.IsRestrained = false;
+                attacker.IsGrabbable = 0;
+                target.IsGrabbable = 0;
             }
 
             if (roll <= attackTable.miss)

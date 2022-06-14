@@ -24,7 +24,7 @@ namespace RDVFSharp.FightingLogic.Actions
 
             foreach (var fighter in others)
             {
-                if (fighter.CurrentTarget == attacker.CurrentTarget) difficulty += 2;
+                if ((fighter.CurrentTarget == attacker.CurrentTarget) && (fighter.IsDead == false)) difficulty += 2;
             }
             if (target.HP * 100 / target.MaxHP > 50) // If target is above 50% HP this is a bad move.
             {

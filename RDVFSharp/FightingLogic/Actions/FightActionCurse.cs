@@ -22,7 +22,7 @@ namespace RDVFSharp.FightingLogic.Actions
 
             foreach (var fighter in others)
             {
-                if (fighter.CurrentTarget == attacker.CurrentTarget) difficulty += 2;
+                if ((fighter.CurrentTarget == attacker.CurrentTarget) && (fighter.IsDead == false)) difficulty += 2;
             }
             //If opponent fumbled on their previous action they should become stunned.
             if (target.Fumbled)

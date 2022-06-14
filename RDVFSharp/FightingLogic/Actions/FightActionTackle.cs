@@ -22,7 +22,7 @@ namespace RDVFSharp.FightingLogic.Actions
 
             foreach (var fighter in others)
             {
-                if (fighter.CurrentTarget == attacker.CurrentTarget) difficulty += 2;
+                if ((fighter.CurrentTarget == attacker.CurrentTarget) && (fighter.IsDead == false)) difficulty += 2;
             }
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
             if (target.IsEvading > 0)

@@ -58,6 +58,8 @@ namespace RDVFSharp.FightingLogic.Actions
                 attacker.IsRestraining = 0;
                 target.IsRestrained = false;
                 tempGrappleFlag = false;
+                attacker.IsGrabbable = 0;
+                target.IsGrabbable = 0;
             }
 
             if (roll <= attackTable.miss)
@@ -91,6 +93,8 @@ namespace RDVFSharp.FightingLogic.Actions
                 attacker.IsEvading = (int)Math.Floor((double)totalBonus / 2);
                 attacker.IsRestrained = false;
                 target.IsRestraining = 0;
+                attacker.IsGrabbable = 0;
+                target.IsGrabbable = 0;
             }
             else
             {

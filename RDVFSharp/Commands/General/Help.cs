@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
-    public class Commands : BaseCommand<RDVFPlugin>
+    public class Help : BaseCommand<RDVFPlugin>
     {
         public override string Description => "Gets the status of an ongoing fight.";
 
