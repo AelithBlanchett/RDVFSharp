@@ -34,7 +34,7 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "\n" +
                     "\n" +
                     "[u][b]Infight commands[/b][/u]" + "\n" +
-                    "[b]!target[/b]: Changes your target. Must be followed by the name of the person you wish to target. Example: !target Mayank. THIS DOES NOT USE YOUR TURN UP" + "\n" +
+                    "[b]!target[/b]: Changes your target. Must be followed by the name of the person you wish to target. Example: !target Mayank. THIS DOES NOT USE YOUR TURN UP. Please, always double check your targets to make sure they are correct!" + "\n" +
                     "[b]!light[/b]: A medium damage STR based attack that does damage to both HP and stamina." + "\n" +
                     "[b]!heavy[/b]: A high damage STR based attack that does damage to HP. Leaves you exposed on a miss." + "\n" +
                     "[b]!ranged[/b]: A high damage STR and DEX based attack that does damage to HP. Harder to hit than a !heavy, but does not leave you exposed." + "\n" +

@@ -44,7 +44,7 @@ namespace RDVFSharp
         {
             JoinTeams();
             PickInitialActor();
-            AssignTargets();
+            AssignTargets(true);
             SetTurnOrder();
             OutputController.Hit.Add("Game started!");
             OutputController.Hit.Add("FIGHTING STAGE: " + Stage + " - " + GetActor().Name + " goes first!");
@@ -59,13 +59,18 @@ namespace RDVFSharp
 
         public int CountOfFightersTargettingTarget(string targetName)
         {
-            return Fighters.Count(x => x.CurrentTarget.Name == targetName);
+            return Fighters.Count(x => x.CurrentTarget != null && x.CurrentTarget.Name == targetName);
         }
 
-        public void AssignTargets(bool isInitialTargeting = true)
+        public void AssignTargets(bool isInitialTargeting = false)
         {
             foreach (var fighter in Fighters.Where(x => !x.IsDead).ToList())
             {
+                if (isInitialTargeting && fighter.CurrentTarget != null)
+                {
+                    continue;
+                }
+
                 AssignNewTarget(fighter);
                 if (isInitialTargeting)
                 {
