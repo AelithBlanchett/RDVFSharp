@@ -21,7 +21,8 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
 [color=red][sub]☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰[/sub][/color]";
 
 
-        public const string Help = "[u][b]General Commands[/b][/u]" + "\n" +
+        public const string Help = "[u][b]IF YOU WANT TO SEE A COMPLETE DETAILED DESCRIPTION OF THESE COMMANDS, PLEASE LOOK AT THE ACTION DETAILS LIST HERE:[/b][/u] [icon]Rendezvous Fight[/icon]" + "\n" +
+                    "[u][b]General Commands[/b][/u]" + "\n" +
                     "\n" +
                     "[b]!ready[/b]: Inserts your character into the battlefield. Preferably followed by one of four colours (red/blue/yellow/purple). And also preferably done in such a way that each team member readies right after each other, so that the status looks better. Example: !ready red" + "\n" +
                     "[b]!start[/b]: Starts the match." + "\n" +
