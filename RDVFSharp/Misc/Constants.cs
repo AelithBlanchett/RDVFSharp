@@ -21,7 +21,8 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
 [color=red][sub]☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰☰[/sub][/color]";
 
 
-        public const string Help = "[u][b]General Commands[/b][/u]" + "\n" +
+        public const string Help = "[u][b]IF YOU WANT TO SEE A COMPLETE DETAILED DESCRIPTION OF THESE COMMANDS, PLEASE LOOK AT THE ACTION DETAILS LIST HERE:[/b][/u] [icon]Rendezvous Fight[/icon]" + "\n" +
+                    "[u][b]General Commands[/b][/u]" + "\n" +
                     "\n" +
                     "[b]!ready[/b]: Inserts your character into the battlefield. Preferably followed by one of four colours (red/blue/yellow/purple). And also preferably done in such a way that each team member readies right after each other, so that the status looks better. Example: !ready red" + "\n" +
                     "[b]!start[/b]: Starts the match." + "\n" +
@@ -45,12 +46,12 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!submission[/b]: A fixed damage finisher (30 damage when opponent is below 50% HP, and 15 damage if they're at or above 50%) that can only be used when grappling." + "\n" +
                     "[b]!stab[/b]: An STR based damage over time move that does damage to both HP and stamina." + "\n" +
                     "[b]!move[/b]: A DEX based move that provides a one time attack buff when not grabbed, or a defensive buff when escaping from a grapple." + "\n" +
-                    "[b]!hex[/b]: A medium damage SPW based attack that does damage to both HP and stamina." + "\n" +
+                    "[b]!hex[/b]: A medium damage SPW based attack that does damage to both HP and mana." + "\n" +
                     "[b]!magic[/b]: A high damage SPW based attack that does damage to HP. Leaves you exposed on a miss." + "\n" +
                     "[b]!spell[/b]: A high damage SPW based attack that does damage to HP. Harder to hit than a !heavy, but does not leave you exposed." + "\n" +
                     "[b]!manastorm[/b]: A high damage SPW based attack that does damage to your target's entire team. Does double the damage to the target than the rest of the team." + "\n" +
                     "[b]!curse[/b]: A single use (Even if it misses, it counts!) maximum damage magic attack. Note: Do not use this move if you have too many points in STR, as they are subtracted from the overall damage, rather than added to it!" + "\n" +
-                    "[b]!drain[/b]: An SPW based damage over time move that does damage to both HP and stamina." + "\n" +
+                    "[b]!drain[/b]: An SPW based damage over time move that does damage to both HP and mana." + "\n" +
                     "[b]!teleport[/b]: An SPW based move that provides a one time attack buff when not grabbed, or a defensive buff when escaping from a grapple." + "\n" +
                     "[b]!rest[/b]: A move that regains stamina." + "\n" +
                     "[b]!channel[/b]: A move that regains mana." + "\n" +

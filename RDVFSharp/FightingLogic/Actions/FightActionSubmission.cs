@@ -90,6 +90,8 @@ namespace RDVFSharp.FightingLogic.Actions
             {
                 attacker.RemoveGrappler(target);
                 battlefield.OutputController.Hint.Add(target.Name + " is in a SUBMISSION hold. " + attacker.Name + " is also no longer at a penalty from being grappled!");
+                attacker.IsRestrained = false;
+                target.IsRestraining = 0;
             }
             else
             {
