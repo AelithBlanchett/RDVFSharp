@@ -50,7 +50,7 @@ namespace RDVFSharp.FightingLogic.Actions
 
             attacker.HitStamina(requiredStam); //Now that stamina has been checked, reduce the attacker's stamina by the appopriate amount.
 
-            var attackTable = attacker.BuildActionTable(difficulty, target.Dexterity, attacker.Dexterity, target.Stamina, target.StaminaCap);
+            var attackTable = attacker.BuildActionTable(difficulty, 0, 0, target.Stamina, target.StaminaCap);
             //If target can dodge the atatcker has to roll higher than the dodge value. Otherwise they need to roll higher than the miss value. We display the relevant value in the output.
             battlefield.OutputController.Info.Add("Dice Roll Required: " + (attackTable.miss + 1));
 
