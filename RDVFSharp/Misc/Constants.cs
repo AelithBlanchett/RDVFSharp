@@ -39,7 +39,7 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!light[/b]: A medium damage STR based attack that does damage to both HP and stamina." + "\n" +
                     "[b]!heavy[/b]: A high damage STR based attack that does damage to HP. Leaves you exposed on a miss." + "\n" +
                     "[b]!ranged[/b]: A high damage STR and DEX based attack that does damage to HP. Harder to hit than a !heavy, but does not leave you exposed." + "\n" +
-                    "[b]!cleave[/b]: A high damage STR based attack that does damage to your target's entire team." + "\n" +
+                    "[b]!cleave[/b]: A high damage STR based attack that does damage to your target's entire team. Only usable in fights with more than 2 fighters, but only recommended for use in team fights!" + "\n" +
                     "[b]!tackle[/b]: A low damage STR based attack that stuns your opponents on hit, giving you another turn, and moves you into grappling range." + "\n" +
                     "[b]!grab[/b]: A low damage STR based attack that grapples your opponent." + "\n" +
                     "[b]!throw[/b]: A high damage STR based attack that frees you of being grabbed, or does extra damage if you're grappling the opponent. Ends the 'grabbed' status." + "\n" +
@@ -49,13 +49,13 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!hex[/b]: A medium damage SPW based attack that does damage to both HP and mana." + "\n" +
                     "[b]!magic[/b]: A high damage SPW based attack that does damage to HP. Leaves you exposed on a miss." + "\n" +
                     "[b]!spell[/b]: A high damage SPW based attack that does damage to HP. Harder to hit than a !heavy, but does not leave you exposed." + "\n" +
-                    "[b]!manastorm[/b]: A high damage SPW based attack that does damage to your target's entire team. Does double the damage to the target than the rest of the team." + "\n" +
+                    "[b]!manastorm[/b]: A high damage SPW based attack that does damage to your target's entire team. Does double the damage to the target than the rest of the team. Only usable in fights with more than 2 fighters, but only recommended for use in team fights!" + "\n" +
                     "[b]!curse[/b]: A single use (Even if it misses, it counts!) maximum damage magic attack. Note: Do not use this move if you have too many points in STR, as they are subtracted from the overall damage, rather than added to it!" + "\n" +
                     "[b]!drain[/b]: An SPW based damage over time move that does damage to both HP and mana." + "\n" +
                     "[b]!teleport[/b]: An SPW based move that provides a one time attack buff when not grabbed, or a defensive buff when escaping from a grapple." + "\n" +
                     "[b]!rest[/b]: A move that regains stamina." + "\n" +
                     "[b]!channel[/b]: A move that regains mana." + "\n" +
                     "[b]!focus[/b]: A move that adds damage to ranged or spell attacks. Lowers as you take damage from your opponent: And can be stacked." + "\n" +
-                    "[b]!guard[/b]: A WIL based move that provides a defensive buff to your character.";
+                    "[b]!guard[/b]: A WIL based move that provides a defensive buff to your character. Only usable in fights with more than 2 fighters!";
     }
 }
