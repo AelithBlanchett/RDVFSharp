@@ -16,10 +16,6 @@ namespace RDVFSharp.FightingLogic.Actions
             //if (attacker.IsDisoriented) difficulty += 2; //Up the difficulty if you are dizzy.
             if (attacker.IsRestrained) difficulty += 9; //Up the difficulty considerably if you are restrained.
 
-            if (target.IsEvading > 0)
-            {//Evasion bonus from move/teleport. Lasts 1 turn. We didn't make an attack and now it resets to 0.
-                target.IsEvading = 0;
-            }
             if (attacker.IsAggressive > 0)
             {//Apply bonus to our action from move/teleport then reset it.
                 difficulty -= attacker.IsAggressive;

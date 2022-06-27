@@ -26,11 +26,7 @@ namespace RDVFSharp.FightingLogic.Actions
             if (attacker.IsRestrained) difficulty -= attacker.IsEscaping; //Then reduce difficulty based on how much effort we've put into escaping so far.
             if (target.IsRestrained) difficulty -= 4; //Lower the difficulty considerably if the target is restrained.
 
-            if (target.IsEvading > 0)
-            {//Evasion bonus from move/teleport. Only applies to one attack, then is reset to 0.
-             //Not affected by opponent's evasion bonus.
-                target.IsEvading = 0;
-            }
+
             if (attacker.IsAggressive > 0)
             {//Apply attack bonus from move/teleport then reset it.
                 difficulty -= attacker.IsAggressive;

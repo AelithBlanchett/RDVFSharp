@@ -114,7 +114,7 @@ namespace RDVFSharp.FightingLogic.Actions
 
             damage = Math.Max(damage, 1);
             foreach (var opposingFighter in battlefield.Fighters.Where(x => x.TeamColor == target.TeamColor))
-            {
+            {   
                 opposingFighter.HitHp((damage * 3 / 4));
                 opposingFighter.IsGrabbable = 0;
             }
