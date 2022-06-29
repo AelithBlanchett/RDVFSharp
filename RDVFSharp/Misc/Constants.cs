@@ -30,6 +30,7 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!restat[/b]: Changes your stats on the fight bot. Must be followed by your STR, DEX, RES, SPW, and WIL values, in that order. Example: !register 5 8 8 1 2" + "\n" +
                     "[b]!stats[/b]: The bot will PM you with your stats." + "\n" +
                     "[b]!forfeit[/b]: Ends the match, and declares your opponent the winner." + "\n" +
+                    "[b]!status[/b]: Shows you the last message sent by the bot in the fight. If the bot does not send a status message in response to your command, or to check if a fight is occurring in the venue/arena, please use this!" + "\n" +
                     "[b]!leave[/b]: If you've readied, but there is no match going on, this clears the arena. Otherwise, if all the participants in an ongoing match type this, the fight becomes null and void." + "\n" +
                     "[b]!help/!commands[/b]: Makes the bot PM all the commands available to you." + "\n" +
                     "\n" +
