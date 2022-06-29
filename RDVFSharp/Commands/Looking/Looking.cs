@@ -37,7 +37,7 @@ namespace RDVFSharp.Commands
 
             if (!string.IsNullOrEmpty(characterCalling))
             {
-                messages.Add($"[icon]{characterCalling}[/icon] is now looking for a fight! (!look to see all available fighters!)");
+                messages.Add($"[icon]{characterCalling}[/icon] " + LookingSelect.SelectRandom() + " (!look to see all available fighters!)");
                 Plugin.FChatClient.SendPrivateMessage("You are now on the !look list of fighters looking for a fight, you will be automatically removed after 2 hours, or when you use the !stoplooking command", characterCalling);
                 LookingInformation.AddIfNotContains(characterCalling);
 
