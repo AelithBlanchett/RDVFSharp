@@ -37,15 +37,17 @@ namespace RDVFSharp.Commands
 
             if (!string.IsNullOrEmpty(characterCalling))
             {
-                messages.Add($"[icon]{characterCalling}[/icon] is now looking for a fight! Please note: You will automatically be removed from the looking list in 2 hours, or you can use the !stoplooking command!");
+                messages.Add($"[icon]{characterCalling}[/icon] is now looking for a fight! (!look to see all available fighters!)");
+                Plugin.FChatClient.SendPrivateMessage("You are now on the !look list of fighters looking for a fight, you will be automatically removed after 2 hours, or when you use the !stoplooking command", characterCalling);
                 LookingInformation.AddIfNotContains(characterCalling);
 
                 LookingTimer.Start();
                 LookingTimer.Elapsed += Lookingover;
-                LookingTimer.AutoReset = true;
+                LookingTimer.AutoReset = false;
                 void Lookingover(Object source, System.Timers.ElapsedEventArgs e)
                 {
                     LookingInformation.Remove(characterCalling);
+                    Plugin.FChatClient.SendPrivateMessage("Your looking status has expired. If you want to renew it, please type !looking in the room once again!", characterCalling);
                 }
             }
             else
@@ -60,10 +62,6 @@ namespace RDVFSharp.Commands
         public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
             var result = await Execute(characterCalling, args);
-            foreach (var message in result)
-            {
-                Plugin.FChatClient.SendPrivateMessage(message, characterCalling);
-            }
         }
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
