@@ -87,10 +87,19 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            var result = await Execute(characterCalling, args);
-            foreach (var message in result)
+            if (channel == "ADH-a823a4e998a2b3d31794")
+
+            { 
+                var result = await Execute(characterCalling, args);
+                foreach (var message in result)
+                {
+                    Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
+                } 
+            }
+
+            else
             {
-                Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
+                Plugin.FChatClient.SendMessageInChannel("You cannot do that in here", channel);
             }
         }
 

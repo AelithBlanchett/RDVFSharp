@@ -3,41 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
+using RDVFSharp.Helpers;
 
 namespace RDVFSharp.Commands
 {
-    public class RoomJoin : BaseCommand<RDVFPlugin>
+    public class Look : BaseCommand<RDVFPlugin>
     {
-        public static Dictionary<string, DateTime> CharacterCooldowns = new Dictionary<string, DateTime>();
 
         public async Task<List<string>> Execute(string characterCalling, IEnumerable<string> args)
         {
             var messages = new List<string>();
 
-
-            int roomId = 0;
-
-            if (args.Any() && int.TryParse(args.First(), out roomId) && RoomCreate.CharacterRoomsIds.Any(x => x.Id == roomId))
+            if (Looking.LookingInformation != null && Looking.LookingInformation.Any())
             {
-                var room = RoomCreate.CharacterRoomsIds.First(x => x.Id == roomId);
+                var output = $"Here are all the people that are looking for a fight! ({Looking.LookingInformation.Count}):\n\n";
 
-                try
+                foreach (var fighter in Looking.LookingInformation)
                 {
-                    Plugin.FChatClient.InviteUserToChannel(characterCalling, room.Channel);
+                    output += $"[user]{fighter}[/user], ";
                 }
-                catch (Exception ex)
-                {
-                    messages.Add($"There was an error. Try again, and if it doesn't work, notify Elise Pariat by note with this as the message: {ex.Message}");
-                    return messages;
-                }
+
+                messages.Add(output);
             }
             else
             {
-                messages.Add("There was an error processing the room ID. Make sure to use the right syntax: Example: '!roomjoin 123'.");
+                messages.Add("Nobody has been set to looking yet, but you can by typing: '!looking'.");
             }
 
             return messages;
         }
+
 
         public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
@@ -55,7 +50,7 @@ namespace RDVFSharp.Commands
                 var result = await Execute(characterCalling, args);
                 foreach (var message in result)
                 {
-                    Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
+                    Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
                 }
             }
 

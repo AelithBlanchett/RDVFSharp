@@ -3,37 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
+using RDVFSharp.Helpers;
+using System.Timers;
 
 namespace RDVFSharp.Commands
 {
-    public class RoomJoin : BaseCommand<RDVFPlugin>
+    public class StopLooking : BaseCommand<RDVFPlugin>
     {
-        public static Dictionary<string, DateTime> CharacterCooldowns = new Dictionary<string, DateTime>();
-
         public async Task<List<string>> Execute(string characterCalling, IEnumerable<string> args)
         {
             var messages = new List<string>();
+            await Task.Delay(4000);
 
-
-            int roomId = 0;
-
-            if (args.Any() && int.TryParse(args.First(), out roomId) && RoomCreate.CharacterRoomsIds.Any(x => x.Id == roomId))
+            if (!string.IsNullOrEmpty(characterCalling))
             {
-                var room = RoomCreate.CharacterRoomsIds.First(x => x.Id == roomId);
-
-                try
-                {
-                    Plugin.FChatClient.InviteUserToChannel(characterCalling, room.Channel);
-                }
-                catch (Exception ex)
-                {
-                    messages.Add($"There was an error. Try again, and if it doesn't work, notify Elise Pariat by note with this as the message: {ex.Message}");
-                    return messages;
-                }
+                messages.Add($"[icon]{characterCalling}[/icon] is no longer looking for a fight!!");
+                Looking.LookingInformation.Remove(characterCalling);
             }
             else
             {
-                messages.Add("There was an error processing the room ID. Make sure to use the right syntax: Example: '!roomjoin 123'.");
+                messages.Add("The bot couldn't remove your looking status. If you are not removed from the looking list (Which you can see by typing !look), please contact [user]Mayank[/user].");
             }
 
             return messages;
@@ -51,11 +40,12 @@ namespace RDVFSharp.Commands
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
             if (channel == "ADH-a823a4e998a2b3d31794")
+
             {
                 var result = await Execute(characterCalling, args);
                 foreach (var message in result)
                 {
-                    Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
+                    Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
                 }
             }
 
@@ -66,3 +56,5 @@ namespace RDVFSharp.Commands
         }
     }
 }
+
+
