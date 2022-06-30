@@ -21,9 +21,7 @@ namespace RDVFSharp.Commands
             "\"Who's ass needs a pounding?\"",
             "\"Anyone looking to throw down and see who ends up on top?\"",
             "is looking for a fight!",
-            "joins the battle!",
             "\"Who needs to get pinned nice and hard?\"",
-            "is playing for keeps!",
             "is here to kick some ass!",
             "\"I've got two fists, and they've both got your name on em!\""
             };
