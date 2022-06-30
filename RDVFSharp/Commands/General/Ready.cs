@@ -8,11 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace RDVFSharp.Commands
 {
     public class Ready : BaseCommand<RDVFPlugin>
     {
+        public Timer ReadyTimer = new Timer(30000);
         public override string Description => "Sets a player as ready.";
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
@@ -74,6 +76,19 @@ namespace RDVFSharp.Commands
                 {
                     Plugin.GetCurrentBattlefield(channel).AddFighter(fighter, teamColor);
                     Plugin.FChatClient.SendMessageInChannel($"{fighter.Name} joined the fight for team [color={teamColor}]{teamColor.ToUpper()}[/color]!", channel);
+                    ReadyTimer.Start();
+                    ReadyTimer.Elapsed += Readyover;
+                    ReadyTimer.AutoReset = false;
+                    void Readyover(Object source, System.Timers.ElapsedEventArgs e)
+                    {
+                        var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
+                        if (!Plugin.GetCurrentBattlefield(channel).IsInProgress)
+                        {
+                            Plugin.GetCurrentBattlefield(channel).Fighters.RemoveAll(x => x.Name == character);
+                            Plugin.FChatClient.SendMessageInChannel($"{character} has been removed from the upcoming fight. If you have an opponent, please ready again!", channel);   
+                        }
+                    }
+
                 }
             }
         }
