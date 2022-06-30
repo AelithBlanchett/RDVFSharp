@@ -85,7 +85,7 @@ namespace RDVFSharp.Commands
                         if (!Plugin.GetCurrentBattlefield(channel).IsInProgress)
                         {
                             Plugin.GetCurrentBattlefield(channel).Fighters.RemoveAll(x => x.Name == character);
-                            Plugin.FChatClient.SendMessageInChannel($"{character} has been removed from the upcoming fight. If you have an opponent, please ready again!", channel);   
+                            Plugin.FChatClient.SendMessageInChannel($"{character} has been removed from the upcoming fight. (You can only ready for up to 5 minutes before starting a fight)", channel);   
                         }
                     }
 
