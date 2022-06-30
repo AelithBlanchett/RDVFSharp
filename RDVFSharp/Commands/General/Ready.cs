@@ -14,7 +14,7 @@ namespace RDVFSharp.Commands
 {
     public class Ready : BaseCommand<RDVFPlugin>
     {
-        public Timer ReadyTimer = new Timer(30000);
+        public Timer ReadyTimer = new Timer(300000);
         public override string Description => "Sets a player as ready.";
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
