@@ -81,7 +81,6 @@ namespace RDVFSharp.Commands
                     ReadyTimer.AutoReset = false;
                     void Readyover(Object source, System.Timers.ElapsedEventArgs e)
                     {
-                        var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
                         if (!Plugin.GetCurrentBattlefield(channel).IsInProgress)
                         {
                             Plugin.GetCurrentBattlefield(channel).Fighters.RemoveAll(x => x.Name == character);
