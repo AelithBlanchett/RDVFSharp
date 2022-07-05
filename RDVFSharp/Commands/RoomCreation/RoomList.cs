@@ -36,16 +36,24 @@ namespace RDVFSharp.Commands
 
         public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
-            var result = await Execute(characterCalling, args);
-            foreach (var message in result)
+            if (characterCalling == "Mayank" || characterCalling == "Elise Pariat" || characterCalling == "Aelith Blanchette")
             {
-                Plugin.FChatClient.SendPrivateMessage(message, characterCalling);
+                var result = await Execute(characterCalling, args);
+                foreach (var message in result)
+                {
+                    Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
+                }
+            }
+
+            else
+            {
+                Plugin.FChatClient.SendPrivateMessage("You cannot do that", characterCalling);
             }
         }
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            if (channel == "ADH-a823a4e998a2b3d31794")
+            if (characterCalling == "Mayank" || characterCalling == "Elise Pariat" || characterCalling == "Aelith Blanchette")
             {
                 var result = await Execute(characterCalling, args);
                 foreach (var message in result)
@@ -56,7 +64,7 @@ namespace RDVFSharp.Commands
 
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("You cannot do that in here", channel);
+                Plugin.FChatClient.SendMessageInChannel("You cannot do that", channel);
             }
         }
     }
