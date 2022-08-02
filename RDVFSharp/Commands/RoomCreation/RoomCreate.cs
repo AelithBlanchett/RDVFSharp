@@ -38,14 +38,19 @@ namespace RDVFSharp.Commands
             }
 
             int entryPrice = 0;
-
+            
+            var argsList = args.ToList();
+            var NamedChannel = string.Join(" ", args);
             var room = new PayPerViewChannelInfo()
             {
                 CreationTime = DateTime.Now,
                 EntryPrice = entryPrice,
-                ChannelName = $"RDVF - Private - {characterCalling}'s Room",
+                ChannelName = $"RDVF - {NamedChannel}",
                 CreatorId = characterCalling
             };
+
+
+
             Plugin.FChatClient.BotCreatedChannel += FChatClient_BotCreatedChannel;
             Plugin.FChatClient.CreateChannel(room.ChannelName);
             await Task.Delay(4000);
@@ -59,12 +64,16 @@ namespace RDVFSharp.Commands
 
                 messages.Add($"A new channel titled '{room.ChannelName}' has been created for you ({room.Channel}).\n" +
                     $"An invite will be sent to you right away.\n" +
-                    $"People can also get invited and join you by typing '!roomjoin {room.Id}'");
+                    $"Please invite whoever you want to by using the '/invite name' function within the room!");
 
                 await Task.Delay(2000);
 
                 Plugin.FChatClient.InviteUserToChannel(characterCalling, room.Channel);
                 Plugin.FChatClient.ModUser(characterCalling, room.Channel);
+                Plugin.FChatClient.ChangeChannelDescription("[b]These are not the official arenas. What happens in here is beyond the control of the officials of the lounge.[/b]", room.Channel);
+                Plugin.FChatClient.ModUser("Elise Pariat", room.Channel);
+                Plugin.FChatClient.ModUser("Aelith Blanchette", room.Channel);
+                Plugin.FChatClient.ChangeChannelOwner("Mayank", room.Channel);
                 Plugin.AddHandledChannel(room.Channel);
             }
             else
@@ -87,19 +96,19 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            if (channel == "ADH-a823a4e998a2b3d31794")
+            if (channel == "ADH-51710b5ac8cce7e99f19" || channel == "ADH-b3c88050e9c580631c70")
 
-            { 
-                var result = await Execute(characterCalling, args);
-                foreach (var message in result)
-                {
-                    Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
-                } 
+            {
+                Plugin.FChatClient.SendMessageInChannel("You cannot do that in here", channel);  
             }
 
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("You cannot do that in here", channel);
+                var result = await Execute(characterCalling, args);
+                foreach (var message in result)
+                {
+                    Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
+                }
             }
         }
 

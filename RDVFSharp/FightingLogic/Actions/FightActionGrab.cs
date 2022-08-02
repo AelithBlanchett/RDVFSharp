@@ -28,10 +28,15 @@ namespace RDVFSharp.FightingLogic.Actions
 
             if (target.IsEvading > 0)
             {//Evasion bonus from move/teleport. Only applies to one attack, then is reset to 0.
-                difficulty += target.IsEvading;
                 damage -= target.IsEvading;
                 target.IsEvading = 0;
             }
+
+            if (attacker.IsEvading > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsEvading = 0;
+            }
+
             if (attacker.IsAggressive > 0)
             {//Apply attack bonus from move/teleport then reset it.
                 difficulty -= attacker.IsAggressive;

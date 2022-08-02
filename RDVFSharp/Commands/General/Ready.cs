@@ -21,18 +21,18 @@ namespace RDVFSharp.Commands
         {
             if (channel == "ADH-a823a4e998a2b3d31794")
             {
-                Plugin.FChatClient.SendMessageInChannel($"[icon]Mayank[/icon][eicon]flipnewshyperbap[/eicon][icon]{character}[/icon] [i]\"No fighting in the bar!\"[/i]", channel);
+                Plugin.FChatClient.SendMessageInChannel($"[eicon]Invertyank[/eicon][eicon]flipnewshyperbap[/eicon][icon]{character}[/icon] [i]\"No fighting in the bar!\"[/i]", channel);
             }
 
             else
             { 
                 if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
                 {
-                    throw new FightInProgress();
+                    Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
                 }
                 else if (Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == character))
                 {
-                    throw new FighterAlreadyExists(character);
+                    Plugin.FChatClient.SendMessageInChannel("You have already readied up!", channel);
                 }
 
                 BaseFighter fighter = null;
@@ -41,7 +41,7 @@ namespace RDVFSharp.Commands
 
                 if (fighter == null)
                 {
-                    throw new FighterNotRegistered(character);
+                    Plugin.FChatClient.SendMessageInChannel("You are not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2", channel);
                 }
 
                 var teamInputText = string.Join(" ", args);
@@ -69,7 +69,7 @@ namespace RDVFSharp.Commands
                 }
                 else
                 {
-                    throw new Exception("Invalid team color.");
+                    Plugin.FChatClient.SendMessageInChannel("Invalid team color. Please pick between red/blue/yellow/purple", channel);
                 }
 
                 if (!Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == fighter.Name))
@@ -84,7 +84,7 @@ namespace RDVFSharp.Commands
                         if (!Plugin.GetCurrentBattlefield(channel).IsInProgress)
                         {
                             Plugin.GetCurrentBattlefield(channel).Fighters.RemoveAll(x => x.Name == character);
-                            Plugin.FChatClient.SendMessageInChannel($"{character} has been removed from the upcoming fight. (You can only ready for up to 5 minutes before starting a fight)", channel);   
+                            Plugin.FChatClient.SendMessageInChannel($"{character} has been removed from the upcoming fight. (You can only ready for up to 5 minutes before starting a fight. Please do not ready if you don't have an opponent!)", channel);   
                         }
                     }
 

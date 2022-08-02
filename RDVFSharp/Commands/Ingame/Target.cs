@@ -111,7 +111,7 @@ namespace RDVFSharp.Commands
 
                 else
                 {
-                    throw new FighterNotFound(args.FirstOrDefault());
+                    Plugin.FChatClient.SendMessageInChannel("This fighter was not found. Please check the spelling of the fighter's name!", channel);
                 }
             }
             else

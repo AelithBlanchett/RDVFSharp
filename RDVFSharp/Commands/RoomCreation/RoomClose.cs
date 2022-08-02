@@ -56,6 +56,5 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
             }
         }
-
     }
 }

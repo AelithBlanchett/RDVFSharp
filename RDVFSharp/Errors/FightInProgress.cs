@@ -6,7 +6,7 @@ namespace RDVFSharp.Errors
 {
     public class FightInProgress : Exception
     {
-        public FightInProgress() : base($"A fight that you're not participating in is already in progress.")
+        public FightInProgress() : base($"A fight that you are not participating in is already in progress.")
         {
         }
     }

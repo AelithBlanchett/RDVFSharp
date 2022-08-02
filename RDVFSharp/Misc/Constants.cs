@@ -33,7 +33,7 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!status[/b]: Shows you the last message sent by the bot in the fight. If the bot does not send a status message in response to your command, or to check if a fight is occurring in the venue/arena, please use this!" + "\n" +
                     "[b]!leave[/b]: If you've readied, but there is no match going on, this clears the arena. Otherwise, if all the participants in an ongoing match type this, the fight becomes null and void." + "\n" +
                     "[b]!help/!commands[/b]: Makes the bot PM all the commands available to you." + "\n" +
-                    "[b]!roomcreate[/b]: Makes a new private room for you to invite people to! Invite them using the '/invite name' command in the room, and it will come up on their console. Only usable in the bar" + "\n" +
+                    "[b]!roomcreate[/b]: Makes a new private room for you to invite people to! Invite them using the '/invite name' command in the room, and it will come up on their console. Only usable in the bar. Also, remember to add the name of the room after the command! Example: !roomcreate Mayank vs Silver. Otherwise, the room will just be named 'RDVF - '" + "\n" +
                     "[b]!looking[/b]: Add yourself to a list of people looking for a fight! This command expires in 2 hours, though it will let you know when it disappears so you can reset the timer by doing the command again! Only usable in the bar" + "\n" +
                     "[b]!look[/b]: Look at the list of people that are looking for a fight! Only usable in the bar" + "\n" +
                     "\n" +

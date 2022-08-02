@@ -20,24 +20,21 @@ namespace RDVFSharp.Commands
             var fighter = await Plugin.DataContext.Fighters.FindAsync(character);
             if (fighter != null)
             {
-                throw new FighterAlreadyExists(character);
+                Plugin.FChatClient.SendMessageInChannel("You are already registered!", channel);
             }
 
             int[] statsArray;
 
-            try
+            
             {
                 statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
 
                 if (statsArray.Length != 5)
                 {
-                    throw new Exception();
+                    Plugin.FChatClient.SendMessageInChannel("Invalid arguments. All stats must be numbers. Example: !register 5 8 8 1 2", channel);
                 }
             }
-            catch (Exception)
-            {
-                throw new ArgumentException("Invalid arguments. All stats must be numbers. Example: !register 5 8 8 1 2");
-            }
+            
 
             var createdFighter = new BaseFighter()
             {
@@ -66,7 +63,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                throw new Exception(string.Join(", ", createdFighter.GetStatsErrors()));
+                Plugin.FChatClient.SendMessageInChannel("Your stats are invalid. Please ensure they add up to 24 in total, and none exceed the range for each stat (0-10)", channel);
             }
         }
 

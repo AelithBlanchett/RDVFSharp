@@ -19,7 +19,7 @@ namespace RDVFSharp.Commands
         {
             if(!Plugin.FChatClient.IsUserAdmin(character, channel))
             {
-                throw new UnauthorizedAccessException($"You don't have access to the {nameof(GetStats)} command.");
+                Plugin.FChatClient.SendMessageInChannel("You do not have access to this command", channel);
             }
 
             var cmd = new Stats()

@@ -45,7 +45,10 @@ namespace RDVFSharp.FightingLogic.Actions
                 damage += attacker.IsAggressive;
                 attacker.IsAggressive = 0;
             }
-
+            if (attacker.IsEvading > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsEvading = 0;
+            }
             if (attacker.Stamina < requiredStam)
             {   //Not enough stamina-- reduced effect
                 damage *= attacker.Stamina / requiredStam;

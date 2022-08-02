@@ -22,7 +22,10 @@ namespace RDVFSharp.FightingLogic.Actions
                 difficulty -= attacker.IsAggressive;
                 attacker.IsAggressive = 0;
             }
-
+            if (attacker.IsEvading > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsEvading = 0;
+            }
             if (roll <= difficulty)
             {   //Failed!
                 battlefield.OutputController.Hint.Add(attacker.Name + " was too disoriented or distracted to get any benefit from resting.");

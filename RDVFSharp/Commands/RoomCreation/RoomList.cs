@@ -27,7 +27,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                messages.Add("No rooms have been opened recently, but you can create yours like that: '!roomcreate'.");
+                messages.Add("No rooms have been opened recently, but you can create yours like that: '!roomcreate name'.");
             }
 
             return messages;

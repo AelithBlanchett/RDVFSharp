@@ -39,7 +39,10 @@ namespace RDVFSharp.FightingLogic.Actions
                 damage += attacker.IsAggressive;
                 attacker.IsAggressive = 0;
             }
-
+            if (attacker.IsEvading > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsEvading = 0;
+            }
             if (attacker.Stamina < requiredStamina)
             {   //Not enough stamina-- reduced effect
                 difficulty += (int)Math.Ceiling((double)((requiredStamina - attacker.Stamina) / requiredStamina) * (20 - difficulty)); // Too tired? You're going to fail.

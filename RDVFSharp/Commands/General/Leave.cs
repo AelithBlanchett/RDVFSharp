@@ -26,7 +26,7 @@ namespace RDVFSharp.Commands
                 }
                 else
                 {
-                    throw new FightInProgress();
+                    Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
                 }
 
                 if (Plugin.GetCurrentBattlefield(channel).Fighters.TrueForAll(x => x.WantsToLeave))

@@ -21,8 +21,13 @@ namespace RDVFSharp.Commands
                 }
                 else
                 {
-                    throw new FightInProgress();
+                    Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
                 }
+            }
+
+            else
+            {
+                Plugin.FChatClient.SendMessageInChannel("There is no match going on right now", channel);
             }
         }
     }

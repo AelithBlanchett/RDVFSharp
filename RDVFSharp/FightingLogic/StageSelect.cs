@@ -23,8 +23,6 @@ namespace RDVFSharp.FightingLogic
             "Park",
             "RF:MMA Hexagonal Cage",
             "Hangar",
-            "Swamp",
-            "RF:Glass Box",
             "RF:Free Space",
             "Magic Shop",
             "Locker Room",
@@ -49,7 +47,9 @@ namespace RDVFSharp.FightingLogic
             "Bowling Club",
             "Concert Stage",
             "Wild West Town",
-            "Movie Set"
+            "Movie Set",
+            "Furniture Store",
+            "Classroom"
             };
 
             return stages[Utils.GetRandomNumber(0, stages.Count - 1)];
