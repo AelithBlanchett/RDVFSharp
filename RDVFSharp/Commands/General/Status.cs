@@ -15,7 +15,7 @@ namespace RDVFSharp.Commands
             if (channel == "ADH-a823a4e998a2b3d31794")
             {
                 var argsList = args.ToList();
-                var NamedChannel = argsList[0];
+                var NamedChannel = string.Join(" ", args);
 
                 if (NamedChannel == "Arena" || NamedChannel == "arena")
                 {
@@ -31,17 +31,17 @@ namespace RDVFSharp.Commands
                 {
                     if (Plugin.GetCurrentBattlefield("ADH-b3c88050e9c580631c70").IsInProgress && Plugin.GetCurrentBattlefield("ADH-51710b5ac8cce7e99f19").IsInProgress)
                     {
-                        Plugin.FChatClient.SendMessageInChannel("There are matches happening in both the arena and the venue!", channel);
+                        Plugin.FChatClient.SendMessageInChannel("There are matches happening in both the arena and the venue! If you want to see the progress of either of those matches, type '!status Arena' or '!status Venue' in the bar!", channel);
                     }
 
                     else if (Plugin.GetCurrentBattlefield("ADH-b3c88050e9c580631c70").IsInProgress && !Plugin.GetCurrentBattlefield("ADH-51710b5ac8cce7e99f19").IsInProgress)
                     {
-                        Plugin.FChatClient.SendMessageInChannel("There is a match happening in the arena!", channel);
+                        Plugin.FChatClient.SendMessageInChannel("There is a match happening in the arena! If you want to see the progress of that match, type '!status Arena' in the bar!", channel);
                     }
 
                     else if (!Plugin.GetCurrentBattlefield("ADH-b3c88050e9c580631c70").IsInProgress && Plugin.GetCurrentBattlefield("ADH-51710b5ac8cce7e99f19").IsInProgress)
                     {
-                        Plugin.FChatClient.SendMessageInChannel("There is a match happening in the venue!", channel);
+                        Plugin.FChatClient.SendMessageInChannel("There is a match happening in the venue! If you want to see the progress of that match, type '!status Venue' in the bar!", channel);
                     }
 
                     else
