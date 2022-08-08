@@ -27,6 +27,8 @@ namespace RDVFSharp.FightingLogic.Actions
             }
             if (roll <= difficulty)
             {   //Failed!
+                battlefield.OutputController.Hit.Add("Failed! ");
+                battlefield.OutputController.Info.Add("Dice Roll Required: " + Math.Max(2, (difficulty + 1)));
                 battlefield.OutputController.Hint.Add(attacker.Name + " was too disoriented or distracted to channel mana.");
                 return false; //Failed action, if we ever need to check that.
             }
