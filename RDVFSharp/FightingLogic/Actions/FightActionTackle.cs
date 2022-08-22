@@ -82,7 +82,7 @@ namespace RDVFSharp.FightingLogic.Actions
             if (target.IsDazed) target.Fumbled = true;
             battlefield.Fighters.ForEach(f => f.IsDazed = (f != attacker)); // Set all as dazed
             if (target.IsDisoriented > 0) target.IsDisoriented += 2;
-            if (target.IsExposed > 0) target.IsExposed += 2;
+            if (target.IsExposed > 0) target.IsExposed = 0;
 
             if (attacker.IsGrabbable == 0 && target.IsGrabbable == 0)
             {
