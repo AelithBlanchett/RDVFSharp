@@ -12,12 +12,10 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            try
-            {
-                var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
-                var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
+            var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
+            var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
 
-                if ((attacker.IsRestrained == true && !target.IsGrappling(attacker)) || (attacker.IsRestraining > 0 && !attacker.IsGrappling(target)))
+            if ((attacker.IsRestrained == true && !target.IsGrappling(attacker)) || (attacker.IsRestraining > 0 && !attacker.IsGrappling(target)))
                 {
                     Plugin.FChatClient.SendMessageInChannel("You must be targetting the one that is grappling you, or that you are grappling.", channel);
                 }
@@ -30,14 +28,7 @@ namespace RDVFSharp.Commands
                 else
                 {
                     Plugin.FChatClient.SendMessageInChannel("This is not your turn.", channel);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-            }
-            
-
+                }            
         }
     }
 }

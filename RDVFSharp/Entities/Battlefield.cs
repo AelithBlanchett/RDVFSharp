@@ -82,7 +82,7 @@ namespace RDVFSharp
         public void AssignNewTarget(Fighter fighter)
         {
             var opponents = Fighters.Where(x => x.TeamColor != fighter.TeamColor && !x.IsDead).OrderBy(x => CountOfFightersTargettingTarget(x.Name)).ThenBy(x => new Random().Next()).ToList();
-            fighter.CurrentTarget = opponents.FirstOrDefault();
+            fighter.CurrentTarget = opponents.First();
         }
 
         public void CheckTargetCoherenceAndReassign()
@@ -165,10 +165,7 @@ namespace RDVFSharp
 
             TurnOrder[currentFighter].Regen();
 
-            if (CheckIfFightIsOver())
-            {
-                return;
-            }
+            CheckIfFightIsOver();
 
             CheckTargetCoherenceAndReassign();
             NextFighter();
@@ -178,7 +175,7 @@ namespace RDVFSharp
             }
         }
 
-        private bool CheckIfFightIsOver()
+        private void CheckIfFightIsOver()
         {
             if (RemainingTeams == 1)
             {
@@ -186,10 +183,7 @@ namespace RDVFSharp
                 OutputController.Special.Add("FATALITY SUGGESTION: " + FatalitySelect.SelectRandom());
                 OutputController.Special.Add("It is just a suggestion, you may not follow it if you don't want to.");
                 EndFight(GetActor(), GetTarget());
-                return true;
             }
-
-            return false;
         }
 
         public int RemainingTeams
