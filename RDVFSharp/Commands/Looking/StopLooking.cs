@@ -13,12 +13,11 @@ namespace RDVFSharp.Commands
         public async Task<List<string>> Execute(string characterCalling, IEnumerable<string> args)
         {
             var messages = new List<string>();
-            await Task.Delay(4000);
 
             if (!string.IsNullOrEmpty(characterCalling))
             {
                 messages.Add($"[icon]{characterCalling}[/icon] is no longer looking for a fight!!");
-                Looking.LookingInformation.Remove(characterCalling);
+                Looking.LookingInformation.RemoveAll(x => x.CharacterId == characterCalling);
             }
             else
             {
@@ -39,7 +38,7 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            if (channel == "ADH-a823a4e998a2b3d31794")
+            if (channel == Constants.RDVFBar)
 
             {
                 var result = await Execute(characterCalling, args);

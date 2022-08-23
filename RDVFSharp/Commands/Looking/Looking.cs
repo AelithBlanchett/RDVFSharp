@@ -10,15 +10,15 @@ namespace RDVFSharp.Commands
 {
     public class Looking : BaseCommand<RDVFPlugin>
     {
-        public Timer LookingTimer = new Timer(7200000);
         public static Dictionary<string, DateTime> CharacterCooldowns = new Dictionary<string, DateTime>();
-        public static List<string> LookingInformation = new List<string>();
+        public static List<LookingInfo> LookingInformation = new List<LookingInfo>();
 
         public class LookingInfo
         {
-            public string LookingId { get; set; }
+            public string CharacterId { get; set; }
+            public Timer ExpirationTimer { get; set; }
         }
-        
+
         public async Task<List<string>> Execute(string characterCalling, IEnumerable<string> args)
         {
             var messages = new List<string>();
@@ -33,21 +33,28 @@ namespace RDVFSharp.Commands
                 }
             }
 
-            await Task.Delay(4000);
-
             if (!string.IsNullOrEmpty(characterCalling))
             {
                 messages.Add($"[icon]{characterCalling}[/icon] " + LookingSelect.SelectRandom() + " (!look to see all available fighters!)");
                 Plugin.FChatClient.SendPrivateMessage("You are now on the !look list of fighters looking for a fight, you will be automatically removed after 2 hours, or when you use the !stoplooking command", characterCalling);
-                LookingInformation.AddIfNotContains(characterCalling);
 
-                LookingTimer.Start();
-                LookingTimer.Elapsed += Lookingover;
-                LookingTimer.AutoReset = false;
-                void Lookingover(Object source, System.Timers.ElapsedEventArgs e)
+                if (!LookingInformation.Any(x => x.CharacterId == characterCalling))
                 {
-                    LookingInformation.Remove(characterCalling);
-                    Plugin.FChatClient.SendPrivateMessage("Your looking status has expired. If you want to renew it, please type !looking in the room once again!", characterCalling);
+                    var lookingInfo = new LookingInfo()
+                    {
+                        CharacterId = characterCalling,
+                        ExpirationTimer = new Timer(7200000)
+                    };
+
+                    lookingInfo.ExpirationTimer.Start();
+                    lookingInfo.ExpirationTimer.Elapsed += (sender, e) => { LookingOver(sender, e, lookingInfo); };
+                    lookingInfo.ExpirationTimer.AutoReset = false;
+
+                    LookingInformation.Add(lookingInfo);
+                }
+                else
+                {
+
                 }
             }
             else
@@ -58,6 +65,11 @@ namespace RDVFSharp.Commands
             return messages;
         }
 
+        private void LookingOver(Object source, System.Timers.ElapsedEventArgs e, LookingInfo lookingInfo)
+        {
+            Plugin.FChatClient.SendPrivateMessage("Your looking status has expired. If you want to renew it, please type !looking in the room once again!", lookingInfo.CharacterId);
+            LookingInformation.RemoveAll(x => x.CharacterId == lookingInfo.CharacterId);
+        }
 
         public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
@@ -68,12 +80,12 @@ namespace RDVFSharp.Commands
         {
             if (channel == "ADH-a823a4e998a2b3d31794")
 
-            { 
+            {
                 var result = await Execute(characterCalling, args);
                 foreach (var message in result)
                 {
                     Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
-                } 
+                }
             }
 
             else

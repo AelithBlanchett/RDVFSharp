@@ -41,7 +41,7 @@ namespace RDVFSharp.Commands
 
         public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
-            if (characterCalling == "Mayank" || characterCalling == "Elise Pariat" || characterCalling == "Aelith Blanchette")
+            if (characterCalling == Constants.MayankAdmin || characterCalling == Constants.EliseAdmin || characterCalling == Constants.AelithAdmin)
             {
                 var result = await Execute(characterCalling, args);
                 foreach (var message in result)
@@ -58,7 +58,7 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            if (characterCalling == "Mayank" || characterCalling == "Elise Pariat" || characterCalling == "Aelith Blanchette")
+            if (characterCalling == Constants.MayankAdmin || characterCalling == Constants.EliseAdmin || characterCalling == Constants.AelithAdmin)
             {
                 var result = await Execute(characterCalling, args);
                 foreach (var message in result)

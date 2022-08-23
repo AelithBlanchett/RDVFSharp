@@ -71,9 +71,9 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.InviteUserToChannel(characterCalling, room.Channel);
                 Plugin.FChatClient.ModUser(characterCalling, room.Channel);
                 Plugin.FChatClient.ChangeChannelDescription("[b]These are not the official arenas. What happens in here is beyond the control of the officials of the lounge.[/b]", room.Channel);
-                Plugin.FChatClient.ModUser("Elise Pariat", room.Channel);
-                Plugin.FChatClient.ModUser("Aelith Blanchette", room.Channel);
-                Plugin.FChatClient.ChangeChannelOwner("Mayank", room.Channel);
+                Plugin.FChatClient.ModUser(Constants.EliseAdmin, room.Channel);
+                Plugin.FChatClient.ModUser(Constants.AelithAdmin, room.Channel);
+                Plugin.FChatClient.ChangeChannelOwner(Constants.MayankAdmin, room.Channel);
                 Plugin.AddHandledChannel(room.Channel);
             }
             else
@@ -96,7 +96,7 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            if (channel == "ADH-51710b5ac8cce7e99f19" || channel == "ADH-b3c88050e9c580631c70")
+            if (channel == Constants.RDVFVenue || channel == Constants.RDVFArena)
 
             {
                 Plugin.FChatClient.SendMessageInChannel("You cannot do that in here", channel);  

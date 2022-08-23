@@ -20,10 +20,12 @@ namespace RDVFSharp.Commands
             if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
                 Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
+                return;
             }
             else if (!Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == character))
             {
                 Plugin.FChatClient.SendMessageInChannel("You have not readied up!", channel);
+                return;
             }
 
             if (!Plugin.GetCurrentBattlefield(channel).IsInProgress && Plugin.GetCurrentBattlefield(channel).Fighters.Count >= 2)

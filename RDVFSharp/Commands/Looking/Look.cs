@@ -45,7 +45,7 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            if (channel == "ADH-a823a4e998a2b3d31794")
+            if (channel == Constants.RDVFBar)
             {
                 var result = await Execute(characterCalling, args);
                 foreach (var message in result)

@@ -14,12 +14,12 @@ namespace RDVFSharp.Commands
 {
     public class Ready : BaseCommand<RDVFPlugin>
     {
-        public Timer ReadyTimer = new Timer(300000);
+        public static Timer ReadyTimer = new Timer(300000);
         public override string Description => "Sets a player as ready.";
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            if (channel == "ADH-a823a4e998a2b3d31794")
+            if (channel == Constants.RDVFBar)
             {
                 Plugin.FChatClient.SendMessageInChannel($"[eicon]Invertyank[/eicon][eicon]flipnewshyperbap[/eicon][icon]{character}[/icon] [i]\"No fighting in the bar!\"[/i]", channel);
             }

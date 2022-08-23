@@ -24,17 +24,18 @@ namespace RDVFSharp.Commands
             if (fighter == null)
             {
                 Plugin.FChatClient.SendMessageInChannel("You are not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2", channel);
+                return;
             }
 
             int[] statsArray;
-
-            
+            try
             {
                 statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
-                if (statsArray.Length != 5)
-                {
-                    Plugin.FChatClient.SendMessageInChannel("Invalid arguments. All stats must be numbers. Example: !restat 5 8 8 1 2", channel);
-                }
+            }
+            catch (Exception)
+            {
+                Plugin.FChatClient.SendMessageInChannel("Invalid arguments. All stats must be numbers. Example: !restat 5 8 8 1 2", channel);
+                return;
             }
 
             fighter.Strength = statsArray[0];

@@ -15,6 +15,7 @@ namespace RDVFSharp.Commands
             if (fighter == null)
             {
                 Plugin.FChatClient.SendMessageInChannel("You are not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2", channel);
+                return;
             }
 
             if (channel.ToLower().StartsWith("adh-"))
