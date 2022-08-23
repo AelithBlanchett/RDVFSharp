@@ -21,20 +21,25 @@ namespace RDVFSharp.Commands
             if (fighter != null)
             {
                 Plugin.FChatClient.SendMessageInChannel("You are already registered!", channel);
+                return;
             }
 
             int[] statsArray;
 
-            
+            try
             {
                 statsArray = Array.ConvertAll(args.ToArray(), int.Parse);
 
                 if (statsArray.Length != 5)
                 {
-                    Plugin.FChatClient.SendMessageInChannel("Invalid arguments. All stats must be numbers. Example: !register 5 8 8 1 2", channel);
+                    throw new Exception();
                 }
             }
-            
+            catch (Exception)
+            {
+                Plugin.FChatClient.SendMessageInChannel("Invalid arguments. All stats must be numbers. Example: !register 5 8 8 1 2", channel);
+                return;
+            }
 
             var createdFighter = new BaseFighter()
             {
@@ -63,7 +68,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("Your stats are invalid. Please ensure they add up to 24 in total, and none exceed the range for each stat (0-10)", channel);
+                throw new Exception(string.Join(", ", createdFighter.GetStatsErrors()));
             }
         }
 
