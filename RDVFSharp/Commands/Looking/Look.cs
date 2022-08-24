@@ -20,7 +20,7 @@ namespace RDVFSharp.Commands
 
                 foreach (var fighter in Looking.LookingInformation)
                 {
-                    output += $"[user]{fighter}[/user], ";
+                    output += $"[user]{fighter.CharacterId}[/user], ";
                 }
 
                 messages.Add(output);

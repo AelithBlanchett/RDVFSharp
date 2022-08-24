@@ -70,6 +70,7 @@ namespace RDVFSharp.Commands
                 else
                 {
                     Plugin.FChatClient.SendMessageInChannel("Invalid team color. Please pick between red/blue/yellow/purple", channel);
+                    return;
                 }
 
                 if (!Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == fighter.Name))
