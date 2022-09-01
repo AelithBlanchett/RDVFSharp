@@ -60,13 +60,13 @@ namespace RDVFSharp.Commands
                 {
                     Plugin.FChatClient.SendPrivateMessage($"Welcome among us, {character}!", character);
                     await Task.Delay(2200); 
-                    Plugin.FChatClient.SendPrivateMessage(fighter.Stats, character);
+                    Plugin.FChatClient.SendPrivateMessage(createdFighter.Stats, character);
                 }
                 else
                 {
                     Plugin.FChatClient.SendMessageInChannel($"Welcome among us, {character}!", channel);
-                    await Task.Delay(2200); 
-                    Plugin.FChatClient.SendPrivateMessage(fighter.Stats, character);
+                    await Task.Delay(2200);
+                    Plugin.FChatClient.SendPrivateMessage(createdFighter.Stats, character);
                 }
 
             }
