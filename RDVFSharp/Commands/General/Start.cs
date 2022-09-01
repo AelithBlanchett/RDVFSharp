@@ -32,7 +32,9 @@ namespace RDVFSharp.Commands
             if (!Plugin.GetCurrentBattlefield(channel).IsInProgress && Plugin.GetCurrentBattlefield(channel).Fighters.Count >= 2)
             {
                 Plugin.FChatClient.SendMessageInChannel($"Let's get it on!", channel);
+                await Task.Delay(2200); 
                 Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
+                await Task.Delay(2200);
                 Plugin.GetCurrentBattlefield(channel).InitialSetup();
                 Ready.ReadyTimer.Stop();
             }
