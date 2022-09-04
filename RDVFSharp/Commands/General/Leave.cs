@@ -19,22 +19,21 @@ namespace RDVFSharp.Commands
             if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
                 var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
-                if (activeFighter != null)
-                {
-                    activeFighter.WantsToLeave = true;
-                    Plugin.FChatClient.SendMessageInChannel($"The fight will end once all the fighters in this match type !leave.", channel);
-                }
-                else
+                if (activeFighter == null)
                 {
                     Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
                     return;
                 }
-
-                if (Plugin.GetCurrentBattlefield(channel).Fighters.TrueForAll(x => x.WantsToLeave))
-                {
-                    Plugin.ResetFight(channel);
-                    Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
-                }
+                
+                
+                    activeFighter.WantsToLeave = true;
+                    Plugin.FChatClient.SendMessageInChannel($"The fight will end once all the fighters in this match type !leave.", channel);
+                    if (Plugin.GetCurrentBattlefield(channel).Fighters.TrueForAll(x => x.WantsToLeave))
+                    {
+                        Plugin.ResetFight(channel);
+                        Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
+                    }
+                
             }
             else
             {
