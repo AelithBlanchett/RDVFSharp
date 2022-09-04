@@ -82,7 +82,7 @@ namespace RDVFSharp.Commands
                     ReadyTimer.AutoReset = false;
                     void Readyover(Object source, System.Timers.ElapsedEventArgs e)
                     {
-                        if (!Plugin.GetCurrentBattlefield(channel).IsInProgress)
+                        if (!Plugin.GetCurrentBattlefield(channel).IsInProgress && Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == fighter.Name))
                         {
                             Plugin.GetCurrentBattlefield(channel).Fighters.RemoveAll(x => x.Name == character);
                             Plugin.FChatClient.SendMessageInChannel($"{character} has been removed from the upcoming fight. (You can only ready for up to 5 minutes before starting a fight. Please do not ready if you don't have an opponent!)", channel);   
