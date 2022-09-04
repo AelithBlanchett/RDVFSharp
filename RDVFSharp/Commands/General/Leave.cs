@@ -44,6 +44,7 @@ namespace RDVFSharp.Commands
                 if (removed)
                 {
                     Plugin.FChatClient.SendMessageInChannel($"You've successfully been removed from the upcoming fight.", channel);
+                    Ready.ReadyTimer.Stop();
                 }
             }
 

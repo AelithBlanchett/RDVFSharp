@@ -51,13 +51,11 @@ namespace RDVFSharp.Commands
                 if (channel == "")
                 {
                     Plugin.FChatClient.SendPrivateMessage($"You've successfully moved points among your stats, {character}.", character);
-                    await Task.Delay(2200); 
                     Plugin.FChatClient.SendPrivateMessage(fighter.Stats, character);
                 }
                 else
                 {
                     Plugin.FChatClient.SendMessageInChannel($"You've successfully moved points among your stats, {character}.", channel);
-                    await Task.Delay(2200);
                     Plugin.FChatClient.SendPrivateMessage(fighter.Stats, character);
                 }
 
