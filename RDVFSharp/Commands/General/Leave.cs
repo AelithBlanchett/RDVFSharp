@@ -25,14 +25,13 @@ namespace RDVFSharp.Commands
                     return;
                 }
                 
-                
-                    activeFighter.WantsToLeave = true;
-                    Plugin.FChatClient.SendMessageInChannel($"The fight will end once all the fighters in this match type !leave.", channel);
-                    if (Plugin.GetCurrentBattlefield(channel).Fighters.TrueForAll(x => x.WantsToLeave))
-                    {
-                        Plugin.ResetFight(channel);
-                        Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
-                    }
+                activeFighter.WantsToLeave = true;
+                Plugin.FChatClient.SendMessageInChannel($"The fight will end once all the fighters in this match type !leave.", channel);
+                if (Plugin.GetCurrentBattlefield(channel).Fighters.TrueForAll(x => x.WantsToLeave))
+                {
+                    Plugin.ResetFight(channel);
+                    Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
+                }
                 
             }
             else
