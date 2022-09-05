@@ -29,10 +29,12 @@ namespace RDVFSharp.Commands
                 if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
                 {
                     Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
+                    return;
                 }
                 else if (Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == character))
                 {
                     Plugin.FChatClient.SendMessageInChannel("You have already readied up!", channel);
+                    return;
                 }
 
                 BaseFighter fighter = null;
@@ -42,6 +44,7 @@ namespace RDVFSharp.Commands
                 if (fighter == null)
                 {
                     Plugin.FChatClient.SendMessageInChannel("You are not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2", channel);
+                    return;
                 }
 
                 var teamInputText = string.Join(" ", args);
