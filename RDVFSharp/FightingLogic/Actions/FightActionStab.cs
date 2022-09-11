@@ -78,7 +78,7 @@ namespace RDVFSharp.FightingLogic.Actions
             }
 
             //The total mobility bonus generated. This will be split bewteen attack and defense.
-            var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
+            var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Dexterity;
 
             {
                 attacker.IsGrabbable = 0;

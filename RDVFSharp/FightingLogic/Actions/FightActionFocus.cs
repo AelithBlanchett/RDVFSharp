@@ -16,7 +16,10 @@ namespace RDVFSharp.FightingLogic.Actions
             //if (attacker.IsDisoriented) difficulty += 2; //Up the difficulty if you are dizzy.
             if (attacker.IsRestrained) difficulty += 9; //Up the difficulty considerably if you are restrained.
 
-
+            if (attacker.IsFocused > 0)
+            {
+                difficulty += (attacker.IsFocused/20);
+            }    
             if (attacker.IsAggressive > 0)
             {//Apply bonus to our action from move/teleport then reset it.
                 difficulty -= attacker.IsAggressive;
