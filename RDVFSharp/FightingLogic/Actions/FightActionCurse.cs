@@ -17,14 +17,13 @@ namespace RDVFSharp.FightingLogic.Actions
             var requiredMana = 20;
             var difficulty = 10; //Base difficulty, rolls greater than this amount will hit.
             var others = battlefield.Fighters.Where(x => x.Name != attacker.Name).OrderBy(x => new Random().Next()).ToList();
+            var othersdeadcheck = others.Where(x => x.IsDead == false).OrderBy(x => new Random().Next()).ToList();
+            var sametarget = othersdeadcheck.Where(x => x.CurrentTarget == attacker.CurrentTarget).OrderBy(x => new Random().Next()).ToList();
 
 
-
-            foreach (var fighter in others)
-            {
-                if ((fighter.CurrentTarget == attacker.CurrentTarget) && (fighter.IsDead == false)) difficulty += 2;
-            }
+            difficulty += 2 * sametarget.Count;
             //If opponent fumbled on their previous action they should become stunned.
+
             if (target.Fumbled)
             {
                 target.IsDazed = true;
@@ -40,7 +39,7 @@ namespace RDVFSharp.FightingLogic.Actions
             {//Evasion bonus from move/teleport. Only applies to one attack, then is reset to 0.
                 difficulty += (int)Math.Ceiling((double)target.IsEvading / 2);//Half effect on ranged attacks.
                 damage -= (int)Math.Ceiling((double)target.IsEvading / 2);
-                target.IsEvading = 0;
+
             }
             if (attacker.IsAggressive > 0)
             {//Apply attack bonus from move/teleport then reset it.
@@ -48,7 +47,10 @@ namespace RDVFSharp.FightingLogic.Actions
                 damage += attacker.IsAggressive;
                 attacker.IsAggressive = 0;
             }
-
+            if (attacker.IsEvading > 0)
+            {//Apply attack bonus from move/teleport then reset it.
+                attacker.IsEvading = 0;
+            }
             var critCheck = true;
             if (attacker.Mana < requiredMana)
             {   //Not enough mana-- reduced effect

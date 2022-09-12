@@ -169,7 +169,6 @@ namespace RDVFSharp
             {
                 return;
             }
-
             CheckTargetCoherenceAndReassign();
             NextFighter();
             for (var i = 0; i < Fighters.Count; i++)
@@ -188,7 +187,6 @@ namespace RDVFSharp
                 EndFight(GetActor(), GetTarget());
                 return true;
             }
-
             return false;
         }
 

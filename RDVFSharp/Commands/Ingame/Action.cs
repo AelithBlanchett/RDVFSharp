@@ -36,7 +36,7 @@ namespace RDVFSharp.Commands
             {
                 Console.WriteLine(ex.StackTrace);
             }
-            
+
 
         }
     }

@@ -19,7 +19,7 @@ namespace RDVFSharp.Commands
             {
                 var room = RoomCreate.CharacterRoomsIds.First(x => x.Id == roomId);
 
-                if ((room.CreatorId == characterCalling) || ("Mayank" == characterCalling))
+                if ((room.CreatorId == characterCalling) || (Constants.MayankAdmin == characterCalling))
                 {
                     Plugin.RemoveHandledChannel(room.Channel);
                     Plugin.FChatClient.LeaveChannel(room.Channel);
@@ -56,6 +56,5 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
             }
         }
-
     }
 }

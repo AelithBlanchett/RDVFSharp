@@ -19,21 +19,20 @@ namespace RDVFSharp.Commands
             if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
                 var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
-                if (activeFighter != null)
+                if (activeFighter == null)
                 {
-                    activeFighter.WantsToLeave = true;
-                    Plugin.FChatClient.SendMessageInChannel($"The fight will end once all the fighters in this match type !leave.", channel);
+                    Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
+                    return;
                 }
-                else
-                {
-                    throw new FightInProgress();
-                }
-
+                
+                activeFighter.WantsToLeave = true;
+                Plugin.FChatClient.SendMessageInChannel($"The fight will end once all the fighters in this match type !leave.", channel);
                 if (Plugin.GetCurrentBattlefield(channel).Fighters.TrueForAll(x => x.WantsToLeave))
                 {
                     Plugin.ResetFight(channel);
                     Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
                 }
+                
             }
             else
             {
@@ -44,6 +43,7 @@ namespace RDVFSharp.Commands
                 if (removed)
                 {
                     Plugin.FChatClient.SendMessageInChannel($"You've successfully been removed from the upcoming fight.", channel);
+                    Ready.ReadyTimer.Stop();
                 }
             }
 

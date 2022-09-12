@@ -20,6 +20,7 @@ namespace RDVFSharp.Commands
             {
                 Plugin.ResetFight(channel);
                 Plugin.FChatClient.SendMessageInChannel($"The fight has been reset.", channel);
+                Ready.ReadyTimer.Stop();
             }
         }
     }

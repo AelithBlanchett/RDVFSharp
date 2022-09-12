@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace RDVFSharp.Commands
 {
@@ -19,11 +20,13 @@ namespace RDVFSharp.Commands
         {
             if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
-                throw new FightInProgress();
+                Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
+                return;
             }
             else if (!Plugin.GetCurrentBattlefield(channel).Fighters.Any(x => x.Name == character))
             {
-                throw new FighterNotFound(character);
+                Plugin.FChatClient.SendMessageInChannel("You have not readied up!", channel);
+                return;
             }
 
             if (!Plugin.GetCurrentBattlefield(channel).IsInProgress && Plugin.GetCurrentBattlefield(channel).Fighters.Count >= 2)
@@ -31,6 +34,7 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.SendMessageInChannel($"Let's get it on!", channel);
                 Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
                 Plugin.GetCurrentBattlefield(channel).InitialSetup();
+                Ready.ReadyTimer.Stop();
             }
         }
     }

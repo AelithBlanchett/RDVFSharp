@@ -1,7 +1,13 @@
-﻿using System;
+﻿using FChatSharpLib.Entities.Plugin;
+using FChatSharpLib.Entities.Plugin.Commands;
+using RDVFSharp.DataContext;
+using RDVFSharp.Entities;
+using RDVFSharp.Errors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RDVFSharp.Entities
 {
@@ -204,6 +210,11 @@ namespace RDVFSharp.Entities
                 if (IsDisoriented > 0) doubleX += IsDisoriented;
                 IsFocused = (int)Math.Max(IsFocused - doubleX, 0);
                 if (IsFocused == 0) Battlefield.OutputController.Hint.Add(Name + " has lost their focus!");
+            }
+
+            for (var i = 0; i < Battlefield.Fighters.Count; i++)
+            {
+                Battlefield.TurnOrder[i].FinalStand();
             }
         }
 

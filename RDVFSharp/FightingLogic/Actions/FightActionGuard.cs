@@ -23,9 +23,7 @@ namespace RDVFSharp.FightingLogic.Actions
             }
 
 
-            if (attacker.IsRestrained) difficulty += (11 + (int)Math.Floor((double)(target.Strength - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants.
-            if (attacker.IsRestrained) difficulty -= attacker.IsEscaping; //Then reduce difficulty based on how much effort we've put into escaping so far.
-            if (target.IsRestrained) difficulty -= 4; //Lower the difficulty considerably if the target is restrained.
+            if (attacker.IsRestrained) difficulty += 9;
 
             if (attacker.IsEvading > 0)
             {//Apply attack bonus from move/teleport then reset it.
@@ -50,7 +48,7 @@ namespace RDVFSharp.FightingLogic.Actions
 
             attacker.HitStamina(requiredStam); //Now that stamina has been checked, reduce the attacker's stamina by the appopriate amount.
 
-            var attackTable = attacker.BuildActionTable(difficulty, target.Dexterity, attacker.Dexterity, target.Stamina, target.StaminaCap);
+            var attackTable = attacker.BuildActionTable(difficulty, 0, 0, 0, 0);
             //If target can dodge the atatcker has to roll higher than the dodge value. Otherwise they need to roll higher than the miss value. We display the relevant value in the output.
             battlefield.OutputController.Info.Add("Dice Roll Required: " + (attackTable.miss + 1));
 

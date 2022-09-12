@@ -18,13 +18,11 @@ namespace RDVFSharp.FightingLogic.Actions
             var requiredMana = 25;
             var difficulty = 10; //Base difficulty, rolls greater than this amount will hit.
             var others = battlefield.Fighters.Where(x => x.Name != attacker.Name).OrderBy(x => new Random().Next()).ToList();
+            var othersdeadcheck = others.Where(x => x.IsDead == false).OrderBy(x => new Random().Next()).ToList();
+            var sametarget = othersdeadcheck.Where(x => x.CurrentTarget == attacker.CurrentTarget).OrderBy(x => new Random().Next()).ToList();
 
 
-
-            foreach (var fighter in others)
-            {
-                if ((fighter.CurrentTarget == attacker.CurrentTarget) && (fighter.IsDead == false)) difficulty += 2;
-            }
+            difficulty += 2 * sametarget.Count;
             //If opponent fumbled on their previous action they should become stunned.
             if (target.Fumbled)
             {

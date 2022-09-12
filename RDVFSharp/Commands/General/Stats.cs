@@ -12,7 +12,11 @@ namespace RDVFSharp.Commands
         public async Task Execute(string character, IEnumerable<string> args, string channel = "")
         {
             var fighter = await Plugin.DataContext.Fighters.FindAsync(character);
-            if (fighter == null) { throw new FighterNotRegistered(character); }
+            if (fighter == null)
+            {
+                Plugin.FChatClient.SendMessageInChannel("You are not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2", channel);
+                return;
+            }
 
             if (channel.ToLower().StartsWith("adh-"))
             {

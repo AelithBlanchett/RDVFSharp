@@ -43,8 +43,16 @@ namespace RDVFSharp.Commands
                 }
                 else
                 {
-                    throw new FighterNotFound(args.FirstOrDefault());
+                    Plugin.FChatClient.SendMessageInChannel("This fighter was not found. Please check the spelling of the fighter's name!", channel);
                 }
+            }
+            else if (Plugin.GetCurrentBattlefield(channel).IsInProgress && !Plugin.FChatClient.IsUserAdmin(character, channel))
+            {
+                Plugin.FChatClient.SendMessageInChannel("You do not have access to this command", channel);
+            }
+            else
+            {
+                Plugin.FChatClient.SendMessageInChannel("There is no match going on right now", channel);
             }
         }
     }

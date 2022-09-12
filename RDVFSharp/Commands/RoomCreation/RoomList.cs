@@ -27,7 +27,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                messages.Add("No rooms have been opened recently, but you can create yours like that: '!roomcreate'.");
+                messages.Add("No rooms have been opened recently, but you can create yours like that: '!roomcreate name'.");
             }
 
             return messages;
@@ -36,19 +36,35 @@ namespace RDVFSharp.Commands
 
         public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
-            var result = await Execute(characterCalling, args);
-            foreach (var message in result)
+            if (characterCalling == Constants.MayankAdmin || characterCalling == Constants.EliseAdmin || characterCalling == Constants.AelithAdmin)
             {
-                Plugin.FChatClient.SendPrivateMessage(message, characterCalling);
+                var result = await Execute(characterCalling, args);
+                foreach (var message in result)
+                {
+                    Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
+                }
+            }
+
+            else
+            {
+                Plugin.FChatClient.SendPrivateMessage("You cannot do that", characterCalling);
             }
         }
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            var result = await Execute(characterCalling, args);
-            foreach (var message in result)
+            if (characterCalling == Constants.MayankAdmin || characterCalling == Constants.EliseAdmin || characterCalling == Constants.AelithAdmin)
             {
-                Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
+                var result = await Execute(characterCalling, args);
+                foreach (var message in result)
+                {
+                    Plugin.FChatClient.SendMessageInChannel($"{message}", channel);
+                }
+            }
+
+            else
+            {
+                Plugin.FChatClient.SendMessageInChannel("You cannot do that", channel);
             }
         }
     }
