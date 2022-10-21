@@ -211,11 +211,6 @@ namespace RDVFSharp.Entities
                 IsFocused = (int)Math.Max(IsFocused - doubleX, 0);
                 if (IsFocused == 0) Battlefield.OutputController.Hint.Add(Name + " has lost their focus!");
             }
-
-            for (var i = 0; i < Battlefield.Fighters.Count; i++)
-            {
-                Battlefield.TurnOrder[i].FinalStand();
-            }
         }
 
         public void HitMana(int manaToRemove)
