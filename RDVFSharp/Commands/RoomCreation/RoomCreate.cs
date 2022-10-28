@@ -64,13 +64,15 @@ namespace RDVFSharp.Commands
 
                 messages.Add($"A new channel titled '{room.ChannelName}' has been created for you ({room.Channel}).\n" +
                     $"An invite will be sent to you right away.\n" +
-                    $"Please invite whoever you want to by using the '/invite name' function within the room!");
+                    $"Please invite whoever you want to by using the '/invite name' function within the room!\n" + 
+                    $"Please read the room description once you enter!");
 
                 await Task.Delay(2000);
 
                 Plugin.FChatClient.InviteUserToChannel(characterCalling, room.Channel);
                 Plugin.FChatClient.ModUser(characterCalling, room.Channel);
-                Plugin.FChatClient.ChangeChannelDescription("[b]These are not the official arenas. What happens in here is beyond the control of the officials of the lounge.[/b]", room.Channel);
+                Plugin.FChatClient.ChangeChannelDescription($"[b]To close this room, {room.CreatorId} must type '!roomclose {room.Id}', or please ask [user]Mayank[/user] to close the room for you![/b]\n" + 
+                "What happens in this room is outside the scope of the main room admins. Please keep that in mind when using this private room feature!", room.Channel);
                 Plugin.FChatClient.ModUser(Constants.EliseAdmin, room.Channel);
                 Plugin.FChatClient.ModUser(Constants.AelithAdmin, room.Channel);
                 Plugin.FChatClient.ChangeChannelOwner(Constants.MayankAdmin, room.Channel);
