@@ -75,6 +75,7 @@ namespace RDVFSharp.Commands
                 "What happens in this room is outside the scope of the main room admins. Please keep that in mind when using this private room feature!", room.Channel);
                 Plugin.FChatClient.ModUser(Constants.EliseAdmin, room.Channel);
                 Plugin.FChatClient.ModUser(Constants.AelithAdmin, room.Channel);
+                Plugin.FChatClient.ModUser(Constants.VCBot, room.Channel);
                 Plugin.FChatClient.ChangeChannelOwner(Constants.MayankAdmin, room.Channel);
                 Plugin.AddHandledChannel(room.Channel);
             }

@@ -24,6 +24,7 @@ namespace RDVFSharp.Commands
                 try
                 {
                     Plugin.FChatClient.SendPrivateMessage($"[session={room.ChannelName}]{room.Channel}[/session]", characterCalling);
+                    Plugin.FChatClient.InviteUserToChannel(characterCalling, room.Channel);
                 }
                 catch (Exception ex)
                 {
