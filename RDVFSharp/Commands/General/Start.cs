@@ -35,6 +35,16 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
                 Plugin.GetCurrentBattlefield(channel).InitialSetup();
                 Ready.ReadyTimer.Stop();
+
+                if (channel == Constants.RDVFArena)
+                {
+                    Plugin.FChatClient.SendMessageInChannel($"There is a fight occuring in the {Constants.RDVFArena}!", Constants.RDVFBar);
+                }
+
+                else if (channel == Constants.RDVFVenue)
+                {
+                    Plugin.FChatClient.SendMessageInChannel($"There is a fight occuring in the {Constants.RDVFVenue}!", Constants.RDVFBar);
+                }
             }
         }
     }
