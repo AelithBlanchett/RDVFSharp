@@ -7,7 +7,7 @@ using RDVFSharp.Helpers;
 
 namespace RDVFSharp.Commands
 {
-    public class RoomCreate : BaseCommand<RDVFPlugin>
+    public class CreateRoom : BaseCommand<RDVFPlugin>
     {
         public static Dictionary<string, DateTime> CharacterCooldowns = new Dictionary<string, DateTime>();
         public static List<PayPerViewChannelInfo> CharacterRoomsIds = new List<PayPerViewChannelInfo>();
@@ -71,7 +71,7 @@ namespace RDVFSharp.Commands
 
                 Plugin.FChatClient.InviteUserToChannel(characterCalling, room.Channel);
                 Plugin.FChatClient.ModUser(characterCalling, room.Channel);
-                Plugin.FChatClient.ChangeChannelDescription($"[b]To close this room, {room.CreatorId} must type '!roomclose {room.Id}', or please ask [user]Mayank[/user] to close the room for you![/b]\n" + 
+                Plugin.FChatClient.ChangeChannelDescription($"[b]To close this room, {room.CreatorId} must type '!closeroom {room.Id}', or please ask [user]Mayank[/user] to close the room for you![/b]\n" + 
                 "What happens in this room is outside the scope of the main room admins. Please keep that in mind when using this private room feature!", room.Channel);
                 Plugin.FChatClient.ModUser(Constants.EliseAdmin, room.Channel);
                 Plugin.FChatClient.ModUser(Constants.AelithAdmin, room.Channel);
