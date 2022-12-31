@@ -16,8 +16,9 @@ namespace RDVFSharp.Commands
                 var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
                 if (activeFighter != null)
                 {
+                    Plugin.GetCurrentBattlefield(channel).GetFighter(character).HP = 0;
                     Plugin.FChatClient.SendMessageInChannel($"{activeFighter.Name} has forfeited the match.", channel);
-                    Plugin.GetCurrentBattlefield(channel).EndFight(Plugin.GetCurrentBattlefield(channel).GetFighterTarget(character), activeFighter);
+                    Plugin.GetCurrentBattlefield(channel).GetFighter(character).UpdateCondition();
                 }
                 else
                 {
