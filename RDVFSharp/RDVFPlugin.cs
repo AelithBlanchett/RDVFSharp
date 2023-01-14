@@ -1,5 +1,6 @@
 ﻿using FChatSharpLib;
 using FChatSharpLib.Entities.Plugin;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RDVFSharp;
 using RDVFSharp.DataContext;
@@ -17,10 +18,13 @@ namespace RDVFSharp
         public IOptions<RDVFPluginOptions> RDVFPluginOptions { get; }
         public RDVFDataContext DataContext { get; }
 
-        public RDVFPlugin(IOptions<RDVFPluginOptions> pluginOptions, RemoteBotController fChatClient, RDVFDataContext dataContext) : base(pluginOptions, fChatClient)
+        public new ILogger<RDVFPlugin> Logger { get; }
+
+        public RDVFPlugin(IOptions<RDVFPluginOptions> pluginOptions, RemoteBotController fChatClient, RDVFDataContext dataContext, ILogger<RDVFPlugin> logger) : base(pluginOptions, fChatClient, logger)
         {
             RDVFPluginOptions = pluginOptions;
             DataContext = dataContext;
+            Logger = logger;
             ResetAllFight();
         }
 

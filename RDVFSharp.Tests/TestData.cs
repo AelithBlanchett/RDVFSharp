@@ -1,7 +1,11 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Castle.Core.Logging;
+using FChatSharpLib;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NSubstitute;
 using RabbitMQ.Client;
 using RDVFSharp.DataContext;
 using RDVFSharp.Entities;
@@ -76,8 +80,10 @@ namespace RDVFSharp.Tests
                 Debug = true
             });
             var optionsRabbit = Options.Create<ConnectionFactory>(new ConnectionFactory());
+            var loggerRemoteEvents = Substitute.For<ILogger<RemoteEvents>>();
+            var logger = Substitute.For<ILogger<RDVFPlugin>>();
 
-            return new RDVFPlugin(options, new FChatSharpLib.RemoteBotController(new FChatSharpLib.RemoteEvents(options, optionsRabbit)), GetDataContext());
+            return new RDVFPlugin(options, new FChatSharpLib.RemoteBotController(new RemoteEvents(options, optionsRabbit, loggerRemoteEvents)), GetDataContext(), logger);
         }
 
     }
