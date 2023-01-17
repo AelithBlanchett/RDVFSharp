@@ -13,18 +13,38 @@ namespace RDVFSharp.Commands
         {
             if (Plugin.GetCurrentBattlefield(channel).IsInProgress)
             {
-                var activeFighter = Plugin.GetCurrentBattlefield(channel).GetFighter(character);
+                var battlefield = Plugin.GetCurrentBattlefield(channel);
+                var activeFighter = battlefield.GetFighter(character);
                 if (activeFighter != null)
                 {
-                    Plugin.GetCurrentBattlefield(channel).GetFighter(character).HP = 0;
+                    activeFighter.HP = 0;
+                    activeFighter.IsDead = true;
+                    activeFighter.IsStunned = 56374621;
+
+                    if (battlefield.TurnOrder[battlefield.currentFighter] == activeFighter)
+                    {
+                        battlefield.NextFighter();
+                    }    
+
                     Plugin.FChatClient.SendMessageInChannel($"{activeFighter.Name} has forfeited the match.", channel);
-                    Plugin.GetCurrentBattlefield(channel).GetFighter(character).UpdateCondition();
+                    battlefield.CheckIfFightIsOver();
+
+                    if (battlefield.RemainingTeams > 1)
+                    {
+                        battlefield.CheckTargetCoherenceAndReassign();
+                        battlefield.OutputFighterStatuses();
+                        battlefield.OutputController.Action.Add("Forfeit");
+                        battlefield.OutputController.Hit.Add($"{activeFighter.Name} is out of commission!");
+                        battlefield.OutputController.Broadcast(battlefield); 
+                    }
                 }
                 else
                 {
                     Plugin.FChatClient.SendMessageInChannel("A fight that you are not participating in is already in progress", channel);
                 }
             }
+
+
 
             else
             {

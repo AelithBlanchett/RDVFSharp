@@ -25,7 +25,7 @@ namespace RDVFSharp
 
         public bool DisplayGrabbed { get; set; }
 
-        private int currentFighter = 0;
+        public int currentFighter = 0;
         private int initialActor = 0;
 
         public Battlefield(RDVFPlugin plugin, string channel)
@@ -177,7 +177,7 @@ namespace RDVFSharp
             }
         }
 
-        private bool CheckIfFightIsOver()
+        public bool CheckIfFightIsOver()
         {
             if (RemainingTeams == 1)
             {
