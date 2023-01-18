@@ -28,7 +28,7 @@ namespace RDVFSharp.FightingLogic.Actions
             }
             if (roll <= difficulty)
             {   //Failed!
-                battlefield.OutputController.Hit.Add("Failed! ");
+                battlefield.OutputController.Hit.Add("FAILED! ");
                 battlefield.OutputController.Info.Add("Dice Roll Required: " + Math.Max(2, (difficulty + 1)));
                 battlefield.OutputController.Hint.Add(attacker.Name + " was too disoriented or distracted to get any benefit from resting.");
                 return false; //Failed action, if we ever need to check that.
