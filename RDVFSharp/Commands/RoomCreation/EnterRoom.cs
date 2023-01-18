@@ -17,13 +17,13 @@ namespace RDVFSharp.Commands
 
             var argsList = args.ToList();
             var ChannelCode = argsList[0];
-            var NamedChannel = string.Join(" ", args);
 
             if (characterCalling == Constants.MayankAdmin)
             {
                 try
                 {
-                    Plugin.FChatClient.JoinChannel($"[session={NamedChannel}]adh-{ChannelCode}[/session]");
+                    Plugin.FChatClient.JoinChannel($"adh-{ChannelCode}");
+                    Plugin.AddHandledChannel($"adh-{ChannelCode}");
                 }
                 catch (Exception ex)
                 {
