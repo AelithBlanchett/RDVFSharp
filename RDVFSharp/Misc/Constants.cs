@@ -10,9 +10,9 @@ namespace RDVFSharp
         public const string EliseAdmin = "Elise Pariat";
         public const string AelithAdmin = "Aelith Blanchette";
         public const string VCBot = "VelvetCuff";
-        public const string RDVFBar = "ADH-a823a4e998a2b3d31794";
-        public const string RDVFArena = "ADH-b3c88050e9c580631c70";
-        public const string RDVFVenue = "ADH-51710b5ac8cce7e99f19";
+        public const string RDVFBar = "adh-a823a4e998a2b3d31794";
+        public const string RDVFArena = "adh-b3c88050e9c580631c70";
+        public const string RDVFVenue = "adh-51710b5ac8cce7e99f19";
         public const int DefaultStatPoints = 24;
         public const int DefaultGameSpeed = 1;
         public const int DefaultDisorientedAt = 50;
