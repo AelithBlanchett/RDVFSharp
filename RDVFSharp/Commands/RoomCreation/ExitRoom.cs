@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
-    public class EnterRoom : BaseCommand<RDVFPlugin>
+    public class ExitRoom : BaseCommand<RDVFPlugin>
     {
         public static Dictionary<string, DateTime> CharacterCooldowns = new Dictionary<string, DateTime>();
 
@@ -22,8 +22,8 @@ namespace RDVFSharp.Commands
             {
                 try
                 {
-                    Plugin.FChatClient.JoinChannel($"adh-{ChannelCode}");
-                    Plugin.AddHandledChannel($"adh-{ChannelCode}");
+                    Plugin.FChatClient.LeaveChannel($"adh-{ChannelCode}");
+                    Plugin.RemoveHandledChannel($"adh-{ChannelCode}");
                 }
                 catch (Exception ex)
                 {
