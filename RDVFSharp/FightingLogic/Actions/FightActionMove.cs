@@ -85,6 +85,7 @@ namespace RDVFSharp.FightingLogic.Actions
 
             if (target.IsGrappling(attacker))
             { //If you were being grappled, you get free.
+                battlefield.OutputController.Hit.Add(attacker.Name + " moved away!");
                 battlefield.OutputController.Hint.Add(attacker.Name + " escaped " + target.Name + "'s hold! ");
                 attacker.RemoveGrappler(target);
                 tempGrappleFlag = false;
@@ -105,7 +106,6 @@ namespace RDVFSharp.FightingLogic.Actions
                 if (attacker.IsGrabbable > 0 && opponent.IsGrabbable == attacker.IsGrabbable && !attacker.IsGrappling(target) && !target.IsGrappling(attacker))
                 {
                     attacker.IsGrabbable = 0;
-                    battlefield.OutputController.Hit.Add(attacker.Name + " moved away!");
                     battlefield.OutputController.Hint.Add(attacker.Name + " managed to put some distance between them and " + opponent.Name + " and is now out of grabbing range.");
                 }
             }

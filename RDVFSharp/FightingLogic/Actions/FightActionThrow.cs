@@ -43,6 +43,12 @@ namespace RDVFSharp.FightingLogic.Actions
                 attacker.IsEvading = 0;
             }
             var critCheck = true;
+
+            if (!target.IsGrappling(attacker))
+            {
+                damage += Math.Max(0, 10 - target.IsEscaping);
+            }
+
             if (attacker.Stamina < requiredStam)
             {   //Not enough stamina-- reduced effect
                 critCheck = false;
@@ -50,6 +56,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 difficulty += (int)Math.Ceiling((double)((requiredStam - attacker.Stamina) / requiredStam) * (20 - difficulty)); // Too tired? You're likely to miss.
                 battlefield.OutputController.Hint.Add(attacker.Name + " did not have enough stamina, and took penalties to the attack.");
             }
+
 
             attacker.HitStamina(requiredStam); //Now that stamina has been checked, reduce the attacker's stamina by the appopriate amount. (We'll hit the attacker up for the rest on a miss or a dodge).
 
@@ -92,7 +99,6 @@ namespace RDVFSharp.FightingLogic.Actions
                 }
                 else
                 {
-                    damage += Math.Max(0, 10 - target.IsEscaping);
                     battlefield.OutputController.Hit.Add(attacker.Name + " THREW " + target.Name + " and dealt bonus damage!");
                 }
                 //battlefield.OutputController.Hint.Add(target.Name + ", you are no longer grappled. You should make your post, but you should only emote being hit, do not try to perform any other actions.");

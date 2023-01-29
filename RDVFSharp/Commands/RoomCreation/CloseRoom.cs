@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
 {
-    public class RoomClose : BaseCommand<RDVFPlugin>
+    public class CloseRoom : BaseCommand<RDVFPlugin>
     {
         public async Task<List<string>> Execute(string characterCalling, IEnumerable<string> args)
         {
@@ -15,15 +15,15 @@ namespace RDVFSharp.Commands
 
             int roomId = 0;
 
-            if (args.Any() && int.TryParse(args.First(), out roomId) && RoomCreate.CharacterRoomsIds.Any(x => x.Id == roomId))
+            if (args.Any() && int.TryParse(args.First(), out roomId) && CreateRoom.CharacterRoomsIds.Any(x => x.Id == roomId))
             {
-                var room = RoomCreate.CharacterRoomsIds.First(x => x.Id == roomId);
+                var room = CreateRoom.CharacterRoomsIds.First(x => x.Id == roomId);
 
                 if ((room.CreatorId == characterCalling) || (Constants.MayankAdmin == characterCalling))
                 {
                     Plugin.RemoveHandledChannel(room.Channel);
                     Plugin.FChatClient.LeaveChannel(room.Channel);
-                    RoomCreate.CharacterRoomsIds.RemoveAll(x => x.Id == roomId);
+                    CreateRoom.CharacterRoomsIds.RemoveAll(x => x.Id == roomId);
                     messages.Add($"The room {roomId} has been successfully closed.");
                 }
                 else
@@ -33,7 +33,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                messages.Add("There was an error deleting the room with that room ID. Make sure to use the right syntax: Example: '!roomclose 123'.");
+                messages.Add("There was an error deleting the room with that room ID. Make sure to use the right syntax: Example: '!closeroom 123'.");
             }
 
             return messages;

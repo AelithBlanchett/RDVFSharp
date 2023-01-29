@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +9,7 @@ namespace RDVFSharp
         public const string MayankAdmin = "Mayank";
         public const string EliseAdmin = "Elise Pariat";
         public const string AelithAdmin = "Aelith Blanchette";
+        public const string VCBot = "VelvetCuff";
         public const string RDVFBar = "adh-a823a4e998a2b3d31794";
         public const string RDVFArena = "adh-b3c88050e9c580631c70";
         public const string RDVFVenue = "adh-51710b5ac8cce7e99f19";
@@ -33,13 +34,13 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!ready[/b]: Inserts your character into the battlefield. Preferably followed by one of four colours (red/blue/yellow/purple). And also preferably done in such a way that each team member readies right after each other, so that the status looks better. Example: !ready red. Not usable in the bar!" + "\n" +
                     "[b]!start[/b]: Starts the match." + "\n" +
                     "[b]!register[/b]: Registers you with the fight bot. Must be followed by your STR, DEX, RES, SPW, and WIL values, in that order. Example: !register 5 8 8 1 2" + "\n" +
-                    "[b]!restat[/b]: Changes your stats on the fight bot. Must be followed by your STR, DEX, RES, SPW, and WIL values, in that order. Example: !register 5 8 8 1 2" + "\n" +
+                    "[b]!restat[/b]: Changes your stats on the fight bot. Must be followed by your STR, DEX, RES, SPW, and WIL values, in that order. Example: !restat 5 8 8 1 2" + "\n" +
                     "[b]!stats[/b]: The bot will PM you with your stats." + "\n" +
                     "[b]!forfeit[/b]: Ends the match, and declares your opponent the winner." + "\n" +
                     "[b]!status[/b]: Shows you the last message sent by the bot in the fight. If the bot does not send a status message in response to your command, or to check if a fight is occurring in the venue/arena, please use this! Now also comes with a '!status Arena'/'!status Venue' command which can be used in the bar to see these same messages, or just use '!status' in the bar to see if a fight is happening in any of the fight rooms!" + "\n" +
                     "[b]!leave[/b]: If you've readied, but there is no match going on, this clears the arena. Otherwise, if all the participants in an ongoing match type this, the fight becomes null and void." + "\n" +
                     "[b]!help/!commands[/b]: Makes the bot PM all the commands available to you." + "\n" +
-                    "[b]!roomcreate[/b]: Makes a new private room for you to invite people to! Invite them using the '/invite name' command in the room, and it will come up on their console. Only usable in the bar. Also, remember to add the name of the room after the command! Example: !roomcreate Mayank vs Silver. Otherwise, the room will just be named 'RDVF - '" + "\n" +
+                    "[b]!createroom[/b]: Makes a new private room for you to invite people to! Invite them using the '/invite name' command in the room, and it will come up on their console. Only usable in the bar. Also, remember to add the name of the room after the command! Example: !createroom Mayank vs Silver. Otherwise, the room will just be named 'RDVF - '" + "\n" +
                     "[b]!looking[/b]: Add yourself to a list of people looking for a fight! This command expires in 2 hours, though it will let you know when it disappears so you can reset the timer by doing the command again! Only usable in the bar" + "\n" +
                     "[b]!look[/b]: Look at the list of people that are looking for a fight! Only usable in the bar" + "\n" +
                     "\n" +
@@ -54,7 +55,7 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!grab[/b]: A low damage STR based attack that grapples your opponent." + "\n" +
                     "[b]!throw[/b]: A high damage STR based attack that frees you of being grabbed, or does extra damage if you're grappling the opponent. Ends the 'grabbed' status." + "\n" +
                     "[b]!submission[/b]: A fixed damage finisher (30 damage when opponent is below 50% HP, and 15 damage if they're at or above 50%) that can only be used when grappling." + "\n" +
-                    "[b]!stab[/b]: An STR based damage over time move that does damage to both HP and stamina." + "\n" +
+                    "[b]!stab[/b]: A DEX based damage over time move that does damage to both HP and stamina." + "\n" +
                     "[b]!move[/b]: A DEX based move that provides a one time attack buff when not grabbed, or a defensive buff when escaping from a grapple." + "\n" +
                     "[b]!hex[/b]: A medium damage SPW based attack that does damage to both HP and mana." + "\n" +
                     "[b]!magic[/b]: A high damage SPW based attack that does damage to HP. Leaves you exposed on a miss." + "\n" +

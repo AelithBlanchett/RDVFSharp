@@ -22,6 +22,11 @@ namespace RDVFSharp.FightingLogic.Actions
 
             difficulty += 2 * sametarget.Count;
             //If opponent fumbled on their previous action they should become stunned.
+
+            if (attacker.IsRestrained) difficulty += 2; //Up the difficulty if the attacker is restrained.
+            if (target.IsRestrained) difficulty -= 4; //Lower it if the target is restrained.
+            if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
+
             if (target.Fumbled)
             {
                 target.IsDazed = true;
@@ -43,8 +48,14 @@ namespace RDVFSharp.FightingLogic.Actions
             {//Apply attack bonus from move/teleport then reset it.
                 attacker.IsEvading = 0;
             }
+
+
+            var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
+
             if (attacker.Mana < requiredMana)
             {   //Not enough stamina-- reduced effect
+                damage *= attacker.Mana / requiredMana;
+                totalBonus *= attacker.Mana / requiredMana;
                 difficulty += (int)Math.Ceiling((double)((requiredMana - attacker.Mana) / requiredMana) * (20 - difficulty)); // Too tired? You're going to fail.
                 battlefield.OutputController.Hint.Add(attacker.Name + " didn't have enough Mana and took a penalty to the attempt.");
             }
@@ -77,8 +88,6 @@ namespace RDVFSharp.FightingLogic.Actions
                 }
             }
 
-            //The total mobility bonus generated. This will be split bewteen attack and defense.
-            var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
 
             {
                 attacker.IsGrabbable = 0;

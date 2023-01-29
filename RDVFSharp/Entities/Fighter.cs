@@ -211,11 +211,6 @@ namespace RDVFSharp.Entities
                 IsFocused = (int)Math.Max(IsFocused - doubleX, 0);
                 if (IsFocused == 0) Battlefield.OutputController.Hint.Add(Name + " has lost their focus!");
             }
-
-            for (var i = 0; i < Battlefield.Fighters.Count; i++)
-            {
-                Battlefield.TurnOrder[i].FinalStand();
-            }
         }
 
         public void HitMana(int manaToRemove)
@@ -345,7 +340,7 @@ namespace RDVFSharp.Entities
 
         public void FinalStand()
         {
-            if (HP < HPDOT && HPBurn > 1)
+            if ((HP < HPDOT && HPBurn > 1) || (HP == HPDOT && HPBurn >1))
             {
                 Battlefield.OutputController.Hit.Add("This is " + Name + "'s final stand, do all the damage you can on this turn!");
             }
