@@ -1,0 +1,5 @@
+services:
+  rdvfsharp:
+    extra_hosts:
+      - mysqlhost:host-gateway
+      - rabbitmqhost:host-gateway

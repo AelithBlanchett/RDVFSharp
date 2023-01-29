@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  rdvfsharp:
+    image: ${DOCKER_REGISTRY-}rdvfsharp:${DOCKER_TAG-}
+    build:
+      context: .
+      dockerfile: RDVFSharp/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection
+      - Channels__0
+      - RabbitMQ__Hostname
+      - RabbitMQ__Port
+      - RabbitMQ__UserName
+      - RabbitMQ__Password
+      - ASPNETCORE_ENVIRONMENT
+    extra_hosts:
+      - mysqlhost:${Host_MySQL}
+      - rabbitmqhost:${Host_RabbitMQ}

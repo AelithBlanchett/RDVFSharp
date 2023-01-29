@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RDVFSharp": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
