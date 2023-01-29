@@ -38,12 +38,12 @@ namespace RDVFSharp.Commands
 
                 if (channel == Constants.RDVFArena)
                 {
-                    Plugin.FChatClient.SendMessageInChannel($"There is a fight occuring in the {Constants.RDVFArena}!", Constants.RDVFBar);
+                    Plugin.FChatClient.SendMessageInChannel($"A fight has started in the {Constants.RDVFArena}!", Constants.RDVFBar);
                 }
 
                 else if (channel == Constants.RDVFVenue)
                 {
-                    Plugin.FChatClient.SendMessageInChannel($"There is a fight occuring in the {Constants.RDVFVenue}!", Constants.RDVFBar);
+                    Plugin.FChatClient.SendMessageInChannel($"A fight has started in the {Constants.RDVFVenue}!", Constants.RDVFBar);
                 }
             }
         }
