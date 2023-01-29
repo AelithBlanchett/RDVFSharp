@@ -14,26 +14,30 @@ namespace RDVFSharp.Commands
         {
             var messages = new List<string>();
 
-
             var argsList = args.ToList();
-            var ChannelCode = argsList[0];
+            var channelCode = argsList.FirstOrDefault();
 
-            if (characterCalling == Constants.MayankAdmin || characterCalling == Constants.EliseAdmin || characterCalling == Constants.AelithAdmin)
-            {
-                try
-                {
-                    Plugin.FChatClient.LeaveChannel($"adh-{ChannelCode}");
-                    Plugin.RemoveHandledChannel($"adh-{ChannelCode}");
-                }
-                catch (Exception ex)
-                {
-                    messages.Add($"There was an error. Try again, and if it doesn't work, notify Elise Pariat by note with this as the message: {ex.Message}");
-                    return messages;
-                }
-            }
-            else
+            if (channelCode == null)
             {
                 messages.Add("There was an error processing the room ID. Make sure to use the right syntax.");
+                return messages;
+            }
+
+            if (!(characterCalling == Constants.MayankAdmin || characterCalling == Constants.EliseAdmin || characterCalling == Constants.AelithAdmin))
+            {
+                messages.Add("This command can only be used by admins.");
+                return messages;
+            }
+
+            try
+            {
+                Plugin.FChatClient.LeaveChannel($"adh-{channelCode}");
+                Plugin.RemoveHandledChannel($"adh-{channelCode}");
+            }
+            catch (Exception ex)
+            {
+                messages.Add($"There was an error. Try again, and if it doesn't work, notify Elise Pariat by note with this as the message: {ex.Message}");
+                return messages;
             }
 
             return messages;
@@ -41,18 +45,10 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string characterCalling, IEnumerable<string> args, string channel)
         {
-            if (characterCalling == Constants.MayankAdmin || characterCalling == Constants.EliseAdmin || characterCalling == Constants.AelithAdmin)
+            var result = await Execute(characterCalling, args);
+            foreach (var message in result)
             {
-                var result = await Execute(characterCalling, args);
-                foreach (var message in result)
-                {
-                    Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
-                }
-            }
-
-            else
-            {
-                Plugin.FChatClient.SendMessageInChannel("You cannot do that", channel);
+                Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
             }
         }
     }
