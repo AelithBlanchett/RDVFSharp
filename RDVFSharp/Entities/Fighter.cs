@@ -374,12 +374,12 @@ namespace RDVFSharp.Entities
                 Battlefield.OutputController.Hint.Add(Name + " has a temporary +" + IsAggressive + " bonus to accuracy and attack damage.");
             }
 
-            if (StaminaDamage > 1)
+            if (StaminaDamage > 1 && HPDOT > 0)
             {
                 Battlefield.OutputController.Hint.Add(Name + " is taking " + HPDOT + " damage to both Stamina and HP for " + (HPBurn - 1) + " turn(s).");
             }
 
-            if (ManaDamage > 1)
+            if (ManaDamage > 1 && HPDOT > 0)
             {
                 Battlefield.OutputController.Hint.Add(Name + " is taking " + HPDOT + " damage to both Mana and HP for " + (HPBurn - 1) + " turn(s).");
             }
