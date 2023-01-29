@@ -48,8 +48,14 @@ namespace RDVFSharp.FightingLogic.Actions
             {//Apply attack bonus from move/teleport then reset it.
                 attacker.IsEvading = 0;
             }
+
+
+            var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
+
             if (attacker.Mana < requiredMana)
             {   //Not enough stamina-- reduced effect
+                damage *= attacker.Mana / requiredMana;
+                totalBonus *= attacker.Mana / requiredMana;
                 difficulty += (int)Math.Ceiling((double)((requiredMana - attacker.Mana) / requiredMana) * (20 - difficulty)); // Too tired? You're going to fail.
                 battlefield.OutputController.Hint.Add(attacker.Name + " didn't have enough Mana and took a penalty to the attempt.");
             }
@@ -82,8 +88,6 @@ namespace RDVFSharp.FightingLogic.Actions
                 }
             }
 
-            //The total mobility bonus generated. This will be split bewteen attack and defense.
-            var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Spellpower;
 
             {
                 attacker.IsGrabbable = 0;
