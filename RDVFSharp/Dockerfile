@@ -20,4 +20,5 @@ RUN curl -sSfL https://github.com/open-telemetry/opentelemetry-dotnet-instrument
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=publish /app/publish/oteltracer .
 ENTRYPOINT ["dotnet", "RDVFSharp.dll"]
