@@ -18,14 +18,14 @@ namespace RDVFSharp
         public static async Task<int> Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-#if !DEBUG
+#if DEBUG
                 .MinimumLevel.Debug()
 #else
                 .MinimumLevel.Information()
 #endif
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Error)
                 .Enrich.FromLogContext()
-                .WriteTo.Async(c => c.File("Logs/logs.txt"))
                 .WriteTo.Async(c => c.Console())
                 .CreateLogger();
 
