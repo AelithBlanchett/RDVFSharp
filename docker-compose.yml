@@ -9,6 +9,8 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection
       - Channels__0
+      - Channels__1
+      - Channels__2
       - RabbitMQ__Hostname
       - RabbitMQ__Port
       - RabbitMQ__UserName
