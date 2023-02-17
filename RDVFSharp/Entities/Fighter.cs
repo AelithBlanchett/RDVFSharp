@@ -340,7 +340,7 @@ namespace RDVFSharp.Entities
 
         public void FinalStand()
         {
-            if ((HP < HPDOT && HPBurn > 1) || (HP == HPDOT && HPBurn >1))
+            if ((HP < HPDOT && HPBurn > 0) || (HP == HPDOT && HPBurn > 0))
             {
                 Battlefield.OutputController.Hit.Add("This is " + Name + "'s final stand, do all the damage you can on this turn!");
             }
