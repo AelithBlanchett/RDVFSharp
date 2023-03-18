@@ -52,5 +52,15 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.SendPrivateMessage($"{message}", characterCalling);
             }
         }
+        
+                public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        {
+            var result = await Execute(characterCalling, args);
+            foreach (var message in result)
+            {
+                Plugin.FChatClient.SendPrivateMessage(message, characterCalling);
+            }
+        }
+
     }
 }
