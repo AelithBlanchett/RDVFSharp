@@ -10,13 +10,13 @@ namespace RDVFSharp.Commands
             var attacker = Plugin.GetCurrentBattlefield(channel).GetActor();
             var target = Plugin.GetCurrentBattlefield(channel).GetTarget();
 
-            if (attacker.IsGrappling(target) || target.IsGrappling(attacker))
+            if (attacker.IsGrappling(target))
             {
                 await base.ExecuteCommand(character, args, channel);
             }
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("You can only use Throw if you are grappling.", channel);
+                Plugin.FChatClient.SendMessageInChannel("You can only use Throw if you are grappling the opponent.", channel);
             }
         }
     }
