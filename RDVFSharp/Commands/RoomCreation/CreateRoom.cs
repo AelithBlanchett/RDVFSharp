@@ -81,7 +81,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                messages.Add("The bot couldn't create the channel. Contact Elise Pariat.");
+                messages.Add("The bot couldn't create the channel. Please try again in 10-20 seconds.");
             }
 
             return messages;
