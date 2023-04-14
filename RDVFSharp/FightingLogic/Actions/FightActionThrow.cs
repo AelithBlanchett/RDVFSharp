@@ -15,7 +15,7 @@ namespace RDVFSharp.FightingLogic.Actions
             var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage *= 2;
             var requiredStam = 10;
-            var difficulty = 8; //Base difficulty, rolls greater than this amount will hit.
+            var difficulty = 4; //Base difficulty, rolls greater than this amount will hit.
             var others = battlefield.Fighters.Where(x => x.Name != attacker.Name).OrderBy(x => new Random().Next()).ToList();
             var othersdeadcheck = others.Where(x => x.IsDead == false).OrderBy(x => new Random().Next()).ToList();
             var sametarget = othersdeadcheck.Where(x => x.CurrentTarget == attacker.CurrentTarget).OrderBy(x => new Random().Next()).ToList();
@@ -24,7 +24,6 @@ namespace RDVFSharp.FightingLogic.Actions
             difficulty += 2 * sametarget.Count;
             if (attacker.IsRestrained) difficulty += Math.Max(0, 12 + (int)Math.Floor((double)(target.Strength - attacker.Strength) / 2)); //When grappled, up the difficulty based on the relative strength of the combatants. Minimum of +4 difficulty, maximum of +12.
             if (attacker.IsRestrained) difficulty -= attacker.IsEscaping; //Then reduce difficulty based on how much effort we've put into escaping so far.
-            if (target.IsRestrained) difficulty -= 4; //Lower the difficulty considerably if the target is restrained.
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
 
             if (target.IsEvading > 0)
@@ -102,14 +101,6 @@ namespace RDVFSharp.FightingLogic.Actions
                     battlefield.OutputController.Hit.Add(attacker.Name + " THREW " + target.Name + " and dealt bonus damage!");
                 }
                 //battlefield.OutputController.Hint.Add(target.Name + ", you are no longer grappled. You should make your post, but you should only emote being hit, do not try to perform any other actions.");
-            }
-            else if (target.IsGrappling(attacker))
-            {
-                attacker.IsRestrained = false;
-                target.IsRestraining = 0;
-                attacker.RemoveGrappler(target);
-                battlefield.OutputController.Hit.Add(attacker.Name + " found a hold and THREW " + target.Name + " off! " + attacker.Name + " is no longer at a penalty from being grappled!");
-                //battlefield.OutputController.Hint.Add(target.Name + ", you should make your post, but you should only emote being hit, do not try to perform any other actions.");
             }
             else
             {
