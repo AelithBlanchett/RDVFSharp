@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using RDVFSharp.Helpers;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Threading.Channels;
 
 namespace RDVFSharp.Commands
 {
@@ -13,7 +14,6 @@ namespace RDVFSharp.Commands
         public static Dictionary<string, DateTime> CharacterCooldowns = new Dictionary<string, DateTime>();
         public static List<ChannelInfo> CharacterRoomsIds = new List<ChannelInfo>();
         private static int _counter = 1;
-        private static int seconds = 0;
 
         public class ChannelInfo
         {
@@ -49,15 +49,20 @@ namespace RDVFSharp.Commands
                 CreatorId = characterCalling
             };
 
-
-
             Plugin.FChatClient.BotCreatedChannel += FChatClient_BotCreatedChannel;
             Plugin.FChatClient.CreateChannel(room.ChannelName);
-            await Task.Delay(4000);
-            while (seconds <= 15 && string.IsNullOrEmpty(_newChannelId))
+
+            var delay = 100; //in ms
+            var totalDelay = 0;
+
+            for (int i = 0; i < 100; i++)
             {
-                await Task.Delay(1000);
-                seconds++;
+                if (!string.IsNullOrEmpty(_newChannelId))
+                {
+                    break;
+                }
+                await Task.Delay(delay);
+                totalDelay += delay;
             }
 
             if (!string.IsNullOrEmpty(_newChannelId))
@@ -73,8 +78,6 @@ namespace RDVFSharp.Commands
                     $"Please invite whoever you want to by using the '/invite name' function within the room!\n" + 
                     $"Please read the room description once you enter!");
 
-                await Task.Delay(2000);
-
                 Plugin.FChatClient.InviteUserToChannel(characterCalling, room.Channel);
                 Plugin.FChatClient.ModUser(characterCalling, room.Channel);
                 Plugin.FChatClient.ChangeChannelDescription($"[b]To close this room, {room.CreatorId} must type '!closeroom {room.Id}', or please ask [user]Mayank[/user] to close the room for you![/b]\n" + 
@@ -84,21 +87,17 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.ModUser(Constants.VCBot, room.Channel);
                 Plugin.FChatClient.ChangeChannelOwner(Constants.MayankAdmin, room.Channel);
                 Plugin.AddHandledChannel(room.Channel);
-                seconds = 0;
             }
-            
-
             else
             {
-                messages.Add("The bot couldn't create the channel. Please try again in 10-20 seconds.");
-                seconds = 0;
+                messages.Add("The bot couldn't create the channel. Please try again later.");
             }
 
             return messages;
         }
 
 
-        public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        public override async Task ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
             var result = await Execute(characterCalling, args);
             foreach (var message in result)
