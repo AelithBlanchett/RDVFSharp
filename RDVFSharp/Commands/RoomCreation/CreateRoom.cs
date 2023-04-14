@@ -84,12 +84,14 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.ModUser(Constants.VCBot, room.Channel);
                 Plugin.FChatClient.ChangeChannelOwner(Constants.MayankAdmin, room.Channel);
                 Plugin.AddHandledChannel(room.Channel);
+                seconds = 0;
             }
             
 
             else
             {
                 messages.Add("The bot couldn't create the channel. Please try again in 10-20 seconds.");
+                seconds = 0;
             }
 
             return messages;
