@@ -4,16 +4,18 @@ using System.Linq;
 using System;
 using System.Threading.Tasks;
 using RDVFSharp.Helpers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace RDVFSharp.Commands
 {
     public class CreateRoom : BaseCommand<RDVFPlugin>
     {
         public static Dictionary<string, DateTime> CharacterCooldowns = new Dictionary<string, DateTime>();
-        public static List<PayPerViewChannelInfo> CharacterRoomsIds = new List<PayPerViewChannelInfo>();
+        public static List<ChannelInfo> CharacterRoomsIds = new List<ChannelInfo>();
         private static int _counter = 1;
+        private static int seconds = 0;
 
-        public class PayPerViewChannelInfo
+        public class ChannelInfo
         {
             public int Id { get; set; }
             public string Channel { get; set; }
@@ -37,14 +39,12 @@ namespace RDVFSharp.Commands
                 }
             }
 
-            int entryPrice = 0;
             
             var argsList = args.ToList();
             var NamedChannel = string.Join(" ", args);
-            var room = new PayPerViewChannelInfo()
+            var room = new ChannelInfo()
             {
                 CreationTime = DateTime.Now,
-                EntryPrice = entryPrice,
                 ChannelName = $"RDVF - {NamedChannel}",
                 CreatorId = characterCalling
             };
@@ -54,6 +54,12 @@ namespace RDVFSharp.Commands
             Plugin.FChatClient.BotCreatedChannel += FChatClient_BotCreatedChannel;
             Plugin.FChatClient.CreateChannel(room.ChannelName);
             await Task.Delay(4000);
+            while (seconds <= 15 && string.IsNullOrEmpty(_newChannelId))
+            {
+                await Task.Delay(1000);
+                seconds++;
+            }
+
             if (!string.IsNullOrEmpty(_newChannelId))
             {
                 room.Id = _counter;
@@ -79,6 +85,8 @@ namespace RDVFSharp.Commands
                 Plugin.FChatClient.ChangeChannelOwner(Constants.MayankAdmin, room.Channel);
                 Plugin.AddHandledChannel(room.Channel);
             }
+            
+
             else
             {
                 messages.Add("The bot couldn't create the channel. Please try again in 10-20 seconds.");
