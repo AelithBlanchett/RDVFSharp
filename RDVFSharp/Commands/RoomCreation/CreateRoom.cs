@@ -128,7 +128,7 @@ namespace RDVFSharp.Commands
 
         private string _newChannelId = "";
 
-        private void FChatClient_BotCreatedChannel(object sender, FChatSharpLib.Entities.Events.Server.InitialChannelData e)
+        private void FChatClient_BotCreatedChannel(object sender, FChatSharpLib.Entities.Events.Server.JoinChannel e)
         {
             _newChannelId = e.channel;
             Console.WriteLine("New channel created.");
