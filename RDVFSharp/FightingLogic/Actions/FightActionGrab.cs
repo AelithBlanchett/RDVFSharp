@@ -85,7 +85,7 @@ namespace RDVFSharp.FightingLogic.Actions
             //grab can only be used when you are not grappling the target, so we no longer need the old check.
             battlefield.OutputController.Hit.Add(attacker.Name + " GRABBED " + target.Name + "! ");
             battlefield.OutputController.Hint.Add(target.Name + " is being grappled! " + attacker.Name + " has reduced difficulty to use melee attacks and can also use the special attacks Throw and Submission.");
-            battlefield.OutputController.Hint.Add(target.Name + " can try to escape the grapple by using Move, Throw, or Teleport.");
+            battlefield.OutputController.Hint.Add(target.Name + " can try to escape the grapple by using Move or Teleport.");
             target.IsGrappledBy.Add(attacker.Name);
 
 
