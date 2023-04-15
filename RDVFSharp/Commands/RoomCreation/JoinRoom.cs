@@ -40,7 +40,7 @@ namespace RDVFSharp.Commands
             return messages;
         }
 
-        public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        public override async Task ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
             if (characterCalling == Constants.MayankAdmin || characterCalling == Constants.EliseAdmin || characterCalling == Constants.AelithAdmin)
             {
