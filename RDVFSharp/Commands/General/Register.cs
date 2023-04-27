@@ -70,7 +70,7 @@ namespace RDVFSharp.Commands
             }
             else
             {
-                throw new Exception(string.Join(", ", createdFighter.GetStatsErrors()));
+                Plugin.FChatClient.SendMessageInChannel($"There was an error registering your character. Please check that you have used 24 points: And that each stat is assigned a number from 0-10", channel);
             }
         }
 
