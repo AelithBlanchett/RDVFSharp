@@ -27,7 +27,7 @@ namespace RDVFSharp.Commands
             return messages;
         }
 
-        public async new void ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        public override async Task ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
             var result = await Execute(characterCalling, args);
             foreach (var message in result)
