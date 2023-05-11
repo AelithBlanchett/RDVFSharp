@@ -18,6 +18,7 @@ namespace RDVFSharp.FightingLogic
             "Skyscraper Roof",
             "Forest",
             "Cafe",
+            "Bathhouse",
             "Street road",
             "Alley",
             "Park",
