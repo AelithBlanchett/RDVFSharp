@@ -78,10 +78,5 @@ namespace RDVFSharp.Commands
         {
             await this.Execute(character, args, channel);
         }
-
-        public override async Task ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
-        {
-            await this.Execute(characterCalling, args);
-        }
     }
 }
