@@ -32,8 +32,6 @@ namespace RDVFSharp.FightingLogic.Actions
             }
 
             if (attacker.IsRestrained) difficulty += 4; //Up the difficulty considerably if the attacker is restrained.
-            if (target.IsRestrained) difficulty += 4; //Ranged attacks during grapple are hard.
-            if (target.IsRestrained) difficulty -= 2; //Lower the difficulty slightly if the target is restrained.
             if (attacker.IsFocused > 0) difficulty -= (int)Math.Ceiling((double)attacker.IsFocused / 10); //Lower the difficulty considerably if the attacker is focused
 
             if (attacker.IsFocused > 0) damage += (int)Math.Ceiling((double)attacker.IsFocused / 10); //Focus gives bonus damage.
