@@ -28,7 +28,7 @@ namespace RDVFSharp.FightingLogic.Actions
             {
                 difficulty += 4;
             }
-
+            if (attacker.IsRestrained) difficulty += 2; //Up the difficulty if the attacker is restrained.
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
 
             if (target.IsEvading > 0)
