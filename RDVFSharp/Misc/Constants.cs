@@ -54,7 +54,7 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!tackle[/b]: A low damage STR based attack that stuns your opponents on hit, giving you another turn, and moves you into grappling range." + "\n" +
                     "[b]!grab[/b]: A low damage STR based attack that grapples your opponent." + "\n" +
                     "[b]!throw[/b]: A high damage STR based attack that can only be used while grappling your opponent. Frees you from being grabbed, and does extra damage if you're not being grabbed. Ends the 'grabbed' status." + "\n" +
-                    "[b]!submission[/b]: A fixed damage finisher (30 damage when opponent is below 50% HP, and 15 damage if they're at or above 50%) that can only be used when grappling." + "\n" +
+                    "[b]!submission[/b]: A fixed damage finisher (30 damage) that can only be used when grappling." + "\n" +
                     "[b]!stab[/b]: A DEX based damage over time move that does damage to both HP and stamina." + "\n" +
                     "[b]!move[/b]: A DEX based move that provides a one time attack buff when not grabbed, or a defensive buff when escaping from a grapple." + "\n" +
                     "[b]!hex[/b]: A medium damage SPW based attack that does damage to both HP and mana." + "\n" +
