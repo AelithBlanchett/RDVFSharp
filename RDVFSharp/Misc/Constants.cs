@@ -64,9 +64,9 @@ Conditions: +18 Good human(-oids) profiles only [sub]no furries, sorry[/sub]
                     "[b]!curse[/b]: A single use (Even if it misses, it counts!) maximum damage magic attack. Note: Do not use this move if you have too many points in STR, as they are subtracted from the overall damage, rather than added to it!" + "\n" +
                     "[b]!drain[/b]: An SPW based damage over time move that does damage to both HP and mana." + "\n" +
                     "[b]!teleport[/b]: An SPW based move that provides a one time attack buff when not grabbed, or a defensive buff when escaping from a grapple." + "\n" +
-                    "[b]!rest[/b]: A move that regains stamina." + "\n" +
-                    "[b]!channel[/b]: A move that regains mana." + "\n" +
-                    "[b]!focus[/b]: A move that adds damage to ranged or spell attacks. Lowers as you take damage from your opponent: And can be stacked." + "\n" +
+                    "[b]!rest[/b]: A WIL based move that regains stamina." + "\n" +
+                    "[b]!channel[/b]: A WIL based move that regains mana." + "\n" +
+                    "[b]!focus[/b]: A WIL based move that adds damage to ranged or spell attacks. Lowers as you take damage from your opponent: And can be stacked." + "\n" +
                     "[b]!guard[/b]: A WIL based move that provides a defensive buff to your character. Only usable in fights with more than 2 fighters!";
     }
 }
