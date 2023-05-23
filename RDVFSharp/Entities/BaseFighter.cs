@@ -56,26 +56,26 @@ namespace RDVFSharp.Entities
             }
         }
 
-        public bool AreStatsValid
+        public string StatErrors
         {
             get
             {
-                return GetStatsErrors().Count == 0;
+                return GetStatsErrors(Strength, Dexterity, Resilience, Spellpower, Willpower).JoinAsString("\n");
             }
         }
 
-        public List<string> GetStatsErrors()
+        public static List<string> GetStatsErrors(int strength, int dexterity, int resilience, int spellpower, int willpower)
         {
             var errors = new List<string>();
             //Check stat points for conformity to rules
-            if (Strength > 10 || Strength < 0) errors.Add(Name + "'s Strength is outside the allowed range (0 to 10).");
-            if (Dexterity > 10 || Dexterity < 0) errors.Add(Name + "'s Dexterity is outside the allowed range (0 to 10).");
-            if (Resilience > 10 || Resilience < 0) errors.Add(Name + "'s Resilience is outside the allowed range (0 to 10).");
-            if (Spellpower > 10 || Spellpower < 0) errors.Add(Name + "'s Spellpower is outside the allowed range (0 to 10).");
-            if (Willpower > 10 || Willpower < 0) errors.Add(Name + "'s Willpower is outside the allowed range (0 to 10).");
+            if (strength > 10 || strength < 0) errors.Add("Strength is outside the allowed range (0 to 10).");
+            if (dexterity > 10 || dexterity < 0) errors.Add("Dexterity is outside the allowed range (0 to 10).");
+            if (resilience > 10 || resilience < 0) errors.Add("Resilience is outside the allowed range (0 to 10).");
+            if (spellpower > 10 || spellpower < 0) errors.Add("Spellpower is outside the allowed range (0 to 10).");
+            if (willpower > 10 || willpower < 0) errors.Add("Willpower is outside the allowed range (0 to 10).");
 
-            var stattotal = Strength + Dexterity + Resilience + Spellpower + Willpower;
-            if (stattotal != Constants.DefaultStatPoints && Constants.DefaultStatPoints != 0) errors.Add(Name + " has stats that are too high or too low (" + stattotal + " out of " + Constants.DefaultStatPoints + " points spent).");
+            var stattotal = strength + dexterity + resilience + spellpower + willpower;
+            if (stattotal != Constants.DefaultStatPoints && Constants.DefaultStatPoints != 0) errors.Add("You have stats that are too high or too low (" + stattotal + " out of " + Constants.DefaultStatPoints + " points spent).");
 
             return errors;
         }

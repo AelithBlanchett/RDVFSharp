@@ -35,14 +35,16 @@ namespace RDVFSharp.Commands
             {
                 return "Invalid arguments. All stats must be numbers. Example: !restat 5 8 8 1 2";
             }
-            fighter.Strength = statsArray[0];
-            fighter.Dexterity = statsArray[1];
-            fighter.Resilience = statsArray[2];
-            fighter.Spellpower = statsArray[3];
-            fighter.Willpower = statsArray[4];
 
-            if (fighter.AreStatsValid)
+            var statErrors = BaseFighter.GetStatsErrors(statsArray[0], statsArray[1], statsArray[2], statsArray[3], statsArray[4]).JoinAsString("\n");
+            if (string.IsNullOrEmpty(statErrors))
             {
+                fighter.Strength = statsArray[0];
+                fighter.Dexterity = statsArray[1];
+                fighter.Resilience = statsArray[2];
+                fighter.Spellpower = statsArray[3];
+                fighter.Willpower = statsArray[4];
+
                 Plugin.DataContext.Fighters.Update(fighter);
                 Plugin.DataContext.SaveChanges();
                 return $"Welcome among us, {character}!\n{fighter.Stats}";

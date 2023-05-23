@@ -120,9 +120,9 @@ namespace RDVFSharp.Entities
             KoValue = Constants.DefaultUnconsciousAt;
             DeathValue = Constants.DefaultDeadAt;
 
-            if (!BaseFighter.AreStatsValid)
+            if (!string.IsNullOrEmpty(BaseFighter.StatErrors))
             {
-                throw new Exception($"{Name} was not created due to invalid settings: {string.Join(", ", BaseFighter.GetStatsErrors())}");
+                throw new Exception($"{Name} was not created due to invalid settings: {BaseFighter.StatErrors}");
             }
 
             MaxHP = BaseFighter.BaseMaxHP;

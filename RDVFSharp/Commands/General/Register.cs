@@ -50,14 +50,12 @@ namespace RDVFSharp.Commands
                 Willpower = statsArray[4]
             };
 
-            if (createdFighter.AreStatsValid)
+            if (string.IsNullOrEmpty(createdFighter.StatErrors))
             {
                 Plugin.DataContext.Fighters.Add(createdFighter);
                 Plugin.DataContext.SaveChanges();
                 return $"Welcome among us, {character}!\n{createdFighter.Stats}";
             }
-
-            
             else
             {
                 return $"There was an error registering your character. Please check that you have used 24 points: And that each stat is assigned a number from 0-10";
