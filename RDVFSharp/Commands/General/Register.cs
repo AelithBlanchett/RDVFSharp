@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace RDVFSharp.Commands
@@ -15,13 +16,12 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Registers a player in the game.";
 
-        public async Task Execute(string character, IEnumerable<string> args, string channel = "")
+        public async Task<string> Execute(string character, IEnumerable<string> args, string channel = "")
         {
             var fighter = await Plugin.DataContext.Fighters.FindAsync(character);
             if (fighter != null)
             {
-                Plugin.FChatClient.SendMessageInChannel("You are already registered!", channel);
-                return;
+                return "You are already registered!";
             }
 
             int[] statsArray;
@@ -37,8 +37,7 @@ namespace RDVFSharp.Commands
             }
             catch (Exception)
             {
-                Plugin.FChatClient.SendMessageInChannel("Invalid arguments. All stats must be numbers. Example: !register 5 8 8 1 2", channel);
-                return;
+                return "Invalid arguments. All stats must be numbers. Example: !register 5 8 8 1 2";
             }
 
             var createdFighter = new BaseFighter()
@@ -55,28 +54,25 @@ namespace RDVFSharp.Commands
             {
                 Plugin.DataContext.Fighters.Add(createdFighter);
                 Plugin.DataContext.SaveChanges();
-
-                if (channel == "")
-                {
-                    Plugin.FChatClient.SendPrivateMessage($"Welcome among us, {character}!", character);
-                    Plugin.FChatClient.SendPrivateMessage(createdFighter.Stats, character);
-                }
-                else
-                {
-                    Plugin.FChatClient.SendMessageInChannel($"Welcome among us, {character}!", channel);
-                    Plugin.FChatClient.SendPrivateMessage(createdFighter.Stats, character);
-                }
-
+                return $"Welcome among us, {character}!\n{createdFighter.Stats}";
             }
+
+            
             else
             {
-                Plugin.FChatClient.SendMessageInChannel($"There was an error registering your character. Please check that you have used 24 points: And that each stat is assigned a number from 0-10", channel);
+                return $"There was an error registering your character. Please check that you have used 24 points: And that each stat is assigned a number from 0-10";
             }
         }
-
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            await this.Execute(character, args, channel);
+            var message = await this.Execute(character, args, channel);
+            Plugin.FChatClient.SendMessageInChannel(message, channel);
+        }
+
+        public override async Task ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
+        {
+            var message = await this.Execute(characterCalling, args);
+            Plugin.FChatClient.SendPrivateMessage(message, characterCalling);
         }
     }
 }
