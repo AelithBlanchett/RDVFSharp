@@ -15,7 +15,7 @@ namespace RDVFSharp.Commands
     {
         public override string Description => "Restats a player in the game.";
 
-        public async Task Execute(string character, IEnumerable<string> args, string channel = "")
+        public async Task<string> Execute(string character, IEnumerable<string> args, string channel = "")
         {
             BaseFighter fighter;
 
@@ -23,8 +23,7 @@ namespace RDVFSharp.Commands
 
             if (fighter == null)
             {
-                Plugin.FChatClient.SendMessageInChannel("You are not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2", channel);
-                return;
+                return "You are not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2";
             }
 
             int[] statsArray;
@@ -34,10 +33,8 @@ namespace RDVFSharp.Commands
             }
             catch (Exception)
             {
-                Plugin.FChatClient.SendMessageInChannel("Invalid arguments. All stats must be numbers. Example: !restat 5 8 8 1 2", channel);
-                return;
+                return "Invalid arguments. All stats must be numbers. Example: !restat 5 8 8 1 2";
             }
-
             fighter.Strength = statsArray[0];
             fighter.Dexterity = statsArray[1];
             fighter.Resilience = statsArray[2];
@@ -48,32 +45,24 @@ namespace RDVFSharp.Commands
             {
                 Plugin.DataContext.Fighters.Update(fighter);
                 Plugin.DataContext.SaveChanges();
-                if (channel == "")
-                {
-                    Plugin.FChatClient.SendPrivateMessage($"You've successfully moved points among your stats, {character}.", character);
-                    Plugin.FChatClient.SendPrivateMessage(fighter.Stats, character);
-                }
-                else
-                {
-                    Plugin.FChatClient.SendMessageInChannel($"You've successfully moved points among your stats, {character}.", channel);
-                    Plugin.FChatClient.SendPrivateMessage(fighter.Stats, character);
-                }
-
+                return $"Welcome among us, {character}!\n{fighter.Stats}";
             }
             else
             {
-                Plugin.FChatClient.SendMessageInChannel("Your stats are invalid. Please ensure they add up to 24 in total, and none exceed the range for each stat (0-10)", channel);
+                return "Your stats are invalid. Please ensure they add up to 24 in total, and none exceed the range for each stat (0-10)";
             }
         }
 
         public override async Task ExecuteCommand(string character, IEnumerable<string> args, string channel)
         {
-            await this.Execute(character, args, channel);
+            var message = await this.Execute(character, args, channel);
+            Plugin.FChatClient.SendMessageInChannel(message, channel);
         }
 
         public override async Task ExecutePrivateCommand(string characterCalling, IEnumerable<string> args)
         {
-            await this.Execute(characterCalling, args);
+            var message = await this.Execute(characterCalling, args);
+            Plugin.FChatClient.SendPrivateMessage(message, characterCalling);
         }
     }
 }

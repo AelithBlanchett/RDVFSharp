@@ -26,10 +26,9 @@ namespace RDVFSharp.FightingLogic.Actions
             difficulty += 2 * sametarget.Count;
             if (target.HP * 100 / target.MaxHP > 50) // If target is above 50% HP this is a bad move.
             {
-                damage /= 2;
-                difficulty *= 2;
+                difficulty += 4;
             }
-
+            if (attacker.IsRestrained) difficulty += 2; //Up the difficulty if the attacker is restrained.
             if (target.IsExposed > 0) difficulty -= 2; // If opponent left themself wide open after a failed strong attack, they'll be easier to hit.
 
             if (target.IsEvading > 0)
