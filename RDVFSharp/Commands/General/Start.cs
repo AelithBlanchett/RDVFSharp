@@ -35,18 +35,12 @@ namespace RDVFSharp.Commands
 
                 Plugin.FChatClient.SendMessageInChannel($"Let's get it on!", channel);
                 Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
-                if (string.IsNullOrEmpty(StageInputText.Trim()))
+                if (!string.IsNullOrEmpty(StageInputText.Trim()))
                 {
-                    Plugin.GetCurrentBattlefield(channel).InitialSetup();
+                    Plugin.GetCurrentBattlefield(channel).Stage = StageInputText;
                 }
-
-                else
-                {
-                    Plugin.GetCurrentBattlefield(channel).StageSelectedSetup();
-                    Plugin.GetCurrentBattlefield(channel).OutputController.Hit.Add("Game started!");
-                    Plugin.GetCurrentBattlefield(channel).OutputController.Hit.Add("FIGHTING STAGE: " + StageInputText + " - " + Plugin.GetCurrentBattlefield(channel).GetActor().Name + " goes first!");
-                    Plugin.GetCurrentBattlefield(channel).BroadcastStart();
-                }
+                Plugin.GetCurrentBattlefield(channel).InitialSetup();
+                
                 Ready.ReadyTimer.Stop();
 
                 if (channel == Constants.RDVFArena)
