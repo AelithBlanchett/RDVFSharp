@@ -18,12 +18,13 @@ namespace RDVFSharp.Commands
             "is looking to brawl!",
             "is raring for a fight!",
             "is hungry for blood!",
-            "\"Who's ass needs a pounding?\"",
+            "\"Whose ass needs a pounding?\"",
             "\"Anyone looking to throw down and see who ends up on top?\"",
             "is looking for a fight!",
             "\"Who needs to get pinned nice and hard?\"",
             "is here to kick some ass!",
-            "\"I've got two fists, and they've both got your name on em!\""
+            "\"I've got two fists, and they've both got your name on em!\"",
+            "is looking to scrap!"
             };
 
             return LookingMessage[Utils.GetRandomNumber(0, LookingMessage.Count - 1)];
