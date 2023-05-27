@@ -54,7 +54,8 @@ namespace RDVFSharp.Commands
             {
                 Plugin.DataContext.Fighters.Add(createdFighter);
                 Plugin.DataContext.SaveChanges();
-                return $"Welcome among us, {character}!\n{createdFighter.Stats}";
+                Plugin.FChatClient.SendPrivateMessage($"{createdFighter.Stats}", character);
+                return $"Welcome among us, {character}!";
             }
             else
             {
