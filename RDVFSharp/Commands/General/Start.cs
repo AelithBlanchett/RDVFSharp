@@ -42,9 +42,10 @@ namespace RDVFSharp.Commands
 
                 else
                 {
+                    Plugin.GetCurrentBattlefield(channel).StageSelectedSetup();
                     Plugin.GetCurrentBattlefield(channel).OutputController.Hit.Add("Game started!");
                     Plugin.GetCurrentBattlefield(channel).OutputController.Hit.Add("FIGHTING STAGE: " + StageInputText + " - " + Plugin.GetCurrentBattlefield(channel).GetActor().Name + " goes first!");
-                    Plugin.GetCurrentBattlefield(channel).StageSelectedSetup();
+                    Plugin.GetCurrentBattlefield(channel).BroadcastStart();
                 }
                 Ready.ReadyTimer.Stop();
 

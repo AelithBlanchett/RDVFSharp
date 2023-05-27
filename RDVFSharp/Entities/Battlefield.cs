@@ -65,8 +65,12 @@ namespace RDVFSharp
             OutputFighterStats(); // Creates the fighter stat blocks (STR/DEX/END/INT/WIL)
             OutputController.Info.Add("[url=http://www.f-list.net/c/rendezvous%20fight/]Visit this page for game information[/url]");
             IsInProgress = true;
+        }
+        public void BroadcastStart()
+        {
             OutputController.Broadcast(this);
         }
+
 #region Target Management
 
         public int CountOfFightersTargettingTarget(string targetName)
