@@ -31,9 +31,21 @@ namespace RDVFSharp.Commands
 
             if (!Plugin.GetCurrentBattlefield(channel).IsInProgress && Plugin.GetCurrentBattlefield(channel).Fighters.Count >= 2)
             {
+                var StageInputText = string.Join(" ", args);
+
                 Plugin.FChatClient.SendMessageInChannel($"Let's get it on!", channel);
                 Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
-                Plugin.GetCurrentBattlefield(channel).InitialSetup();
+                if (string.IsNullOrEmpty(StageInputText.Trim()))
+                {
+                    Plugin.GetCurrentBattlefield(channel).InitialSetup();
+                }
+
+                else
+                {
+                    Plugin.GetCurrentBattlefield(channel).OutputController.Hit.Add("Game started!");
+                    Plugin.GetCurrentBattlefield(channel).OutputController.Hit.Add("FIGHTING STAGE: " + StageInputText + " - " + Plugin.GetCurrentBattlefield(channel).GetActor().Name + " goes first!");
+                    Plugin.GetCurrentBattlefield(channel).StageSelectedSetup();
+                }
                 Ready.ReadyTimer.Stop();
 
                 if (channel == Constants.RDVFArena)
