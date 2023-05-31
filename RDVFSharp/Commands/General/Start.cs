@@ -33,7 +33,6 @@ namespace RDVFSharp.Commands
             {
                 var StageInputText = string.Join(" ", args);
 
-                Plugin.FChatClient.SendMessageInChannel($"Let's get it on!", channel);
                 Plugin.FChatClient.SendMessageInChannel(Constants.VCAdvertisement, channel);
                 if (!string.IsNullOrEmpty(StageInputText.Trim()))
                 {
