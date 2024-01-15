@@ -407,7 +407,7 @@ namespace RDVFSharp.Entities
                 //Battlefield.WindowController.Hit.Add(Name + " is permanently Knocked Out (or extremely dizzy, and can not resist)! Feel free to use this opportunity! " + Name + " must not resist! Continue beating them to get a fatality suggestion.");
             }
 
-            if (HP <= DeathValue && IsDead == false)
+            if (CurrentTarget.HP <= DeathValue && CurrentTarget.IsDead == false)
             {
                 IsDead = true;
                 IsGrabbable = 0;
