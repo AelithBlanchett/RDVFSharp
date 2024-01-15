@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using RDVFSharp.Commands;
-using RDVFSharp.Entities;
+﻿using RDVFSharp.Entities;
 using RDVFSharp.FightingLogic;
 using System;
 using System.Collections.Generic;
@@ -110,116 +108,56 @@ namespace RDVFSharp
 
             return true;
         }
+
         public void TakeAction(string actionMade)
         {
-            if (actionMade != "Tackle")
+            var action = actionMade;
+            var actor = GetActor();
+            var roll = Utils.RollDice(20);
+            while (actor.LastRolls.IndexOf(roll) != -1)
             {
-                var action = actionMade;
-                var actor = GetActor();
-                var roll = Utils.RollDice(20);
-                while (actor.LastRolls.IndexOf(roll) != -1)
-                {
-                    roll = Utils.RollDice(20);
-                }
-                actor.LastRolls.Add(roll);
-                if (actor.LastRolls.Count > 5)
-                {
-                    actor.LastRolls.RemoveAt(0);
-                }
-                Console.WriteLine(actor.LastRolls);
-                var luck = 0; //Actor's average roll of the fight.
-
-                OutputController.Action.Add(action);
-
-                // Update tracked sum of all rolls and number of rolls the actor has made. Then calculate average value of actor's rolls in this fight.
-                actor.RollTotal += roll;
-                actor.RollsMade += 1;
-                if (actor.RollsMade > 0)
-                {
-                    luck = (int)Math.Round((double)actor.RollTotal / actor.RollsMade);
-                }
-
-                var fightAction = FightActionFactory.Create(action, Fighters.Count > 2);
-                fightAction.Execute(roll, this, actor, this.GetFighterTarget(actor.Name));
-
-                OutputController.Info.Add("Raw Dice Roll: " + roll);
-                OutputController.Info.Add(actor.Name + "'s Average Dice Roll: " + luck);
-                if (roll == 20) OutputController.Info.Add("\n" + "[eicon]d20crit[/eicon]" + "\n");//Test to see if this works. Might add more graphics in the future.
-
-                TurnUpKeep(); //End of turn upkeep (Stamina regen, check for being stunned/knocked out, etc.)
-                OutputFighterStatuses(); // Creates the fighter status blocks (HP/Mana/Stamina)
-                                         //Battlefield.outputFighterStats();
-
-                if ((GetActor().IsGrabbable == GetTarget().IsGrabbable) && (GetActor().IsGrabbable > 0) && (GetActor().IsGrabbable < 20))
-                {
-                    OutputController.Hint.Add(GetActor().Name + " and " + GetTarget().Name + " are in grappling range.");
-                }
-
-                OutputController.Broadcast(this); //Tells the window controller to format and dump all the queued up messages to the results screen.
+                roll = Utils.RollDice(20);
             }
-            else
+            actor.LastRolls.Add(roll);
+            if (actor.LastRolls.Count > 5)
             {
-                var action = actionMade;
-                var actor = GetActor();
-                var roll = Utils.RollDice(20);
-                while (actor.LastRolls.IndexOf(roll) != -1)
-                {
-                    roll = Utils.RollDice(20);
-                }
-                actor.LastRolls.Add(roll);
-                if (actor.LastRolls.Count > 5)
-                {
-                    actor.LastRolls.RemoveAt(0);
-                }
-                Console.WriteLine(actor.LastRolls);
-                var luck = 0; //Actor's average roll of the fight.
-
-                OutputController.Action.Add(action);
-
-                // Update tracked sum of all rolls and number of rolls the actor has made. Then calculate average value of actor's rolls in this fight.
-                actor.RollTotal += roll;
-                actor.RollsMade += 1;
-                if (actor.RollsMade > 0)
-                {
-                    luck = (int)Math.Round((double)actor.RollTotal / actor.RollsMade);
-                }
-
-                var fightAction = FightActionFactory.Create(action);
-                fightAction.Execute(roll, this, actor, this.GetFighterTarget(actor.Name));
-
-                OutputController.Info.Add("Raw Dice Roll: " + roll);
-                OutputController.Info.Add(actor.Name + "'s Average Dice Roll: " + luck);
-                if (roll == 20) OutputController.Info.Add("\n" + "[eicon]d20crit[/eicon]" + "\n");//Test to see if this works. Might add more graphics in the future.
-
-                OutputFighterStatuses(); // Creates the fighter status blocks (HP/Mana/Stamina)
-                                         //Battlefield.outputFighterStats();
-
-                if ((GetActor().IsGrabbable == GetTarget().IsGrabbable) && (GetActor().IsGrabbable > 0) && (GetActor().IsGrabbable < 20))
-                {
-                    OutputController.Hint.Add(GetActor().Name + " and " + GetTarget().Name + " are in grappling range.");
-                }
-
-                OutputController.Broadcast(this); //Tells the window controller to format and dump all the queued up messages to the results screen.
+                actor.LastRolls.RemoveAt(0);
             }
+            Console.WriteLine(actor.LastRolls);
+            var luck = 0; //Actor's average roll of the fight.
+
+            OutputController.Action.Add(action);
+
+            // Update tracked sum of all rolls and number of rolls the actor has made. Then calculate average value of actor's rolls in this fight.
+            actor.RollTotal += roll;
+            actor.RollsMade += 1;
+            if (actor.RollsMade > 0)
+            {
+                luck = (int)Math.Round((double)actor.RollTotal / actor.RollsMade);
+            }
+
+            var fightAction = FightActionFactory.Create(action, Fighters.Count > 2);
+            fightAction.Execute(roll, this, actor, this.GetFighterTarget(actor.Name));
+
+            OutputController.Info.Add("Raw Dice Roll: " + roll);
+            OutputController.Info.Add(actor.Name + "'s Average Dice Roll: " + luck);
+            if (roll == 20) OutputController.Info.Add("\n" + "[eicon]d20crit[/eicon]" + "\n");//Test to see if this works. Might add more graphics in the future.
+
+            TurnUpKeep(); //End of turn upkeep (Stamina regen, check for being stunned/knocked out, etc.)
+            OutputFighterStatuses(); // Creates the fighter status blocks (HP/Mana/Stamina)
+                                     //Battlefield.outputFighterStats();
+
+            if ((GetActor().IsGrabbable == GetTarget().IsGrabbable) && (GetActor().IsGrabbable > 0) && (GetActor().IsGrabbable < 20))
+            {
+                OutputController.Hint.Add(GetActor().Name + " and " + GetTarget().Name + " are in grappling range.");
+            }
+
+            OutputController.Broadcast(this); //Tells the window controller to format and dump all the queued up messages to the results screen.
         }
 
         #region Turn-based logic
         public void TurnUpKeep()
         {
-            if (TurnOrder[currentFighter].HPBurn > 0 && TurnOrder[currentFighter].IsStunned < 2 && TurnOrder[currentFighter].IsDazed == false)
-            {
-                TurnOrder[currentFighter].HPBurn--;
-            }
-
-            if (TurnOrder[currentFighter].ManaDamage > 0 && TurnOrder[currentFighter].IsStunned < 2 && TurnOrder[currentFighter].IsDazed == false)
-            {
-                TurnOrder[currentFighter].ManaDamage--;
-            }
-
-            if (TurnOrder[currentFighter].StaminaDamage > 0 && TurnOrder[currentFighter].IsStunned < 2 && TurnOrder[currentFighter].IsDazed == false)
-            {
-                TurnOrder[currentFighter].StaminaDamage--;
-            }
             for (var i = 0; i < Fighters.Count; i++)
             {
                 TurnOrder[i].UpdateCondition();
@@ -323,7 +261,20 @@ namespace RDVFSharp
         {
             currentFighter = (currentFighter == TurnOrder.Count - 1) ? 0 : currentFighter + 1;
 
+            if (TurnOrder[currentFighter].HPBurn > 0 && TurnOrder[currentFighter].IsStunned < 2 && TurnOrder[currentFighter].IsDazed == false)
+            {
+                TurnOrder[currentFighter].HPBurn--;
+            }
 
+            if (TurnOrder[currentFighter].ManaDamage > 0 && TurnOrder[currentFighter].IsStunned < 2 && TurnOrder[currentFighter].IsDazed == false)
+            {
+                TurnOrder[currentFighter].ManaDamage--;
+            }
+
+            if (TurnOrder[currentFighter].StaminaDamage > 0 && TurnOrder[currentFighter].IsStunned < 2 && TurnOrder[currentFighter].IsDazed == false)
+            {
+                TurnOrder[currentFighter].StaminaDamage--;
+            }
 
             if (TurnOrder[currentFighter].IsExposed > 0)
             {

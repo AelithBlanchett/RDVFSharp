@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 
 namespace RDVFSharp.FightingLogic.Actions
 {
@@ -65,7 +64,6 @@ namespace RDVFSharp.FightingLogic.Actions
                     target.IsDazed = true;
                     target.Fumbled = false;
                 }
-                battlefield.TurnUpKeep();
                 return false; //Failed attack, if we ever need to check that.
             }
 
@@ -81,24 +79,10 @@ namespace RDVFSharp.FightingLogic.Actions
 
             damage = Math.Max(damage, 0);
             if (damage > 0) target.HitHp(damage); //This is to prevent the game displayin that the attacker did 0 damage, which is the normal case.
+            if (target.IsDazed) target.Fumbled = true;
+            battlefield.Fighters.ForEach(f => f.IsDazed = (f != attacker)); // Set all as dazed
+            if (target.IsDisoriented > 0) target.IsDisoriented += 2;
             if (target.IsExposed > 0) target.IsExposed = 0;
-            if (attacker.StaminaDamage > 1 && attacker.HPDOT > 0)
-            {
-                attacker.HitStamina(attacker.StaminaDOT);
-                attacker.HitHp(attacker.HPDOT);
-                attacker.HPBurn--;
-                attacker.StaminaDamage--;
-            }
-
-            if (attacker.ManaDamage > 1 && attacker.HPDOT > 0)
-            {
-                attacker.HitMana(attacker.ManaDOT);
-                attacker.HitHp(attacker.HPDOT);
-                attacker.HPBurn--;
-                attacker.ManaDamage--;
-            }
-
-
 
             if (attacker.IsGrabbable == 0 && target.IsGrabbable == 0)
             {
@@ -131,7 +115,7 @@ namespace RDVFSharp.FightingLogic.Actions
             {
                 attacker.IsGrabbable += 2;
             }
-            attacker.UpdateCondition();
+
             return true; //Successful attack, if we ever need to check that.
         }
     }
