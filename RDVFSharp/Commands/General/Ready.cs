@@ -46,6 +46,10 @@ namespace RDVFSharp.Commands
                     Plugin.FChatClient.SendMessageInChannel("You are not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2", channel);
                     return;
                 }
+                else if ((fighter.Name == Constants.LeonDuChain) || (fighter.Name == Constants.CantTouchThis))
+                {
+                    Plugin.FChatClient.SendMessageInChannel("You have been banned: And as such, are no longer able to participate in fights with this bot.", channel);
+                }
 
                 var teamInputText = string.Join(" ", args);
 
