@@ -9,6 +9,8 @@ namespace RDVFSharp
         public const string MayankAdmin = "Mayank";
         public const string EliseAdmin = "Elise Pariat";
         public const string AelithAdmin = "Aelith Blanchette";
+        public const string LeonDuChain = "Leon DuChain";
+        public const string CantTouchThis = "Cant Touch This";
         public const string VCBot = "VelvetCuff";
         public const string RDVFBar = "adh-a823a4e998a2b3d31794";
         public const string RDVFArena = "adh-b3c88050e9c580631c70";

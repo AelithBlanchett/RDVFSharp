@@ -55,7 +55,8 @@ namespace RDVFSharp.FightingLogic.Actions
             if (attacker.Stamina < requiredStam)
             {   //Not enough stamina-- reduced effect
                 critCheck = false;
-                damage *= attacker.Stamina / requiredStam;
+                damage /= 2;
+                attacker.HitHp(requiredStam - attacker.Stamina);
                 difficulty += (int)Math.Ceiling((double)((requiredStam - attacker.Stamina) / requiredStam) * (20 - difficulty)); // Too tired? You're likely to miss.
                 battlefield.OutputController.Hint.Add(attacker.Name + " did not have enough stamina, and took penalties to the attack.");
             }
