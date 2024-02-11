@@ -36,10 +36,14 @@ namespace RDVFSharp.FightingLogic.Actions
             {//Apply attack bonus from move/teleport then reset it.
                 attacker.IsEvading = 0;
             }
+
+            var critCheck = true;
+
             if (attacker.Mana < requiredMana)
             {   //Not enough stamina-- reduced effect
                 difficulty += (int)Math.Ceiling((double)((requiredMana - attacker.Mana) / requiredMana) * (20 - difficulty)); // Too tired? You're going to fail.
                 battlefield.OutputController.Hint.Add(attacker.Name + " didn't have enough Mana and took a penalty to the attempt.");
+                var criCheck = false;
             }
 
             attacker.HitMana(requiredMana); //Now that mana has been checked, reduce the attacker's mana by the appopriate amount.
@@ -67,7 +71,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 return false; //Failed attack, if we ever need to check that.
             }
 
-            if (roll >= attackTable.crit)
+            if (roll >= attackTable.crit && critCheck == true)
             { //Critical Hit-- increased damage/effect, typically 3x damage if there are no other bonuses.
                 battlefield.OutputController.Hit.Add(" CRITICAL SUCCESS! ");
                 battlefield.OutputController.Hint.Add(attacker.Name + " can perform another action!");

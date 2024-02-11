@@ -67,9 +67,10 @@ namespace RDVFSharp.FightingLogic.Actions
             if (attacker.Mana < requiredMana)
             {   //Not enough mana-- reduced effect
                 critCheck = false;
-                damage *= attacker.Mana / requiredMana;
-                difficulty += (int)Math.Ceiling((double)((requiredMana - attacker.Mana) / requiredMana) * (20 - difficulty)); // Too tired? You're likely to have your spell fizzle.
-                battlefield.OutputController.Hint.Add(attacker.Name + " did not have enough mana, and took penalties to the attack.");
+                damage /= 2;
+                attacker.HitHp(requiredMana - attacker.Mana);
+                difficulty += (int)Math.Ceiling((double)((requiredMana - attacker.Mana) / requiredMana) * (20 - difficulty)); // Too tired? You're likely to miss.
+                battlefield.OutputController.Hint.Add(attacker.Name + " did not have enough stamina, and took penalties to the attack.");
             }
 
             attacker.HitMana(requiredMana); //Now that required mana has been checked, reduce the attacker's mana by the appopriate amount.
@@ -84,7 +85,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 return false; //Failed attack, if we ever need to check that.
             }
 
-            if (roll >= attackTable.crit)
+            if (roll >= attackTable.crit && critCheck == true)
             { //Critical Hit-- increased damage/effect, typically 3x damage if there are no other bonuses.
                 battlefield.OutputController.Hit.Add(" CRITICAL HIT! ");
                 battlefield.OutputController.Hint.Add(attacker.Name + " landed a particularly vicious blow!");

@@ -49,6 +49,7 @@ namespace RDVFSharp.Commands
                 else if ((fighter.Name == Constants.LeonDuChain) || (fighter.Name == Constants.CantTouchThis))
                 {
                     Plugin.FChatClient.SendMessageInChannel("You have been banned: And as such, are no longer able to participate in fights with this bot.", channel);
+                    return;
                 }
 
                 var teamInputText = string.Join(" ", args);

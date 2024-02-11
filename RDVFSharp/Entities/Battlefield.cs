@@ -158,12 +158,12 @@ namespace RDVFSharp
         #region Turn-based logic
         public void TurnUpKeep()
         {
+            TurnOrder[currentFighter].Regen(); 
+            
             for (var i = 0; i < Fighters.Count; i++)
             {
                 TurnOrder[i].UpdateCondition();
             }
-
-            TurnOrder[currentFighter].Regen();
 
             if (CheckIfFightIsOver())
             {

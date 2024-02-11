@@ -12,7 +12,7 @@ namespace RDVFSharp.FightingLogic.Actions
         {
             var attacker = initiatingActor;
             var target = battlefield.GetTarget();
-            var requiredStamina = 10;
+            var requiredStam = 10;
             var damage = 0;
             var difficulty = 8; //Base difficulty, rolls greater than this amount will hit.
             var others = battlefield.Fighters.Where(x => x.Name != attacker.Name).OrderBy(x => new Random().Next()).ToList();
@@ -51,16 +51,18 @@ namespace RDVFSharp.FightingLogic.Actions
             }
 
             var totalBonus = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Dexterity;
-
-            if (attacker.Stamina < requiredStamina)
+            var critCheck = true;
+            if (attacker.Stamina < requiredStam)
             {   //Not enough stamina-- reduced effect
-                damage *= attacker.Stamina / requiredStamina;
-                totalBonus *= attacker.Stamina / requiredStamina;
-                difficulty += (int)Math.Ceiling((double)((requiredStamina - attacker.Stamina) / requiredStamina) * (20 - difficulty)); // Too tired? You're going to fail.
-                battlefield.OutputController.Hint.Add(attacker.Name + " didn't have enough Stamina and took a penalty to the attempt.");
+                critCheck = false;
+                damage /= 2;
+                totalBonus /= 2;
+                attacker.HitHp(requiredStam - attacker.Stamina);
+                difficulty += (int)Math.Ceiling((double)((requiredStam - attacker.Stamina) / requiredStam) * (20 - difficulty)); // Too tired? You're likely to miss.
+                battlefield.OutputController.Hint.Add(attacker.Name + " did not have enough stamina, and took penalties to the attack.");
             }
 
-            attacker.HitStamina(requiredStamina); //Now that mana has been checked, reduce the attacker's mana by the appopriate amount.
+            attacker.HitStamina(requiredStam); //Now that mana has been checked, reduce the attacker's mana by the appopriate amount.
 
             var attackTable = attacker.BuildActionTable(difficulty, target.Dexterity, attacker.Dexterity, target.Stamina, target.StaminaCap);
             //If target can dodge the atatcker has to roll higher than the dodge value. Otherwise they need to roll higher than the miss value. We display the relevant value in the output.
@@ -73,7 +75,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 return false; //Failed attack, if we ever need to check that.
             }
 
-            if (roll >= attackTable.crit)
+            if (roll >= attackTable.crit && critCheck == true)
             { //Critical Hit-- increased damage/effect.
                 battlefield.OutputController.Hit.Add(" CRITICAL HIT! ");
                 battlefield.OutputController.Hint.Add(attacker.Name + " landed a particularly vicious blow!");

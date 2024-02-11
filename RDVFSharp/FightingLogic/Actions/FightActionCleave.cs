@@ -15,7 +15,7 @@ namespace RDVFSharp.FightingLogic.Actions
             var damage = Utils.RollDice(new List<int>() { 5, 5 }) - 1 + attacker.Strength;
             damage *= 2;
             damage += Math.Min(attacker.Strength, attacker.Spellpower);
-            var requiredStamina = 25;
+            var requiredStam = 25;
             var difficulty = 10; //Base difficulty, rolls greater than this amount will hit.
             var others = battlefield.Fighters.Where(x => x.Name != attacker.Name).OrderBy(x => new Random().Next()).ToList();
             var othersdeadcheck = others.Where(x => x.IsDead == false).OrderBy(x => new Random().Next()).ToList();
@@ -64,15 +64,16 @@ namespace RDVFSharp.FightingLogic.Actions
             }
 
             var critCheck = true;
-            if (attacker.Stamina < requiredStamina)
-            {   //Not enough Stamina-- reduced effect
+            if (attacker.Stamina < requiredStam)
+            {   //Not enough stamina-- reduced effect
                 critCheck = false;
-                damage *= attacker.Stamina / requiredStamina;
-                difficulty += (int)Math.Ceiling((double)((requiredStamina - attacker.Stamina) / requiredStamina) * (20 - difficulty)); // Too tired? You're likely to have your spell fizzle.
-                battlefield.OutputController.Hint.Add(attacker.Name + " did not have enough Stamina, and took penalties to the attack.");
+                damage /= 2;
+                attacker.HitHp(requiredStam - attacker.Stamina);
+                difficulty += (int)Math.Ceiling((double)((requiredStam - attacker.Stamina) / requiredStam) * (20 - difficulty)); // Too tired? You're likely to miss.
+                battlefield.OutputController.Hint.Add(attacker.Name + " did not have enough stamina, and took penalties to the attack.");
             }
 
-            attacker.HitStamina(requiredStamina); //Now that required Stamina has been checked, reduce the attacker's Stamina by the appopriate amount.
+            attacker.HitStamina(requiredStam); //Now that required Stamina has been checked, reduce the attacker's Stamina by the appopriate amount.
 
             var attackTable = attacker.BuildActionTable(difficulty, target.Dexterity, attacker.Dexterity, target.Stamina, target.StaminaCap);
             //If target can dodge the atatcker has to roll higher than the dodge value. Otherwise they need to roll higher than the miss value. We display the relevant value in the output.
@@ -84,7 +85,7 @@ namespace RDVFSharp.FightingLogic.Actions
                 return false; //Failed attack, if we ever need to check that.
             }
 
-            if (roll >= attackTable.crit)
+            if (roll >= attackTable.crit && critCheck == true)
             { //Critical Hit-- increased damage/effect, typically 3x damage if there are no other bonuses.
                 battlefield.OutputController.Hit.Add(" CRITICAL HIT! ");
                 battlefield.OutputController.Hint.Add(attacker.Name + " landed a particularly vicious blow!");
