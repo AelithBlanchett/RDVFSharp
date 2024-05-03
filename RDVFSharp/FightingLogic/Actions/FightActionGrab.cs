@@ -95,6 +95,8 @@ namespace RDVFSharp.FightingLogic.Actions
             attacker.IsGrabbable = 40;
             target.IsGrabbable = 40;
             attacker.IsRestraining = 2;
+            target.IsAggressive = 0;
+            target.IsEvading = 0;
             target.IsRestrained = true;
             return true; //Successful attack, if we ever need to check that.
         }
