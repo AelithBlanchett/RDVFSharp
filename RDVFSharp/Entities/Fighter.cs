@@ -427,13 +427,13 @@ namespace RDVFSharp.Entities
                 SetTarget = 0;
                 HPDOT = 0;
                 HPBurn = 0;
-                foreach (var enemies in this.Battlefield.TurnOrder.Where(x => x.TeamColor != this.TeamColor && x.CurrentTarget == this))
-                {
-                    enemies.IsEscaping = 0;
-                    enemies.IsRestrained = false;
-                    enemies.IsGrappledBy = new List<string>();
-                }
                 
+                foreach (var target in this.Battlefield.TurnOrder.Where(x => x.TeamColor != this.TeamColor && this.CurrentTarget == x))
+                {
+                    target.IsEscaping = 0;
+                    target.IsRestrained = false;
+                    target.IsGrappledBy = new List<string>();
+                }
                 Battlefield.OutputController.Hit.Add(Name + " has been knocked out!");
             }
         }
