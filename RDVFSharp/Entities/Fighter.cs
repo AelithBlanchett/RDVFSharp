@@ -409,6 +409,7 @@ namespace RDVFSharp.Entities
 
             if (HP <= DeathValue && IsDead == false)
             {
+
                 IsDead = true;
                 IsGrabbable = 0;
                 IsStunned = 2147483647;
@@ -430,6 +431,7 @@ namespace RDVFSharp.Entities
                 {
                     enemies.IsEscaping = 0;
                     enemies.IsRestrained = false;
+                    enemies.IsGrappledBy = new List<string>();
                 }
                 
                 Battlefield.OutputController.Hit.Add(Name + " has been knocked out!");
