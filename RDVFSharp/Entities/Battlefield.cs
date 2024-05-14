@@ -179,7 +179,7 @@ namespace RDVFSharp
 
         public bool CheckIfFightIsOver()
         {
-            if (RemainingTeams == 1)
+            if (RemainingTeams == 1 || RemainingTeams == 0)
             {
                 OutputController.Hit.Add("The fight is over! CLAIM YOUR SPOILS and VICTORY and FINISH YOUR OPPONENT!");
                 OutputController.Special.Add("FATALITY SUGGESTION: " + FatalitySelect.SelectRandom());
