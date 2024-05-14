@@ -23,9 +23,7 @@ namespace RDVFSharp.Commands
             }
 
 
-            var argsList = args.ToList();
-
-            var characterName = string.Join(' ', argsList.Skip(0));
+            var characterName = string.Join(' ', args);
 
 
             var fighter = await Plugin.DataContext.Fighters.FindAsync(characterName);
