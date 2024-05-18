@@ -17,7 +17,7 @@ namespace RDVFSharp.Commands
 
         public override async Task ExecuteCommand(string character ,IEnumerable<string> args, string channel)
         {
-            if(!Plugin.FChatClient.IsUserAdmin(character, channel))
+            if (!(character == Constants.MayankAdmin || character == Constants.EliseAdmin || character == Constants.AelithAdmin))
             {
                 Plugin.FChatClient.SendMessageInChannel("You do not have access to this command", channel);
             }
@@ -27,6 +27,12 @@ namespace RDVFSharp.Commands
 
 
             var fighter = await Plugin.DataContext.Fighters.FindAsync(characterName);
+
+            if (fighter == null)
+            {
+                Plugin.FChatClient.SendMessageInChannel("This character is not registered. Please register with the bot first using the !register command. Example: !register 5 8 8 1 2", channel);
+                return;
+            }
 
             Plugin.FChatClient.SendPrivateMessage(fighter.Stats, character);
         }
