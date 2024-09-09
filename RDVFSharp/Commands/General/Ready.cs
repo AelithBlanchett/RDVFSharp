@@ -57,7 +57,30 @@ namespace RDVFSharp.Commands
                 var teamColor = "";
                 if (string.IsNullOrEmpty(teamInputText.Trim()))
                 {
-                    teamColor = Plugin.GetCurrentBattlefield(channel).Fighters.Count % 2 == 0 ? "red" : "blue";
+                    if (Plugin.GetCurrentBattlefield(channel).TeamRed.Count == 0)
+                    {
+                        teamColor = "red";
+                    }
+
+                    else if (Plugin.GetCurrentBattlefield(channel).TeamBlue.Count == 0)
+                    {
+                        teamColor = "blue";
+                    }
+
+                    else if (Plugin.GetCurrentBattlefield(channel).TeamYellow.Count == 0)
+                    {
+                        teamColor = "yellow";
+                    }
+
+                    else if (Plugin.GetCurrentBattlefield(channel).TeamPurple.Count == 0)
+                    {
+                        teamColor = "purple";
+                    }
+                    
+                    else
+                    {
+                        teamColor = Plugin.GetCurrentBattlefield(channel).Fighters.Count % 2 == 0 ? "red" : "blue";
+                    }
                 }
                else if (teamInputText.ToLower().Contains("red"))
                 {
@@ -85,6 +108,7 @@ namespace RDVFSharp.Commands
                 {
                     Plugin.GetCurrentBattlefield(channel).AddFighter(fighter, teamColor);
                     Plugin.FChatClient.SendMessageInChannel($"{fighter.Name} joined the fight for team [color={teamColor}]{teamColor.ToUpper()}[/color]!", channel);
+                    Plugin.GetCurrentBattlefield(channel).JoinTeams();
                     ReadyTimer.Start();
                     ReadyTimer.Elapsed += Readyover;
                     ReadyTimer.AutoReset = false;

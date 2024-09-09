@@ -28,7 +28,7 @@ namespace RDVFSharp.Commands
                 }
                 else
                 {
-                    messages.Add("There was an error deleting the room with that room ID. This room doesn't exist.");
+                    messages.Add("There was an error deleting the room with that room ID. Either this room doesn't exist, or you did not create this room.");
                 }
             }
             else

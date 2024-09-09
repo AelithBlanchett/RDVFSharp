@@ -42,7 +42,6 @@ namespace RDVFSharp
 
         public void InitialSetup()
         {
-            JoinTeams();
             PickInitialActor();
             AssignTargets(true);
             SetTurnOrder();
