@@ -333,7 +333,8 @@ namespace RDVFSharp.Entities
 
             if (IsRestrained) Battlefield.OutputController.Hint.Add(Name + " is Grappled.");
             if (IsFocused > 0) Battlefield.OutputController.Hint.Add(Name + " is Focused (" + IsFocused + " points). Focus is reduced by taking damage.");
-            if (IsFocused > 0) Battlefield.OutputController.Hint.Add(Name + "'s Ranged and Spell attacks have a +" + Math.Ceiling((double)IsFocused / 10) + " bonus to attack and damage because of the Focus.");
+            if (IsFocused > 0 && IsRestrained) Battlefield.OutputController.Hint.Add(Name + "'s focus points have no effect until the grab is escaped!");
+            if (IsFocused > 0 && !IsRestrained) Battlefield.OutputController.Hint.Add(Name + "'s Ranged and Spell attacks have a +" + Math.Ceiling((double)IsFocused / 10) + " bonus to attack and damage because of the Focus.");
             Battlefield.DisplayGrabbed = !Battlefield.DisplayGrabbed; //only output it on every two turns
             return message;
         }
