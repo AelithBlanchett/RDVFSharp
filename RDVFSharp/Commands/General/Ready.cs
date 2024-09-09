@@ -57,6 +57,8 @@ namespace RDVFSharp.Commands
                 var teamColor = "";
                 if (string.IsNullOrEmpty(teamInputText.Trim()))
                 {
+                    Plugin.GetCurrentBattlefield(channel).JoinTeams();
+
                     if (Plugin.GetCurrentBattlefield(channel).TeamRed.Count == 0)
                     {
                         teamColor = "red";
